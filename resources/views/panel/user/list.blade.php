@@ -10,232 +10,147 @@
   
 @include('panel.layout.header')
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.0/css/dataTables.bootstrap5.css">
+
 <div class="panel-header panel-header-sm">
 </div>
-      <div class="content">
-      @include('_message')
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-              <a class="btn btn-primary pull-right" href="{{ url('panel/user/add') }}">Add</a>
-              <h4 class="card-title" style="font-weight: bold;"> Manage User</h4>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead class=" text-primary">
-                      <th style="font-weight: 500;">
-                        Id
-                      </th>
-                      <th style="font-weight: 500;">
-                        Name
-                      </th>
-                      <th style="font-weight: 500;">
-                        Age
-                      </th>
-                      <th style="font-weight: 500;">
-                        Email
-                      </th>
-                      <th style="font-weight: 500;">
-                        Role
-                      </th>
-                      <th style="font-weight: 500;">
-                        Employment Pass
-                      </th>
-                      <th style="font-weight: 500;">
-                        Passport
-                      </th>
-                      <th style="font-weight: 500;">
-                        Date
-                      </th>
-                      <th style="font-weight: 500;" class="text-right">
-                        Action
-                      </th>
-                    </thead>
-                    <tbody>
-                        @foreach($getRecord as $value)
-                        @if($value->role_name == "User")
-                        <tr>
-                        <td>
-                        {{ $value->id }}
-                        </td>
-                        <td>
-                        {{ $value->name }}
-                        </td>
-                        <td>
-                        {{ $value->age }}
-                        </td>
-                        <td>
-                        {{ $value->email }}
-                        </td>
-                        <td>
-                        {{ $value->role_name }}
-                        </td>
-                        <td>
-                        {{ $value->employment_pass }}
-                        </td>
-                        <td>
-                        {{ $value->passport_number }}
-                        </td>
-                        <td>
-                        {{ $value->created_at }}
-                        </td>
-                        <td class="text-right">
-                          <a href="{{ url('panel/user/edit/' .$value->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                          <a href="{{ url('panel/user/delete/' .$value->id) }}" class="btn btn-danger btn-sm">Delete</a>
-                        </td>
-                      </tr>
-                        @endif
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-      </div>
 
-      <div class="content">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-              <a class="btn btn-primary pull-right" href="{{ url('panel/user/add') }}">Add</a>
-              <h4 class="card-title" style="font-weight: bold;"> Manage Admin</h4>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead class=" text-primary">
-                      <th style="font-weight: 500;">
-                        Id
-                      </th>
-                      <th style="font-weight: 500;">
-                        Name
-                      </th>
-                      <th style="font-weight: 500;">
-                        Age
-                      </th>
-                      <th style="font-weight: 500;">
-                        Email
-                      </th>
-                      <th style="font-weight: 500;">
-                        Role
-                      </th>
-                      <th style="font-weight: 500;">
-                        Date
-                      </th>
-                      <th style="font-weight: 500;" class="text-right">
-                        Action
-                      </th>
-                    </thead>
-                    <tbody>
-                        @foreach($getRecord as $value)
-                        @if($value->role_name == "Admin")
-                        <tr>
-                        <td>
-                        {{ $value->id }}
-                        </td>
-                        <td>
-                        {{ $value->name }}
-                        </td>
-                        <td>
-                        {{ $value->age }}
-                        </td>
-                        <td>
-                        {{ $value->email }}
-                        </td>
-                        <td>
-                        {{ $value->role_name }}
-                        </td>
-                        <td>
-                        {{ $value->created_at }}
-                        </td>
-                        <td class="text-right">
-                          <a href="{{ url('panel/user/edit/' .$value->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                          <a href="{{ url('panel/user/delete/' .$value->id) }}" class="btn btn-danger btn-sm">Delete</a>
-                        </td>
-                      </tr>
-                        @endif
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="p-5">
+  <!-- User Table -->
+  <div class="card">
+    <div class="card-header">
+      <h4 class="card-title" style="font-weight: bold;">Manage User</h4>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="userTable" class="table table-striped" style="width:100%">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Employment Pass</th>
+              <th>Passport</th>
+              <th>Date</th>
+              <th class="text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($getRecord as $value)
+              @if($value->role_name == "User")
+                <tr>
+                  <td>{{ $value->name }}</td>
+                  <td>{{ $value->age }}</td>
+                  <td>{{ $value->email }}</td>
+                  <td>{{ $value->role_name }}</td>
+                  <td>{{ $value->employment_pass }}</td>
+                  <td>{{ $value->passport_number }}</td>
+                  <td>{{ $value->created_at }}</td>
+                  <td class="text-right">
+                    <a href="{{ url('panel/user/edit/' . $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="{{ url('panel/user/delete/' . $value->id) }}" class="btn btn-danger btn-sm">Delete</a>
+                  </td>
+                </tr>
+              @endif
+            @endforeach
+          </tbody>
+        </table>
       </div>
+    </div>
+  </div>
 
-      <div class="content">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-              <a class="btn btn-primary pull-right" href="{{ url('panel/user/add') }}">Add</a>
-              <h4 class="card-title" style="font-weight: bold;"> Manage Super Admin</h4>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead class=" text-primary">
-                      <th style="font-weight: 500;">
-                        Id
-                      </th>
-                      <th style="font-weight: 500;">
-                        Name
-                      </th>
-                      <th style="font-weight: 500;">
-                        Age
-                      </th>
-                      <th style="font-weight: 500;">
-                        Email
-                      </th>
-                      <th style="font-weight: 500;">
-                        Role
-                      </th>
-                      <th style="font-weight: 500;">
-                        Date
-                      </th>
-                      <th style="font-weight: 500;" class="text-right">
-                        Action
-                      </th>
-                    </thead>
-                    <tbody>
-                        @foreach($getRecord as $value)
-                        @if($value->role_name == "Super Admin")
-                        <tr>
-                        <td>
-                        {{ $value->id }}
-                        </td>
-                        <td>
-                        {{ $value->name }}
-                        </td>
-                        <td>
-                        {{ $value->age }}
-                        </td>
-                        <td>
-                        {{ $value->email }}
-                        </td>
-                        <td>
-                        {{ $value->role_name }}
-                        </td>
-                        <td>
-                        {{ $value->created_at }}
-                        </td>
-                        <td class="text-right">
-                          <a href="{{ url('panel/user/edit/' .$value->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                          <a href="{{ url('panel/user/delete/' .$value->id) }}" class="btn btn-danger btn-sm">Delete</a>
-                        </td>
-                      </tr>
-                        @endif
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+  <!-- Admin Table -->
+  <div class="card mt-4">
+    <div class="card-header">
+      <h4 class="card-title" style="font-weight: bold;">Manage Admin</h4>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="adminTable" class="table table-striped" style="width:100%">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Date</th>
+              <th class="text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($getRecord as $value)
+              @if($value->role_name == "Admin")
+                <tr>
+                  <td>{{ $value->name }}</td>
+                  <td>{{ $value->age }}</td>
+                  <td>{{ $value->email }}</td>
+                  <td>{{ $value->role_name }}</td>
+                  <td>{{ $value->created_at }}</td>
+                  <td class="text-right">
+                    <a href="{{ url('panel/user/edit/' . $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="{{ url('panel/user/delete/' . $value->id) }}" class="btn btn-danger btn-sm">Delete</a>
+                  </td>
+                </tr>
+              @endif
+            @endforeach
+          </tbody>
+        </table>
       </div>
+    </div>
+  </div>
+
+  <!-- Super Admin Table -->
+  <div class="card mt-4">
+    <div class="card-header">
+      <h4 class="card-title" style="font-weight: bold;">Manage Super Admin</h4>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="superAdminTable" class="table table-striped" style="width:100%">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Date</th>
+              <th class="text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($getRecord as $value)
+              @if($value->role_name == "Super Admin")
+                <tr>
+                  <td>{{ $value->name }}</td>
+                  <td>{{ $value->age }}</td>
+                  <td>{{ $value->email }}</td>
+                  <td>{{ $value->role_name }}</td>
+                  <td>{{ $value->created_at }}</td>
+                  <td class="text-right">
+                    <a href="{{ url('panel/user/edit/' . $value->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="{{ url('panel/user/delete/' . $value->id) }}" class="btn btn-danger btn-sm">Delete</a>
+                  </td>
+                </tr>
+              @endif
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.0/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.2.0/js/dataTables.bootstrap5.js"></script>
+
+<script>
+  new DataTable('#userTable');
+  new DataTable('#adminTable');
+  new DataTable('#superAdminTable');
+</script>
 
 @endsection('content')
