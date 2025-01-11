@@ -35,7 +35,7 @@
                   aria-expanded="false"
                 >
                 <img 
-                  src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('public/images/1.png') }}" 
+                  src="{{ Auth::user()->profile_photo ? asset('public/storage/' . Auth::user()->profile_photo) : asset('public/images/1.png') }}" 
                   alt="Profile Photo" 
                   class="img-thumbnail" 
                   style="width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">

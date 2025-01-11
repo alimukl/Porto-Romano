@@ -3,38 +3,62 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    public function index()
+    // Show the user profile form
+    public function show()
     {
-        return view('panel.profile.index');
+        return view('panel.profile.index', [
+            'user' => Auth::user()
+        ]);
     }
 
-    public function updateProfilePhoto(Request $request, $id)
+    public function update(Request $request, $id)
     {
-        // Validate the uploaded file
+        $user = User::findOrFail($id);
+
+        // Validate the incoming data
         $request->validate([
-            'profile_photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate the file is an image and limit size to 2MB
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'age' => 'required|integer',
+            'passport_number' => 'required|string',
+            'employment_pass' => 'required|string',
+            'phone' => 'required|string|max:15',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Profile picture validation
         ]);
 
-        // Find the user by ID
-        $user = User::find($id);
+        // Update user data
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->age = $request->age;
+        $user->passport_number = $request->passport_number;
+        $user->employment_pass = $request->employment_pass;
+        $user->phone = $request->phone;
 
-        // Check if the request has a file and upload it
+        // Handle file upload for profile photo
         if ($request->hasFile('profile_photo')) {
-            $file = $request->file('profile_photo');
+            // Delete the old profile photo if exists
+            if ($user->profile_photo && Storage::exists('public/' . $user->profile_photo)) {
+                Storage::delete('public/' . $user->profile_photo);
+            }
 
-            // Store the file in the 'storage/app/public/images' directory
-            $path = $file->store('images', 'public');
+            // Store the new profile photo in the 'public/profile_photos' directory
+            $profilePhoto = $request->file('profile_photo');
+            $filePath = $profilePhoto->storeAs('profile_photos', uniqid() . '.' . $profilePhoto->getClientOriginalExtension(), 'public');
 
-            // Save the file path to the user's profile
-            $user->profile_photo = $path;
-            $user->save();
+            // Update the profile_photo field with the file path
+            $user->profile_photo = 'profile_photos/' . basename($filePath);
         }
 
-        return redirect()->back()->with('success', 'Profile photo updated successfully!');
+
+        // Save the updated user data
+        $user->save();
+
+        return redirect()->route('profile.index')->with('success', 'Profile updated successfully!');
     }
-
-
 }

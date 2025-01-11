@@ -30,6 +30,8 @@ Route::group(['middleware' => 'useradmin'], function () {
     Route::post('panel/user/edit/{id}', [UserController::class, 'update'])->name('role.update');
     Route::get('panel/user/delete/{id}', [UserController::class, 'delete'])->name('role.delete');
 
-    Route::get('panel/profile', [ProfileController::class, 'index'])->name('profile.index');
+
+    Route::get('panel/profile', [ProfileController::class, 'show'])->name('profile.index');
+    Route::put('panel/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 
 });

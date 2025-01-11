@@ -24,7 +24,9 @@ class User extends Authenticatable
         'profile_photo',
         'age',               // Add the age field here
         'passport_number',   // Add the passport_number field here
-        'employment_pass',   // Add the employment_pass field here
+        'employment_pass',
+        'address',   // Add the employment_pass field here
+        'phone' ,
     ];
 
     /**
@@ -57,7 +59,7 @@ class User extends Authenticatable
 
     static public function getRecord()
     {
-        return User::select('users.*', 'role.name as role_name', 'users.profile_photo', 'users.age', 'users.passport_number', 'users.employment_pass') // Added new fields here
+        return User::select('users.*', 'role.name as role_name', 'users.profile_photo', 'users.age', 'users.passport_number', 'users.employment_pass','users.address','users.phone') // Added new fields here
                     ->join('role', 'role.id', '=', 'users.role_id')
                     ->orderBy('users.id', 'desc')
                     ->get();

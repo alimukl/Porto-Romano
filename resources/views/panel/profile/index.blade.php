@@ -3,7 +3,7 @@
 @section('content')
 
 <body class="">
-<div class="wrapper ">
+<div class="wrapper">
 
 @include('panel.layout.sidebar')
 
@@ -12,87 +12,84 @@
 <div class="panel-header panel-header-sm">
 </div>
 
-<!-- Adjusted container with full width and left alignment -->
-<div class="container-fluid px-4 mt-4" style="margin-left: 2%; width: 96%;">
+<!-- Container with Bootstrap grid system -->
+<div class="container-fluid px-4 mt-4">
     <hr class="mt-0 mb-4">
-    <div class="row">
-        <div class="col-xl-4">
-            <!-- Profile picture card-->
-            <div class="card mb-4 mb-xl-0">
-                <div class="card-header">Profile Picture</div>
-                <div class="card-body text-center">
-                    <!-- Profile picture image-->
-                    <img class="img-account-profile rounded-circle mb-2" 
-                    src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('public/images/1.png') }}"  alt="">
-                    <!-- Profile picture help block-->
-                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                    <!-- Profile picture upload button-->
-                    <button class="btn btn-primary" type="button">Upload new image</button>
+    <div class="row justify-content-center">
+        <form action="{{ route('profile.update', Auth::user()->id) }}" method="POST" enctype="multipart/form-data" class="col-12 col-md-10 col-lg-8">
+            @csrf
+            @method('PUT')
+            
+            <!-- Profile Picture Section -->
+            <div class="row mb-4">
+                <div class="col-xl-4">
+                    <div class="card mb-4 mb-xl-0">
+                        <div class="card-header">Profile Picture</div>
+                        <div class="card-body text-center">
+                            <img class="img-account-profile rounded-circle mb-2"
+                                 src="{{ Auth::user()->profile_photo ? asset('public/storage/' . Auth::user()->profile_photo) : asset('images/1.png') }}"
+                                 alt="Profile Picture">
+                            <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                            <input type="file" class="form-control" name="profile_photo">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Account Details Section -->
+                <div class="col-xl-8">
+                    <div class="card mb-4">
+                        <div class="card-header">Account Details</div>
+                        <div class="card-body">
+                            <!-- Name -->
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputname">Name</label>
+                                <input class="form-control" id="inputname" type="text" placeholder="Enter your name" name="name" value="{{ Auth::user()->name }}" required>
+                            </div>
+
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <!-- Age -->
+                                    <label class="small mb-1" for="inputage">Age</label>
+                                    <input class="form-control" id="inputage" type="text" placeholder="Enter your age" name="age" value="{{ Auth::user()->age }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- Email -->
+                                    <label class="small mb-1" for="inputEmail">Email</label>
+                                    <input class="form-control" id="inputEmail" type="email" placeholder="Enter your email" name="email" value="{{ Auth::user()->email }}" required>
+                                </div>
+                            </div>
+
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <!-- Employment Pass -->
+                                    <label class="small mb-1" for="inputemployment_pass">Employment Pass</label>
+                                    <input class="form-control" id="inputemployment_pass" type="text" placeholder="Enter your employment pass" name="employment_pass" value="{{ Auth::user()->employment_pass }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- Passport -->
+                                    <label class="small mb-1" for="inputpassport">Passport</label>
+                                    <input class="form-control" id="inputpassport" type="text" placeholder="Enter your passport" name="passport_number" value="{{ Auth::user()->passport_number }}" required>
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputPhone">Phone number</label>
+                                    <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" name="phone" value="{{ Auth::user()->phone }}" required>
+                                </div>
+                            </div>
+
+                            <!-- Save Changes Button -->
+                            <button class="btn btn-primary" type="submit">Save changes</button>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-xl-8">
-            <!-- Account details card-->
-            <div class="card mb-4">
-                <div class="card-header">Account Details</div>
-                <div class="card-body">
-                    <form>
-                        <!-- Form Group (username)-->
-                        <div class="mb-3">
-                            <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
-                            <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value="username">
-                        </div>
-                        <!-- Form Row-->
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (first name)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputFirstName">First name</label>
-                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" value="Valerie">
-                            </div>
-                            <!-- Form Group (last name)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputLastName">Last name</label>
-                                <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" value="Luna">
-                            </div>
-                        </div>
-                        <!-- Form Row        -->
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (organization name)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputOrgName">Organization name</label>
-                                <input class="form-control" id="inputOrgName" type="text" placeholder="Enter your organization name" value="Start Bootstrap">
-                            </div>
-                            <!-- Form Group (location)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputLocation">Location</label>
-                                <input class="form-control" id="inputLocation" type="text" placeholder="Enter your location" value="San Francisco, CA">
-                            </div>
-                        </div>
-                        <!-- Form Group (email address)-->
-                        <div class="mb-3">
-                            <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                            <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="name@example.com">
-                        </div>
-                        <!-- Form Row-->
-                        <div class="row gx-3 mb-3">
-                            <!-- Form Group (phone number)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputPhone">Phone number</label>
-                                <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="555-123-4567">
-                            </div>
-                            <!-- Form Group (birthday)-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputBirthday">Birthday</label>
-                                <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Enter your birthday" value="06/10/1988">
-                            </div>
-                        </div>
-                        <!-- Save changes button-->
-                        <button class="btn btn-primary" type="button">Save changes</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+
+        </form>
     </div>
 </div>
 
-@endsection('content')
+@endsection

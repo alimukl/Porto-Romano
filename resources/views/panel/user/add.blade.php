@@ -49,6 +49,15 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-md-6 pr-1">
+                                        <div class="form-group">
+                                            <label>Phone Number</label>
+                                            <input type="text" name="phone" value="{{ old('phone') }}" required class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row" id="employmentPassField">
                                     <div class="col-md-6 pr-1">
                                         <div class="form-group">
@@ -63,6 +72,15 @@
                                         <div class="form-group">
                                             <label>Passport Number</label>
                                             <input type="text" name="passport_number" value="{{ old('passport_number') }}" required class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 pr-1">
+                                        <div class="form-group">
+                                            <label>Address</label>
+                                            <input type="text" name="address" value="{{ old('address') }}" required class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -107,34 +125,44 @@
         </div>
     </div>
 
-    <script>
-        // When the page loads, toggle fields based on selected role
-        window.onload = function() {
-            toggleFieldsBasedOnRole();
-        };
+<script>
+    // When the page loads, toggle fields based on selected role
+    window.onload = function() {
+        toggleFieldsBasedOnRole();
+    };
 
-        // Listen for change on role selection
-        document.getElementById('roleSelect').addEventListener('change', function() {
-            toggleFieldsBasedOnRole();
-        });
+    // Listen for change on role selection
+    document.getElementById('roleSelect').addEventListener('change', function() {
+        toggleFieldsBasedOnRole();
+    });
 
-        function toggleFieldsBasedOnRole() {
-            var role = document.getElementById('roleSelect').value;
-            console.log("Selected Role ID: ", role);  // Debugging line
+    function toggleFieldsBasedOnRole() {
+    var role = document.getElementById('roleSelect').value;
+    console.log("Selected Role ID: ", role);  // Debugging line
 
-            // Get the form fields
-            var employmentPassField = document.getElementById('employmentPassField');
-            var passportNumberField = document.getElementById('passportNumberField');
+    // Get the form fields
+    var employmentPassField = document.getElementById('employmentPassField');
+    var passportNumberField = document.getElementById('passportNumberField');
+    var employmentPassInput = employmentPassField.querySelector('input');
+    var passportNumberInput = passportNumberField.querySelector('input');
 
-            // Check if the selected role is Admin (ID 2) or Super Admin (ID 1)
-            if (role == '1' || role == '2') {
-                employmentPassField.style.display = 'none';
-                passportNumberField.style.display = 'none';
-            } else {
-                employmentPassField.style.display = 'block';
-                passportNumberField.style.display = 'block';
-            }
-        }
-    </script>
+    // Check if the selected role is Admin (ID 2) or Super Admin (ID 1)
+    if (role == '1' || role == '2') {
+        employmentPassField.style.display = 'none';
+        passportNumberField.style.display = 'none';
+        // Remove required attribute for hidden fields
+        employmentPassInput.removeAttribute('required');
+        passportNumberInput.removeAttribute('required');
+    } else {
+        employmentPassField.style.display = 'block';
+        passportNumberField.style.display = 'block';
+        // Add required attribute back for visible fields
+        employmentPassInput.setAttribute('required', 'required');
+        passportNumberInput.setAttribute('required', 'required');
+    }
+    }
+
+</script>
+
 
 @endsection
