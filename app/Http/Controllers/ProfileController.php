@@ -26,8 +26,6 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'age' => 'required|integer',
-            'passport_number' => 'required|string',
-            'employment_pass' => 'required|string',
             'phone' => 'required|string|max:15',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Profile picture validation
         ]);
@@ -36,8 +34,6 @@ class ProfileController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->age = $request->age;
-        $user->passport_number = $request->passport_number;
-        $user->employment_pass = $request->employment_pass;
         $user->phone = $request->phone;
 
         // Handle file upload for profile photo
