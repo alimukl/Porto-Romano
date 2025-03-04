@@ -7,10 +7,14 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 
-Route::get('/', [AuthController::class,'login']);
+//public route
+Route::get('/', [AuthController::class, 'login'])->name('login'); 
 Route::post('/', [AuthController::class,'auth_login']);
 
 Route::get('logout', [AuthController::class,'logout']);
+
+Route::post('/send-mfa', [AuthController::class, 'sendMfaCode'])->name('send.mfa');
+Route::post('/verify-mfa', [AuthController::class, 'verifyMfaCode'])->name('verify.mfa');
 
 Route::group(['middleware' => 'useradmin'], function () {
 

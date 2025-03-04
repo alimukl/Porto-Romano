@@ -9,22 +9,14 @@ Use Auth;
 
 class AdminUserMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!empty(Auth::check()))
-        {
+        if (Auth::check()) {
             return $next($request);
-        }
-        else
-        {
+        } else {
             Auth::logout();
-            return redirect(url(''));
+            return redirect(url(''))->with('error', 'Unauthorized access. Please log in.');
         }
-        
     }
+
 }

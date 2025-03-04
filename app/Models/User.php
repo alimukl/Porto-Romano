@@ -27,6 +27,8 @@ class User extends Authenticatable
         'employment_pass',
         'address',   // Add the employment_pass field here
         'phone' ,
+        'mfa_token',
+        'mfa_expires_at',
     ];
 
     /**
