@@ -16,6 +16,11 @@ Route::get('logout', [AuthController::class,'logout']);
 Route::post('/send-mfa', [AuthController::class, 'sendMfaCode'])->name('send.mfa');
 Route::post('/verify-mfa', [AuthController::class, 'verifyMfaCode'])->name('verify.mfa');
 
+//display verify
+Route::get('/verify-mfa', function () {
+    return view('auth.mfa');
+})->name('verify.mfa.form');
+
 Route::group(['middleware' => 'useradmin'], function () {
 
     Route::get('panel/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -33,7 +38,6 @@ Route::group(['middleware' => 'useradmin'], function () {
     Route::get('panel/user/edit/{id}', [UserController::class, 'edit'])->name('role.edit');
     Route::post('panel/user/edit/{id}', [UserController::class, 'update'])->name('role.update');
     Route::get('panel/user/delete/{id}', [UserController::class, 'delete'])->name('role.delete');
-
 
     Route::get('panel/profile', [ProfileController::class, 'show'])->name('profile.index');
     Route::put('panel/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');

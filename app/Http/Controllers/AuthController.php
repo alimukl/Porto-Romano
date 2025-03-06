@@ -75,7 +75,7 @@ class AuthController extends Controller
     
         try {
             // Send OTP via email
-            Mail::send('emails.mfa', ['otp' => $otp], function ($message) use ($user) {
+            Mail::send('emails.mfa', ['otp' => $otp,'user' => $user], function ($message) use ($user) {
                 $message->to($user->email)->subject('Your MFA Verification Code');
             });
     
@@ -90,7 +90,7 @@ class AuthController extends Controller
 
     public function verifyMfaCode(Request $request)
     {
-            // Combine the OTP array into a single string
+        // Combine the OTP array into a single string
         $otp = implode('', $request->otp);
 
         // Validate OTP as a 6-digit numeric string
@@ -115,7 +115,7 @@ class AuthController extends Controller
             now()->gt($user->mfa_expires_at) || 
             $user->mfa_token !== $request->otp) 
         {
-            return back()->withErrors(['otp' => 'Invalid or expired verification code.']);
+            return redirect()->route('verify.mfa')->withErrors(['otp' => 'Invalid or expired verification code.']);
         }
 
         // Clear MFA token after successful verification

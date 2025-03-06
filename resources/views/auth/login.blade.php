@@ -6,8 +6,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/apple-icon.png') }}">
-  <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}">
-  <title>Soft UI Dashboard 3 by Creative Tim</title>
+  <link rel="icon" type="image/png" href="{{ asset('assets/img/logo-porto-romano.png') }}">
+  <title>Log In</title>
   <!-- Fonts and Icons -->
   <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet" />
   <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-icons.css" rel="stylesheet" />
@@ -16,9 +16,21 @@
   <!-- CSS Files -->
   <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css?v=1.1.0') }}" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 </head>
 
+<style>
+  .navbar {
+    background-color:rgb(255, 255, 255) !important;
+}
+.porto-romano-text {
+  font-family: 'Great Vibes', cursive;
+    font-size: 24px; /* Adjust size as needed */
+    font-weight: normal;
+    color: rgb(175, 127, 39); /* Adjust color if needed */
+    padding-bottom: 10px !important;
+}
+</style>
 <body class="">
   <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
@@ -26,8 +38,10 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg blur blur-rounded top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
           <div class="container-fluid pe-0">
-            <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="../pages/dashboard.html">
-              Soft UI Dashboard 3
+            <a class="navbar-brand font-weight-bolder ms-lg-1 ms-3 " href="../pages/dashboard.html">
+            <a class="navbar-brand font-weight-bolder ms-lg-1 ms-3" href="../pages/dashboard.html">
+                <img src="{{ asset('assets/img/porto-romano-new.png') }}" alt="Logo" height="50">
+                <span class="porto-romano-text">Porto Romano</span>
             </a>
             <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon mt-2">
@@ -64,13 +78,8 @@
                 </li>
               </ul>
               <li class="nav-item d-flex align-items-center">
-                <a class="btn btn-round btn-sm mb-0 btn-outline-primary me-2" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-soft-ui-dashboard">Online Builder</a>
+                <a class="btn btn-round btn-sm mb-0 btn-outline-primary me-2" target="_blank" href="https://portoromano.my/">Offical Website</a>
               </li>
-              <ul class="navbar-nav d-lg-block d-none">
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/product/soft-ui-dashboard" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-dark">Free download</a>
-                </li>
-              </ul>
             </div>
           </div>
         </nav>
@@ -80,7 +89,7 @@
   </div>
   <main class="main-content  mt-0">
     <section>
-      <div class="page-header min-vh-75">
+      <div class="page-header min-vh-80">
         <div class="container">
           <div class="row">
             <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
@@ -113,8 +122,8 @@
               </div>
             </div>
             <div class="col-md-6">
-              <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
-                <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image:url('assets/img/curved-images/curved5.jpg')"
+              <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n3">
+                <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image:url('assets/img/otp-bg.jpg')"
 				></div>
               </div>
             </div>

@@ -4,8 +4,9 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Responsive OTP Verification Form Using Bootstrap 5</title>
+        <title>OTP Verification Form</title>
         <!-- Bootstrap 5 CDN Link -->
+        <link rel="icon" type="image/png" href="{{ asset('assets/img/porto-romano.png') }}">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom CSS Link -->
         <link rel="stylesheet" href="style.css">
@@ -28,16 +29,19 @@
             --gray:#5e6278;
             --gray-1:#e3e3e3;
         }
-        body{
-            font-family:var(--primary-font-family);
-            font-size: 14px;
-        } 
+        body {
+                font-family: var(--primary-font-family);
+                font-size: 14px;
+                background-image: url("{{ asset('assets/img/otp-bg.jpg') }}");
+                background-size: cover; /* Ensure it covers the full screen */
+                background-position: center;
+                background-repeat: no-repeat;
+            }
 
         /* Main CSS OTP Verification New Changing */ 
         .wrapper{
             padding:0 0 100px;
             margin-top:150px;
-            background-image:url("images/bg.png");
             background-position:bottom center;
             background-repeat: no-repeat;
             background-size: contain;
@@ -49,7 +53,7 @@
             justify-content:center; */
         }
         .wrapper .logo img{
-            max-width:25%;
+            max-width:75%;
         }
         .wrapper input{
             background-color:var(--light-white);
@@ -109,17 +113,25 @@
             <div class="container">
                 <div class="col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center">
                     <div class="logo">
-                        <img decoding="async" src="{{ asset('assets/img/porto-romano.png') }}" class="img-fluid" alt="logo">
+                        <img decoding="async" src="{{ asset('assets/img/logo-porto-romano-2.png') }}" class="img-fluid" alt="logo">
                     </div>
                     <form method="POST" action="{{ route('verify.mfa') }}" class="rounded bg-white shadow p-5">
                         @csrf
                         <h3 class="text-dark fw-bolder fs-4 mb-2">Two Step Verification</h3>
                         <div class="fw-normal text-muted mb-4">
                             Enter the verification code we sent to your email.
-                        </div>  
+                        </div> 
+                        <div class="fw-normal mb-4">
+                        Type your 6-digit security code
+                        </div>
+
+                        @if ($errors->has('otp'))
+                            <div class="alert alert-danger">
+                                {{ $errors->first('otp') }}
+                            </div>
+                        @endif
 
                         <div class="otp_input text-start mb-2">
-                            <label for="otp">Type your 6-digit security code</label>
                             <div class="d-flex justify-content-between mt-2">
                                 <input type="text" name="otp[]" class="otp-box form-control text-center" maxlength="1" required>
                                 <input type="text" name="otp[]" class="otp-box form-control text-center" maxlength="1" required>
@@ -132,14 +144,10 @@
 
                         <input type="hidden" name="otp_combined" id="otp_combined"> 
 
-                        <button type="submit" class="btn btn-primary submit_btn my-4">Verify</button>
-
-                        @if ($errors->any())
-                            <p class="text-danger">{{ $errors->first() }}</p>
-                        @endif
+                        <button type="submit" class="btn btn-danger submit_btn my-4">Verify</button>
 
                         <div class="fw-normal text-muted mb-2">
-                            Didn’t get the code? <a href="#" class="text-primary fw-bold text-decoration-none">Resend</a>
+                        For security reasons, do not share this code with <a href="#" class="text-danger fw-bold text-decoration-none">anyone.</a>
                         </div>
                     </form>
                 </div>
