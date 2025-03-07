@@ -10,6 +10,12 @@
   <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-svg.css" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.1.0" rel="stylesheet" />
+
+<style>
+    .table-custom-shadow {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* You can adjust the values to control the shadow's size and intensity */
+}
+</style>
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -29,7 +35,7 @@
 
   <div class="row">
     <div class="col-12">
-      <div class="card mb-4">
+      <div class="card mb-4 table-custom-shadow">
       <div class="card-header pb-0 d-flex align-items-center">
         <h6 class="mb-0">Apply Requests Table</h6>      
         <div class="ms-auto">

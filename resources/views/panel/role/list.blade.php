@@ -21,6 +21,12 @@
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 
+<style>
+  .table-custom-shadow {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* You can adjust the values to control the shadow's size and intensity */
+}
+
+</style>
 </head>
 <body class="g-sidenav-show  bg-gray-100">
 
@@ -28,6 +34,7 @@
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
 @include('panel.layout.header')
 
+<div class="container-fluid py-4">
 
 <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
@@ -40,7 +47,7 @@
 
       <div class="row">
         <div class="col-12">
-          <div class="card mb-4">
+          <div class="card mb-4 table-custom-shadow">
           <div class="card-header pb-0 d-flex align-items-center">
             <h6 class="mb-0">Role Permission Table</h6>
             @if(!empty($PermissionAdd))

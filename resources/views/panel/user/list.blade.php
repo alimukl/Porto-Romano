@@ -61,13 +61,7 @@
   object-fit: cover;
   border-radius: 10px; /* Makes the image square with slightly rounded corners */
 }
-/*
-.blur-gradient {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgb(143, 143, 143));
-    backdrop-filter: blur(10px);
-    padding: 20px;
-}
-*/
+
 .custom-divider {
   border: none;            
   height: 3px;             
@@ -120,6 +114,9 @@
   background-color: rgba(0, 0, 0, 0.7); /* Darker on hover */
 }
 
+.table-custom-shadow {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* You can adjust the values to control the shadow's size and intensity */
+}
 
   </style>
 </head>
@@ -140,7 +137,7 @@
   <br>
         <div class="row">
           <div class="col-12">
-            <div class="card mb-4">
+            <div class="card mb-4 table-custom-shadow">
               <div class="card-header pb-0 d-flex align-items-center">
                 <h6 class="mb-0">Manage Employee</h6>
                 @if(!empty($PermissionAdd))
@@ -227,7 +224,7 @@
 
         <div class="row">
           <div class="col-12">
-            <div class="card mb-4">
+            <div class="card mb-4 table-custom-shadow">
               <div class="card-header pb-0 d-flex align-items-center">
                 <h6 class="mb-0">Manage Admin</h6>
                 @if(!empty($PermissionAdd))
@@ -306,7 +303,7 @@
 
         <div class="row">
           <div class="col-12">
-            <div class="card mb-4">
+            <div class="card mb-4 table-custom-shadow">
               <div class="card-header pb-0 d-flex align-items-center">
                 <h6 class="mb-0">Manage Super Admin</h6>
                 @if(!empty($PermissionAdd))

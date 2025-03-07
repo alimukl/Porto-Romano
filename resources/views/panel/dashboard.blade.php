@@ -770,7 +770,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             loaderContainer.style.display = "none";
         }, 500); // Match transition duration (0.5s)
-    }, 3000);
+    }, 1000);
 });
 </script>
 
