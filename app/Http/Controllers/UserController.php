@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\RoleModel;
-use App\Models\User;
 use App\Models\PermissionModel;
 use App\Models\PermissionRoleModel;
+use App\Models\User;
 use Hash;
 use Auth;
 
@@ -18,7 +18,7 @@ class UserController extends Controller
         $PermissionRole = PermissionRoleModel::getPermission('Role',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.404');
         }
 
         $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add Role',Auth::user()->role_id);

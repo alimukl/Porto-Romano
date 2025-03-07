@@ -41,8 +41,6 @@ class AuthController extends Controller
         }
     }
 
-
-
     public function sendMfaCode(Request $request)
     {
         // Retrieve user ID from session

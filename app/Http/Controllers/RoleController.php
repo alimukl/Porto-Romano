@@ -16,7 +16,7 @@ class RoleController extends Controller
         $PermissionRole = PermissionRoleModel::getPermission('Role',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.401');
         }
 
         $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add Role',Auth::user()->role_id);
@@ -33,7 +33,7 @@ class RoleController extends Controller
         $PermissionRole = PermissionRoleModel::getPermission('Add Role',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.401');
         }
 
         $getPermission = PermissionModel::getRecord();
@@ -47,7 +47,7 @@ class RoleController extends Controller
         $PermissionRole = PermissionRoleModel::getPermission('Add Role',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.401');
         }
 
         $save = new RoleModel;
@@ -65,7 +65,7 @@ class RoleController extends Controller
         $PermissionRole = PermissionRoleModel::getPermission('Edit Role',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.401');
         }
 
         $data['getRecord'] = RoleModel::getSingle($id);
@@ -80,7 +80,7 @@ class RoleController extends Controller
         $PermissionRole = PermissionRoleModel::getPermission('Edit Role',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.401');
         }
 
         $save = RoleModel::getSingle($id);
@@ -98,7 +98,7 @@ class RoleController extends Controller
         $PermissionRole = PermissionRoleModel::getPermission('Delete Role',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.401');
         }
 
         $save = RoleModel::getSingle($id);

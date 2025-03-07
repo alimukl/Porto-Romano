@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LeaveRequestController;
 
 //public route
 Route::get('/', [AuthController::class, 'login'])->name('login'); 
@@ -33,13 +34,29 @@ Route::group(['middleware' => 'useradmin'], function () {
     Route::get('panel/role/delete/{id}', [RoleController::class, 'delete'])->name('role.delete');
 
     Route::get('panel/user', [UserController::class, 'list'])->name('user.list');
-    Route::get('panel/user/add', [UserController::class, 'add'])->name('role.add');
-    Route::post('panel/user/add', [UserController::class, 'insert'])->name('role.insert');
-    Route::get('panel/user/edit/{id}', [UserController::class, 'edit'])->name('role.edit');
-    Route::post('panel/user/edit/{id}', [UserController::class, 'update'])->name('role.update');
-    Route::get('panel/user/delete/{id}', [UserController::class, 'delete'])->name('role.delete');
+    Route::get('panel/user/add', [UserController::class, 'add'])->name('user.add');
+    Route::post('panel/user/add', [UserController::class, 'insert'])->name('user.insert');
+    Route::get('panel/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+    Route::post('panel/user/edit/{id}', [UserController::class, 'update'])->name('user.update');
+    Route::get('panel/user/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
 
     Route::get('panel/profile', [ProfileController::class, 'show'])->name('profile.index');
     Route::put('panel/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 
+    Route::get('panel/leave-requests', [LeaveRequestController::class, 'index'])->name('leave_requests.index');
+    Route::get('panel/apply_leave', [LeaveRequestController::class, 'apply'])->name('apply_leave.index');
+    Route::get('panel/leave-requests/create', [LeaveRequestController::class, 'create'])->name('leave_requests.create');
+    Route::post('panel/leave-requests', [LeaveRequestController::class, 'store'])->name('leave_requests.store');
+    Route::post('panel/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave_requests.approve');
+    Route::post('panel/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave_requests.reject');
+
+    Route::get('/leave_requests/{id}/edit', [LeaveRequestController::class, 'edit'])->name('leave_requests.edit');
+    Route::put('/leave_requests/{id}', [LeaveRequestController::class, 'update'])->name('leave_requests.update');
+    Route::delete('/leave_requests/{id}', [LeaveRequestController::class, 'delete'])->name('leave_requests.delete');
+
+    Route::get('/panel/error', [UserController::class, 'index'])->name('error.401');
+
+    Route::fallback(function () {
+        return response()->view('error.404', [], 404);
+    });
 });

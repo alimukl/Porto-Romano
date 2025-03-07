@@ -65,5 +65,6 @@ class User extends Authenticatable
                     ->join('role', 'role.id', '=', 'users.role_id')
                     ->orderBy('users.id', 'desc')
                     ->get();
-    }   
+    }
+
 }

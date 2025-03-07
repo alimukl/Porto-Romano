@@ -18,4 +18,7 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    # Custom 404 Error Page
+    ErrorDocument 404 /404.html
 </IfModule>
