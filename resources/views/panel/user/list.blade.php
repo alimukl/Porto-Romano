@@ -187,13 +187,17 @@
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->created_at }}</span>
                             </td>
                             <td class="align-middle">
+                            @if(!empty($PermissionEdit))
                               <a href="{{ url('panel/user/edit/' . $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                 <i class="fas fa-pen text-success hover-edit"></i>
                               </a>
+                            @endif
                               <span class="mx-2"></span>
+                            @if(!empty($PermissionDelete))
                               <a href="{{ url('panel/user/delete/' . $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user">
                                 <i class="fas fa-trash text-danger hover-delete"></i>
                               </a>
+                            @endif
                             </td>
                           </tr>
                         @endif
@@ -257,13 +261,17 @@
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->created_at }}</span>
                             </td>
                             <td class="align-middle">
+                            @if(!empty($PermissionEdit))
                               <a href="{{ url('panel/user/edit/' . $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                 <i class="fas fa-pen text-success hover-edit"></i>
                               </a>
+                            @endif
                               <span class="mx-2"></span>
+                            @if(!empty($PermissionDelete))
                               <a href="{{ url('panel/user/delete/' . $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user">
                                 <i class="fas fa-trash text-danger hover-delete"></i>
                               </a>
+                            @endif
                             </td>
                           </tr>
                         @endif

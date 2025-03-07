@@ -15,15 +15,15 @@ class UserController extends Controller
     public function list()
     {
         //permission to page by link
-        $PermissionRole = PermissionRoleModel::getPermission('Role',Auth::user()->role_id);
+        $PermissionRole = PermissionRoleModel::getPermission('User',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
-            return view('error.404');
+            return view('error.401');
         }
 
-        $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add Role',Auth::user()->role_id);
-        $data['PermissionEdit'] = PermissionRoleModel::getPermission('Edit Role',Auth::user()->role_id);
-        $data['PermissionDelete'] = PermissionRoleModel::getPermission('Delete Role',Auth::user()->role_id);
+        $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add User',Auth::user()->role_id);
+        $data['PermissionEdit'] = PermissionRoleModel::getPermission('Edit User',Auth::user()->role_id);
+        $data['PermissionDelete'] = PermissionRoleModel::getPermission('Delete User',Auth::user()->role_id);
 
         $data['getRecord'] = User::getRecord();
         return view('panel.user.list', $data);
@@ -32,12 +32,13 @@ class UserController extends Controller
     public function add() //dropdown role
     {
         //permission to page by link
-        $PermissionRole = PermissionRoleModel::getPermission('Add Role',Auth::user()->role_id);
+        $PermissionRole = PermissionRoleModel::getPermission('Add User',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.401');
         }
 
+        $data['getRecord'] = User::getRecord();
         $data['getRole'] = RoleModel::getRecord();
         return view ('panel.user.add', $data);
     }
@@ -45,23 +46,26 @@ class UserController extends Controller
     public function edit($id) //retrieve existing data
     {
         //permission to page by link
-        $PermissionRole = PermissionRoleModel::getPermission('Edit Role',Auth::user()->role_id);
+        $PermissionRole = PermissionRoleModel::getPermission('Edit User',Auth::user()->role_id);    
+
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.401');
         }
 
         $data['getRecord'] = User::getSingle($id);
         $data['getRole'] = RoleModel::getRecord();
+        
         return view ('panel.user.edit', $data);
     }
 
     public function insert(Request $request)
     {
         // Permission to page by link
-        $PermissionRole = PermissionRoleModel::getPermission('Add Role', Auth::user()->role_id);
+        $PermissionRole = PermissionRoleModel::getPermission('Add User', Auth::user()->role_id);
         if (empty($PermissionRole)) {
-            abort(404);
+
+            return view('error.401');
         }
     
         // Conditionally validate fields based on role
@@ -100,9 +104,10 @@ class UserController extends Controller
     public function update($id, Request $request)
     {
         // Permission to page by link
-        $PermissionRole = PermissionRoleModel::getPermission('Edit Role', Auth::user()->role_id);
+        $PermissionRole = PermissionRoleModel::getPermission('Edit User', Auth::user()->role_id);
         if (empty($PermissionRole)) {
-            abort(404);
+
+            return view('error.401');
         }
     
         // Retrieve the user record
@@ -139,10 +144,11 @@ class UserController extends Controller
     public function delete($id)
     {
         //permission to page by link
-        $PermissionRole = PermissionRoleModel::getPermission('Delete Role',Auth::user()->role_id);
+        $PermissionRole = PermissionRoleModel::getPermission('Delete User',Auth::user()->role_id);
+
         if(empty($PermissionRole))
         {
-            abort(404);
+            return view('error.401');
         }
 
         $user = User::getSingle($id);

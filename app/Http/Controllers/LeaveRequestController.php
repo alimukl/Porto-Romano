@@ -13,15 +13,17 @@ class LeaveRequestController extends Controller
     public function index()//display table
     {
         //permission to page by link
-        $PermissionRole = PermissionRoleModel::getPermission('Role',Auth::user()->role_id);
+        $PermissionRole = PermissionRoleModel::getPermission('List Leave',Auth::user()->role_id);
         if(empty($PermissionRole))
         {
             return view('error.401');
         }
 
-        $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add Leave',Auth::user()->role_id);
-        $data['PermissionEdit'] = PermissionRoleModel::getPermission('Edit Leave',Auth::user()->role_id);
-        $data['PermissionDelete'] = PermissionRoleModel::getPermission('Delete Leave',Auth::user()->role_id);
+        $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add List Leave',Auth::user()->role_id);
+        $data['PermissionEdit'] = PermissionRoleModel::getPermission('Edit List Leave',Auth::user()->role_id);
+        $data['PermissionUpdate'] = PermissionRoleModel::getPermission('Update List Leave',Auth::user()->role_id);
+        $data['PermissionDelete'] = PermissionRoleModel::getPermission('Delete List Leave',Auth::user()->role_id);
+        $data['PermissionApprove'] = PermissionRoleModel::getPermission('Approve List Leave',Auth::user()->role_id);
 
         $data['getRecord'] = LeaveRequest::getRecord();
         return view('leave_requests.index', $data);
@@ -32,7 +34,7 @@ class LeaveRequestController extends Controller
     {
         $user = Auth::user(); 
     
-        // only take user leave application
+        // only take own user leave application
         $leaveRequests = LeaveRequest::where('user_id', $user->id)
             ->with('user')
             ->get();
@@ -62,81 +64,98 @@ class LeaveRequestController extends Controller
         return redirect()->route('leave_requests.index')->with('success', 'Leave request submitted successfully.');
     }
 
-    public function approve($id) //edit status 
+    public function approve($id) // Edit status
     {
+        // Check if the user has permission
+        $PermissionRole = PermissionRoleModel::getPermission('Approve List Leave', Auth::user()->role_id);
+    
+        if (empty($PermissionRole)) { // Explicit check for permission
+            return view('error.401'); // Redirect to 401 Unauthorized error page
+        }
+    
+        // Retrieve the leave request
         $leaveRequest = LeaveRequest::findOrFail($id);
         
-        if (in_array(Auth::user()->role_id, [1, 2])) {
-            $leaveRequest->update(['status' => 'approved']);
-            return redirect()->back()->with('success', 'Leave request approved.');
-        }
-
-        return redirect()->back()->with('error', 'Unauthorized action.');
+        // Update status to approved
+        $leaveRequest->update(['status' => 'approved']);
+    
+        return redirect()->back()->with('success', 'Leave request approved.');
     }
-
-    public function reject($id) //edit status
+    
+    public function reject($id) // Edit status
     {
+        // Check if the user has permission
+        $PermissionRole = PermissionRoleModel::getPermission('Approve List Leave', Auth::user()->role_id);
+    
+        if (empty($PermissionRole)) { // Explicit check for permission
+            return view('error.401'); // Redirect to 401 Unauthorized error page
+        }
+    
+        // Retrieve the leave request
         $leaveRequest = LeaveRequest::findOrFail($id);
         
-        if (in_array(Auth::user()->role_id, [1, 2])) {
-            $leaveRequest->update(['status' => 'rejected']);
-            return redirect()->back()->with('success', 'Leave request rejected.');
-        }
-
-        return redirect()->back()->with('error', 'Unauthorized action.');
-    }
+        // Update status to rejected
+        $leaveRequest->update(['status' => 'rejected']);
+    
+        return redirect()->back()->with('success', 'Leave request rejected.');
+    }    
 
     public function edit($id)
     {
-        $leaveRequest = LeaveRequest::findOrFail($id);
-
-        // Only Admin (role_id 1 or 2) can edit
-        if (!in_array(Auth::user()->role_id, [1, 2])) {
-            return redirect()->route('leave_requests.index')->with('error', 'Unauthorized action.');
+        // Check if the user has the "Edit Leave Request" permission
+        $PermissionRole = PermissionRoleModel::getPermission('Edit List Leave', Auth::user()->role_id);
+    
+        if (empty($PermissionRole)) { // Explicit check instead of empty()
+            return view('error.401'); // Redirect to the 401 Unauthorized error page
         }
-
+    
+        // Retrieve the leave request
+        $leaveRequest = LeaveRequest::findOrFail($id);
+        $getRole = RoleModel::getRecord(); // Fetch all available roles
+    
         return view('leave_requests.edit', compact('leaveRequest'));
-
-    }
+    }    
 
     public function update($id, Request $request)
     {
-        // Check if user has permission (Only Admins can update)
-        if (!in_array(Auth::user()->role_id, [1, 2])) {
-            return redirect()->route('leave_requests.index')->with('error', 'Unauthorized action.');
-        }
 
         // Retrieve the leave request
         $leaveRequest = LeaveRequest::findOrFail($id);
-
+    
         // Validate input
         $request->validate([
             'reason' => 'required|string|max:255',
             'leave_date' => 'required|date|after:today',
         ]);
-
+    
         // Update leave request fields
         $leaveRequest->reason = trim($request->reason);
         $leaveRequest->leave_date = trim($request->leave_date);
-
+    
         // Save changes
         $leaveRequest->save();
-
+    
         return redirect()->route('leave_requests.index')->with('success', 'Leave request updated successfully.');
     }
-
-
+    
     public function delete($id)
     {
-        $leaveRequest = LeaveRequest::findOrFail($id);
-        $user = Auth::user();
+        // Check if the authenticated user has permission to delete leave requests
+        $PermissionRole = PermissionRoleModel::getPermission('Delete List Leave', Auth::user()->role_id);
+        
+        //dd($PermissionRole);
 
-        // Only Super Admin (1) and Admin (2) can delete leave requests
-        if (in_array($user->role_id, [1, 2])) {
-            $leaveRequest->delete();
-            return redirect()->route('leave_requests.index')->with('success', 'Leave request deleted successfully.');
+        if (empty($PermissionRole)) {
+            return view('error.401'); // Unauthorized access
         }
+    
+        // Find the leave request record
+        $leaveRequest = LeaveRequest::findOrFail($id);
+    
+        // Delete the leave request
+        $leaveRequest->delete();
+    
+        return redirect()->route('leave_requests.index')->with('success', 'Leave request deleted successfully.');
+    }    
 
-        return redirect()->route('leave_requests.index')->with('error', 'Unauthorized action.');
-    }
 }

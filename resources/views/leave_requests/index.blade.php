@@ -106,27 +106,35 @@
                         {{ ucfirst($value->status) }}
                       </span>
                     </td>
-                    @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
                       <td>
                         @if($value->status == 'pending')
-                          <form action="{{ route('leave_requests.approve', $value->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                          </form>
-                          <form action="{{ route('leave_requests.reject', $value->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                          </form>
+
+                          @if(!empty($PermissionApprove))
+                              <form action="{{ route('leave_requests.approve', $value->id) }}" method="POST" class="d-inline">
+                                  @csrf
+                                  <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                              </form>
+                          @endif
+
+                          @if(!empty($PermissionApprove))
+                              <form action="{{ route('leave_requests.reject', $value->id) }}" method="POST" class="d-inline">
+                                  @csrf
+                                  <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                              </form>
+                          @endif
+
                         @endif
+
                         <!-- Edit Button -->
                         <a href="{{ route('leave_requests.edit', $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit Leave Request">
                             <i class="fas fa-pen text-success hover-edit"></i>
                         </a>
-
+   
                         <!-- Spacing -->
                         <span class="mx-2"></span>
 
                         <!-- Delete Button -->
+                        @if(!empty($PermissionDelete))
                         <form action="{{ route('leave_requests.delete', $value->id) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
@@ -134,8 +142,8 @@
                                 <i class="fas fa-trash text-danger hover-delete"></i>
                             </button>
                         </form>
+                        @endif
                       </td>
-                    @endif
                   </tr>
                 @endforeach
               </tbody>

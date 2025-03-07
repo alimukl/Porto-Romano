@@ -110,4 +110,36 @@
     </div>
   </main>
 </body>
+
+<script>
+    // Run function on page load
+    window.onload = function() {
+        toggleFieldsBasedOnRole();
+    };
+
+    // Listen for changes in the role dropdown
+    document.getElementById('roleSelect').addEventListener('change', function() {
+        toggleFieldsBasedOnRole();
+    });
+
+    function toggleFieldsBasedOnRole() {
+        var role = document.getElementById('roleSelect').value;
+
+        var employmentPassField = document.getElementById('employmentPassField');
+        var passportNumberField = document.getElementById('passportNumberField');
+        var employmentPassInput = document.getElementById('employment_pass');
+        var passportNumberInput = document.getElementById('passport_number');
+
+        if (role == '1' || role == '2') {
+            employmentPassField.style.display = 'none';
+            passportNumberField.style.display = 'none';
+            employmentPassInput.value = ''; // Clear input values
+            passportNumberInput.value = '';
+        } else {
+            employmentPassField.style.display = 'block';
+            passportNumberField.style.display = 'block';
+        }
+    }
+</script>
+
 @endsection

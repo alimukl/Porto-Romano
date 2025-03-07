@@ -19,7 +19,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link @if(Request::segment(2) == 'dashboard') active collapsed @endif" href="{{ url('panel/dashboard') }}">
+          <a class="nav-link @if(Request::is('panel/dashboard')) active collapsed @endif" href="{{ url('panel/dashboard') }}">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>shop </title>
@@ -41,7 +41,7 @@
 
         @if(!empty($PermissionUser))
         <li class="nav-item">
-          <a class="nav-link @if(Request::segment(2) == 'user') active collapsed @endif" href="{{ url('panel/user') }}">
+          <a class="nav-link @if(Request::is('panel/user')) active collapsed @endif" href="{{ url('panel/user') }}">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -64,7 +64,7 @@
 
         @if(!empty($PermissionRole))
         <li class="nav-item">
-          <a class="nav-link @if(Request::segment(2) == 'role') active collapsed @endif" href="{{ url('panel/role') }}">
+          <a class="nav-link @if(Request::is('panel/role')) active collapsed @endif" href="{{ url('panel/role') }}">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>credit-card</title>
@@ -87,7 +87,7 @@
 
         @if(!empty($PermissionLogActivity))
         <li class="nav-item">
-          <a class="nav-link @if(Request::segment(2) == 'applyleave') active collapsed @endif" href="{{ url('panel/applyleave') }}">
+          <a class="nav-link @if(Request::is('panel/log')) active collapsed @endif" href="{{ url('panel/applyleave') }}">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>box-3d-50</title>
@@ -111,7 +111,7 @@
 
         @if(!empty($PermissionListLeave))
         <li class="nav-item">
-          <a class="nav-link @if(Request::segment(2) == 'listleave') active collapsed @endif" href="{{ url('panel/leave-requests') }}">
+          <a class="nav-link @if(Request::is('panel/leave-requests')) active collapsed @endif" href="{{ url('panel/leave-requests') }}">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>settings</title>
@@ -135,7 +135,7 @@
 
         @if(!empty($PermissionApplyLeave))
         <li class="nav-item">
-          <a class="nav-link @if(Request::segment(2) == 'applyleave') active collapsed @endif" href="{{ url('panel/apply_leave') }}">
+          <a class="nav-link @if(Request::is('panel/apply_leave')) active collapsed @endif" href="{{ url('panel/apply_leave') }}">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>customer-support</title>
@@ -159,7 +159,7 @@
 
         @if(!empty($PermissionSetting))
         <li class="nav-item">
-          <a class="nav-link @if(Request::segment(2) == 'setting') active collapsed @endif" href="{{ url('panel/setting') }}">
+          <a class="nav-link @if(Request::is('panel/setting')) active collapsed @endif" href="{{ url('panel/setting') }}">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="20px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>spaceship</title>

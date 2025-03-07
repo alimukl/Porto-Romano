@@ -146,7 +146,7 @@ body {
 				<h1>Oops!</h1>
 				<h2>401 - You dont have permission to this page!</h2>
 			</div>
-			<a href="">Go TO Homepage</a>
+			<a href="{{ url('panel/dashboard') }}">Go TO Homepage</a>
 		</div>
 	</div>
 
