@@ -27,7 +27,7 @@
   font-family: 'Great Vibes', cursive;
     font-size: 24px; /* Adjust size as needed */
     font-weight: normal;
-    color: rgb(175, 127, 39); /* Adjust color if needed */
+    color: rgb(56, 43, 18); /* Adjust color if needed */
     padding-bottom: 10px !important;
 }
 </style>

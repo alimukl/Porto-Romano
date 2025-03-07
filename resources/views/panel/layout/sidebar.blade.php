@@ -1,4 +1,32 @@
 
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+
+.sidenav-header {
+  display: flex;
+  align-items: center; /* Align text and image */
+  justify-content: flex-start; /* Keeps elements aligned properly */
+  padding: 10px; /* Adjust spacing */
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center; /* Aligns image and text vertically */
+  gap: 10px; /* Space between logo and text */
+}
+
+.porto-romano-text {
+  font-family: 'Great Vibes', cursive;
+  font-size: 24px; /* Adjust size as needed */
+  font-weight: normal;
+  color: rgb(56, 43, 18);
+  white-space: nowrap; /* Prevents text from wrapping */
+  line-height: 1; /* Keeps text vertically centered */
+  padding-bottom:20px;
+}
+
+</style>
   <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
          @php
           $PermissionUser = App\Models\PermissionRoleModel::getPermission('User',Auth::user()->role_id);
@@ -10,9 +38,8 @@
         @endphp
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/soft-ui-dashboard/pages/dashboard.html " target="_blank">
-        <img src="{{ asset('assets/img/porto-romano.png') }}" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold">Porto Romano</span>
+      <a class="navbar-brand m-0" href="{{ url('panel/dashboard') }}" target="_blank">
+        <span class="ms-1 porto-romano-text">Porto Romano</span>
       </a>
     </div>
     <hr class="horizontal dark mt-0">

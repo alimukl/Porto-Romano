@@ -16,10 +16,9 @@
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
   <link rel="stylesheet" href="node_modules/bootstrap-icons/font/bootstrap-icons.css">
-  
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.1.0" rel="stylesheet" />
@@ -62,12 +61,65 @@
   object-fit: cover;
   border-radius: 10px; /* Makes the image square with slightly rounded corners */
 }
-
+/*
 .blur-gradient {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgb(164, 164, 164));
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgb(143, 143, 143));
     backdrop-filter: blur(10px);
     padding: 20px;
 }
+*/
+.custom-divider {
+  border: none;            
+  height: 3px;             
+  background: linear-gradient(to right,rgb(202, 202, 202),rgb(191, 119, 37)); 
+  width: 30%; /* Adjust width */
+  margin: 5px auto 20px auto; /* Center it */
+  border-radius: 5px;      
+  opacity: 0.8;           
+}
+
+.blur-background {
+  width: 100%;
+  padding: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3); /* Light transparency */
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.blur-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: inherit; /* Use the dynamically set background image */
+  background-size: cover;
+  background-position: center;
+  filter: blur(15px); /* Increase blur intensity */
+  z-index: -1;
+  opacity: 100; /* Adjust visibility */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10; /* Ensure it's above everything */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  border-radius: 50%; /* Make it round */
+  padding: 5px;
+}
+
+.close-button:hover {
+  background-color: rgba(0, 0, 0, 0.7); /* Darker on hover */
+}
+
 
   </style>
 </head>
@@ -326,78 +378,81 @@
                       <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                           <div class="modal-content rounded-3 position-relative" style="background-color:rgb(255, 255, 255);">
-                            <!-- Modal Header -->
-                            <div class="modal-header border-0 text-white position-relative">
-                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
                             <!-- Modal Body -->
                             <div class=" text-center position-relative">
                               <!-- Profile Picture, Name & Role -->
-                              <div class="d-flex flex-column align-items-center blur-gradient ">
-                                <!-- Profile Picture -->
-                                <img
-                                  id="modalUserPicture"
-                                  src=""
-                                  alt="Profile Picture"
-                                  class="profile-picture shadow"
-                                />
+                              <div class="d-flex flex-column align-items-center blur-background position-relative">
+                                <!-- Close Button -->
+                                <button type="button" class="btn-close btn-close-white close-button" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                <!-- Profile Picture Wrapper -->
+                                <div class="position-relative">
+                                  <img
+                                    id="modalUserPicture"
+                                    src=""
+                                    alt="Profile Picture"
+                                    class="profile-picture shadow"
+                                  />
+                                </div>
+
                                 <!-- Name -->
-                                <h4 class="mt-3 mb-1" id="modalUserName"></h4>
+                                <h4 class="mt-3 mb-1" id="modalUserName" style="color: rgb(255, 255, 255); font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);"></h4>
+
                                 <!-- Role -->
-                                <p class="text-muted" id="modalUserRole"></p>
+                                <p class="" id="modalUserRole" style="color: rgb(255, 255, 255); font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); letter-spacing: 1.5px;"></p>
                               </div>
                               <!-- User Details Card -->
                               <div class="card shadow-sm mx-auto text-center rounded-4" style="background-color:rgb(255, 255, 255);">
                                 <div class="card-body">
+                                <hr class="custom-divider">
                                   <!-- User Details -->
-                                  <div class="container px-3 text-secondary" style="font-size: 15px;">
-                                    <div class="row">
-                                      <!-- Left Column -->
-                                      <div class="col-md-6">
-                                        <div class="d-flex flex-column align-items-start mb-1">
-                                          <h6 class="mb-0"><i class="bi bi-envelope-check me-2"></i>Email</h6>
-                                          <a href="mailto:" id="modalUserEmail" class="text-decoration-none text-dark"></a>
+                                  <div class="container px-3 text-secondary text-start" style="font-size: 15px;">
+                                    <div class="d-flex justify-content-center"> <!-- Flex container to center -->
+                                      <div class="row w-100" style="max-width: 650px;"> <!-- Adjust max width -->
+                                        <!-- Left Column -->
+                                        <div class="col-md-6 mt-2">
+                                          <div class="mb-1">
+                                            <h6 class="mb-0"><i class="fa-solid fa-envelope-circle-check me-2"></i>Email</h6>
+                                            <a href="mailto:" id="modalUserEmail" class="text-decoration-none text-dark d-block"></a>
+                                          </div>
+
+                                          <div class="mb-1 mt-3">
+                                            <h6 class="mb-0"><i class="fa-solid fa-phone-volume me-2"></i>Phone</h6>
+                                            <span id="modalUserPhone" class="d-block"></span>
+                                          </div>
+
+                                          <div class="mb-1 mt-3">
+                                            <h6 class="mb-0"><i class="fa-solid fa-location-dot me-2"></i>Address</h6>
+                                            <span id="modalUserAddress" class="d-block"></span>
+                                          </div>
                                         </div>
 
-                                        <div class="d-flex flex-column align-items-start mb-1">
-                                          <h6 class="mb-0"><i class="far fa-phone fs-4 me-2"></i>Phone</h6>
-                                          <span id="modalUserPhone"></span>
-                                        </div>
+                                        <!-- Right Column (Employment & Passport) -->
+                                        <div class="col-md-6 mt-2">
+                                          <div class="mb-1" id="employmentPass">
+                                            <h6 class="mb-0"><i class="fa-solid fa-address-card me-2"></i>Employment Pass</h6>
+                                            <span id="modalUserEmployment" class="d-block"></span>
+                                          </div>
 
-                                        <div class="d-flex flex-column align-items-start mb-1">
-                                          <h6 class="mb-0"><i class="fas fa-map-marker-alt fs-4 me-2"></i>Address</h6>
-                                          <span id="modalUserAddress"></span>
-                                        </div>
-                                      </div>
+                                          <div class="mb-1 mt-3" id="passportNumber">
+                                            <h6 class="mb-0"><i class="fa-solid fa-passport me-2"></i>Passport No</h6>
+                                            <span id="modalUserPassport" class="d-block"></span>
+                                          </div>
 
-                                      <!-- Right Column (Employment & Passport) -->
-                                      <div class="col-md-6">
-                                        <div class="d-flex flex-column align-items-start mb-1" id="employmentPass">
-                                          <h6 class="mb-0"><i class="far fa-id-card fs-4 me-2"></i>Employment Pass</h6>
-                                          <span id="modalUserEmployment"></span>
-                                        </div>
+                                          <div class="mb-1 mt-3">
+                                            <h6 class="mb-0"><i class="fa-solid fa-user me-2"></i>Member Since</h6>
+                                            <span id="modalUserCreated" class="d-block"></span>
+                                          </div>
 
-                                        <div class="d-flex flex-column align-items-start mb-1" id="passportNumber">
-                                          <h6 class="mb-0"><i class="far fa-passport fs-4 me-2"></i>Passport No</h6>
-                                          <span id="modalUserPassport"></span>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <hr class="my-2">
-
-                                    <!-- Full Width Row for Membership Info -->
-                                    <div class="row">
-                                      <div class="col-md-6">
-                                        <div class="d-flex flex-column align-items-start mb-1">
-                                          <h6 class="mb-0"><i class="far fa-calendar-alt fs-4 me-2"></i>Member Since</h6>
-                                          <span id="modalUserCreated"></span>
                                         </div>
                                       </div>
-                                      <div class="col-md-6">
-                                        <div class="d-flex flex-column align-items-start mb-1">
-                                          <h6 class="mb-0"><i class="far fa-clock fs-4 me-2"></i>Last Updated</h6>
-                                          <span id="modalUserUpdated"></span>
+                                      <!-- Full Width Row for Membership Info -->
+                                      <div class="row">
+                                        <div class="col-md-8 mt-2">
+                                          <div class="mb-1">
+                                            <h6 class="mb-0"><i class="fa-solid fa-pen-to-square me-2"></i>Last Updated</h6>
+                                            <span id="modalUserUpdated" class="d-block"></span>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
@@ -438,5 +493,19 @@
     var myModal = new bootstrap.Modal(document.getElementById('profileModal'));
     myModal.show();
   }
+
+  document.addEventListener("DOMContentLoaded", function () {
+  const profilePic = document.getElementById("modalUserPicture");
+  const blurBackground = document.querySelector(".blur-background");
+
+  if (profilePic && blurBackground) {
+    profilePic.onload = function () {
+      blurBackground.style.backgroundImage = `url(${profilePic.src})`;
+      blurBackground.style.backgroundSize = "cover";
+      blurBackground.style.backgroundPosition = "center";
+      blurBackground.style.backgroundRepeat = "no-repeat";
+    };
+  }
+});
   
 </script>
