@@ -13,10 +13,17 @@
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- CSS Files -->
   <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css?v=1.1.0') }}" rel="stylesheet" />
+
+<style>
+    .table-custom-shadow {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* You can adjust the values to control the shadow's size and intensity */
+}
+</style>
+
 </head>
 <body class="g-sidenav-show  bg-gray-100">
 @include('panel.layout.sidebar')
-<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+<main class="main-content position-relative max-height-vh-150 h-150 border-radius-lg">
     @include('panel.layout.header')
 
     <div class="wrapper">

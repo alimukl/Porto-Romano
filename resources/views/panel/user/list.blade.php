@@ -26,6 +26,9 @@
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
   <style>
     /* Hover effect for the pen icon */
 .hover-edit:hover {
@@ -200,11 +203,12 @@
                               </a>
                             @endif
                               <span class="mx-2"></span>
-                            @if(!empty($PermissionDelete))
-                              <a href="{{ url('panel/user/delete/' . $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user">
-                                <i class="fas fa-trash text-danger hover-delete"></i>
-                              </a>
-                            @endif
+                              @if(!empty($PermissionDelete))
+                                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user" 
+                                  onclick="confirmDelete('{{ url('panel/user/delete/' . $value->id) }}', '{{ $value->name }}')">
+                                  <i class="fas fa-trash text-danger hover-delete"></i>
+                                </a>
+                              @endif
                               <!-- View Button -->
                               <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
                                 onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
@@ -279,11 +283,12 @@
                               </a>
                             @endif
                               <span class="mx-2"></span>
-                            @if(!empty($PermissionDelete))
-                              <a href="{{ url('panel/user/delete/' . $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user">
-                                <i class="fas fa-trash text-danger hover-delete"></i>
-                              </a>
-                            @endif
+                              @if(!empty($PermissionDelete))
+                                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user" 
+                                  onclick="confirmDelete('{{ url('panel/user/delete/' . $value->id) }}', '{{ $value->name }}')">
+                                  <i class="fas fa-trash text-danger hover-delete"></i>
+                                </a>
+                              @endif
                               <!-- View Button -->
                               <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
                                 onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
@@ -358,11 +363,12 @@
                               </a>
                             @endif
                               <span class="mx-2"></span>
-                            @if(!empty($PermissionDelete))
-                              <a href="{{ url('panel/user/delete/' . $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user">
-                                <i class="fas fa-trash text-danger hover-delete"></i>
-                              </a>
-                            @endif
+                              @if(!empty($PermissionDelete))
+                                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user" 
+                                  onclick="confirmDelete('{{ url('panel/user/delete/' . $value->id) }}', '{{ $value->name }}')">
+                                  <i class="fas fa-trash text-danger hover-delete"></i>
+                                </a>
+                              @endif
                             <!-- View Button -->
                             <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
                               onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
@@ -372,6 +378,29 @@
                           </tr>
                         @endif
                       @endforeach
+
+                        <!-- Confirmation Delete Modal -->
+                        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      Are you sure you want to delete <span id="userName" class="font-weight-bold"></span>'s account?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <form id="deleteForm" method="POST" action="">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                       <!-- User Details Modal -->
                       <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -471,9 +500,6 @@
   </div>
 </main>
 
-</body>
-@endsection('content')
-
 <script>
   function showUserDetails(name, email, address, phone, employment_pass, passport_number, role_name, created_at, updated_at, profile_photo) {
     document.getElementById("modalUserName").innerText = name;
@@ -496,14 +522,30 @@
   const profilePic = document.getElementById("modalUserPicture");
   const blurBackground = document.querySelector(".blur-background");
 
-  if (profilePic && blurBackground) {
-    profilePic.onload = function () {
-      blurBackground.style.backgroundImage = `url(${profilePic.src})`;
-      blurBackground.style.backgroundSize = "cover";
-      blurBackground.style.backgroundPosition = "center";
-      blurBackground.style.backgroundRepeat = "no-repeat";
-    };
-  }
-});
+    if (profilePic && blurBackground) {
+      profilePic.onload = function () {
+        blurBackground.style.backgroundImage = `url(${profilePic.src})`;
+        blurBackground.style.backgroundSize = "cover";
+        blurBackground.style.backgroundPosition = "center";
+        blurBackground.style.backgroundRepeat = "no-repeat";
+      };
+    }
+  });
   
 </script>
+
+<script>
+  function confirmDelete(deleteUrl, userName) {
+    // Set the action URL for the delete form
+    document.getElementById('deleteForm').action = deleteUrl;
+    // Set the user name in the modal
+    document.getElementById('userName').textContent = userName;
+    // Initialize modal and show it
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+  }
+</script>
+
+</body>
+@endsection('content')
+
