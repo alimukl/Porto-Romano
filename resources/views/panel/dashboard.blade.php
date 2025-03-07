@@ -20,8 +20,16 @@
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+
+  <!-- loader css -->
+  <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
+
 </head>
 <body class="g-sidenav-show  bg-gray-100">
+<div class="loader-container">
+    <div class="loader"></div>
+</div>
+
 @include('panel.layout.sidebar')
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
 @include('panel.layout.header')
@@ -747,6 +755,24 @@
     </div>
 
 </main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(() => {
+        let loaderContainer = document.querySelector(".loader-container");
+        let loader = document.querySelector(".loader");
+        
+        // Add fade-out class
+        loaderContainer.classList.add("fade-out");
+        loader.classList.add("fade-out");
+
+        // Remove loader from DOM after animation completes
+        setTimeout(() => {
+            loaderContainer.style.display = "none";
+        }, 500); // Match transition duration (0.5s)
+    }, 3000);
+});
+</script>
 
 </body>
 @endsection('content')

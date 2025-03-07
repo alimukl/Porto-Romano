@@ -188,8 +188,16 @@
 
                         <input type="hidden" name="otp_combined" id="otp_combined"> 
 
-                        <button type="submit" class="btn btn-danger submit_btn my-4">Verify</button>
+                        <button type="submit" class="btn btn-danger submit_btn my-4 verify-btn">Verify</button>
 
+                            <!-- Loader element (hidden by default) -->
+                            <div id="loader" class="text-center" style="display: none;">
+                                <div class="spinner-border text-danger" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p>Verifying...</p>
+                            </div>
+                        
                         <div class="fw-normal text-muted mb-2">
                         For security reasons, do not share this code with <a href="#" class="text-danger fw-bold text-decoration-none">anyone.</a>
                         </div>
@@ -197,9 +205,10 @@
                 </div>
             </div>
         </section>
-
+            
         <script>
             document.addEventListener("DOMContentLoaded", function () {
+                // OTP Input Logic (as before)
                 const inputs = document.querySelectorAll(".otp-box");
                 const hiddenInput = document.getElementById("otp_combined");
 
@@ -223,6 +232,41 @@
                 function updateHiddenInput() {
                     hiddenInput.value = Array.from(inputs).map(i => i.value).join("");
                 }
+
+                // Animation for the Verify Button
+                const verifyButton = document.querySelector('.verify-btn');
+
+                // IntersectionObserver to trigger the animation when the button comes into view
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            // Trigger animation
+                            entry.target.classList.add('animate');
+                            observer.unobserve(entry.target); // Stop observing once it's visible
+                        }
+                    });
+                }, {
+                    threshold: 0.5  // Trigger when 50% of the element is in the viewport
+                });
+
+                observer.observe(verifyButton); // Start observing the Verify button
+
+                // Handle Verify Button Click and Add Delay Before Redirection
+                const verifyBtn = document.querySelector('.submit_btn'); // The Verify button
+                const loader = document.getElementById('loader'); // The loader element
+
+                verifyBtn.addEventListener('click', function (event) {
+                    event.preventDefault(); // Prevent the default form submission
+                    
+                    // Show the loader
+                    loader.style.display = 'block'; 
+                    
+                    // Simulate delay before redirecting (e.g., 2 seconds)
+                    setTimeout(function () {
+                        // Submit the form after the delay
+                        document.querySelector('form').submit(); // This will submit the form
+                    }, 4500); // Adjust the delay time as needed (2000ms = 2 seconds)
+                });
             });
         </script>
 

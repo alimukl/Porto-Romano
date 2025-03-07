@@ -20,13 +20,14 @@
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+
 </head>
 <body class="g-sidenav-show  bg-gray-100">
+
 @include('panel.layout.sidebar')
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
 @include('panel.layout.header')
 
-<div class="container-fluid py-4">
 
 <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
@@ -102,4 +103,5 @@
 </main>
 
 </body>
+
 @endsection('content')

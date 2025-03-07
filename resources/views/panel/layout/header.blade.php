@@ -22,7 +22,12 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                 <li><a class="dropdown-item" href="{{ url('panel/profile') }}">Profile</a></li>
-                <li><a class="dropdown-item text-danger" href="{{ url('logout') }}">Log Out</a></li>
+                <li>
+                  <a id="logOutBtn" class="dropdown-item text-danger" href="{{ url('logout') }}">Log Out</a>
+                </li>
+                <div id="loader" class="text-center" style="display: none;">
+                      <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
+                </div>
               </ul>
             </li>
             
@@ -301,6 +306,23 @@
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
   </script>
+
+  <script>
+    document.getElementById('logOutBtn').addEventListener('click', function (event) {
+    // Prevent the default logout action until we show the loader
+    event.preventDefault();
+    
+    // Show the loader and hide the logout button
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('logOutBtn').style.display = 'none';
+
+    // Redirect to logout after a short delay (to simulate processing)
+    setTimeout(function () {
+      window.location.href = "{{ url('logout') }}";  // Proceed with the logout
+    }, 600); // You can adjust this delay as needed
+  });
+  </script>
+
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->

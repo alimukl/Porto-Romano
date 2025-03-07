@@ -17,6 +17,7 @@
   <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css?v=1.1.0') }}" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
 </head>
 
 <style>
@@ -30,8 +31,18 @@
     color: rgb(56, 43, 18); /* Adjust color if needed */
     padding-bottom: 10px !important;
 }
+
+  /* Fade out effect */
+  .fade-out {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
 </style>
+
 <body class="">
+
   <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
       <div class="col-12">
@@ -115,7 +126,10 @@
                       <label class="form-check-label" for="rememberMe">Remember me</label>
                     </div>
                     <div class="text-center">
-					<button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign In</button>
+                        <button type="submit" class="form-control btn btn-primary rounded submit px-3" id="signInBtn">Sign In</button>
+                    </div>
+                    <div id="loader" class="text-center" style="display: none;">
+                      <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
                     </div>
                   </form>
                 </div>
@@ -162,6 +176,23 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="{{ asset('assets/js/soft-ui-dashboard.min.js?v=1.1.0') }}"></script>
+
+  <script>
+    document.getElementById('signInBtn').addEventListener('click', function (event) {
+      // Prevent form submission until we show the loader
+      event.preventDefault();
+      
+      // Show the loader and hide the sign-in button
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('signInBtn').style.display = 'none';
+
+      // Submit the form after a short delay (to simulate processing)
+      setTimeout(function () {
+        document.querySelector('form').submit();
+      }, 1000); // You can adjust this delay as needed
+    });
+  </script>
+
 </body>
 
 </html>
