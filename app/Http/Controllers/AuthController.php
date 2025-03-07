@@ -82,8 +82,8 @@ class AuthController extends Controller
             \Log::error('MFA email sending failed: ' . $e->getMessage());
             return redirect()->route('login')->with('error', 'Failed to send MFA code. Please try again.');
         }
-    
-        return view('auth.mfa'); // Redirect to MFA verification page
+
+          return view('auth.mfa', ['email' => $user->email]);
     }    
 
     public function verifyMfaCode(Request $request)

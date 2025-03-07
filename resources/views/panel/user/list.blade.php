@@ -15,6 +15,12 @@
   <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <link rel="stylesheet" href="node_modules/bootstrap-icons/font/bootstrap-icons.css">
+  
+
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.1.0" rel="stylesheet" />
   <!-- Nepcha Analytics (nepcha.com) -->
@@ -32,10 +38,35 @@
   color: #c82333; /* Darker red color for hover */
 }
 
+/* Hover effect for the eye icon */
+.hover-view:hover {
+  color:rgb(73, 145, 213); /* Darker red color for hover */
+}
+
 /* Optional: Make the icons slightly bigger on hover */
-.hover-edit:hover, .hover-delete:hover {
+.hover-edit:hover, .hover-delete:hover, .hover-view:hover{
   transform: scale(1.3); /* Increase size by 10% */
   transition: all 0.3s ease; /* Smooth transition for scaling */
+}
+
+/* Ensure content is above the blurred background */
+.modal-content > .position-relative {
+  position: relative;
+  z-index: 2;
+}
+
+/* Profile Picture */
+.profile-picture {
+  width: 280px;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 10px; /* Makes the image square with slightly rounded corners */
+}
+
+.blur-gradient {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgb(164, 164, 164));
+    backdrop-filter: blur(10px);
+    padding: 20px;
 }
 
   </style>
@@ -124,6 +155,11 @@
                                 <i class="fas fa-trash text-danger hover-delete"></i>
                               </a>
                             @endif
+                              <!-- View Button -->
+                              <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
+                                onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
+                                <i class="fas fa-eye text-info hover-edit"></i>
+                              </button>
                             </td>
                           </tr>
                         @endif
@@ -198,6 +234,11 @@
                                 <i class="fas fa-trash text-danger hover-delete"></i>
                               </a>
                             @endif
+                              <!-- View Button -->
+                              <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
+                                onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
+                                <i class="fas fa-eye text-info hover-edit"></i>
+                              </button>
                             </td>
                           </tr>
                         @endif
@@ -272,10 +313,101 @@
                                 <i class="fas fa-trash text-danger hover-delete"></i>
                               </a>
                             @endif
+                            <!-- View Button -->
+                            <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
+                              onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
+                              <i class="fas fa-eye text-info hover-edit"></i>
+                            </button>
                             </td>
                           </tr>
                         @endif
                       @endforeach
+                      <!-- User Details Modal -->
+                      <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                          <div class="modal-content rounded-3 position-relative" style="background-color:rgb(255, 255, 255);">
+                            <!-- Modal Header -->
+                            <div class="modal-header border-0 text-white position-relative">
+                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <!-- Modal Body -->
+                            <div class=" text-center position-relative">
+                              <!-- Profile Picture, Name & Role -->
+                              <div class="d-flex flex-column align-items-center blur-gradient ">
+                                <!-- Profile Picture -->
+                                <img
+                                  id="modalUserPicture"
+                                  src=""
+                                  alt="Profile Picture"
+                                  class="profile-picture shadow"
+                                />
+                                <!-- Name -->
+                                <h4 class="mt-3 mb-1" id="modalUserName"></h4>
+                                <!-- Role -->
+                                <p class="text-muted" id="modalUserRole"></p>
+                              </div>
+                              <!-- User Details Card -->
+                              <div class="card shadow-sm mx-auto text-center rounded-4" style="background-color:rgb(255, 255, 255);">
+                                <div class="card-body">
+                                  <!-- User Details -->
+                                  <div class="container px-3 text-secondary" style="font-size: 15px;">
+                                    <div class="row">
+                                      <!-- Left Column -->
+                                      <div class="col-md-6">
+                                        <div class="d-flex flex-column align-items-start mb-1">
+                                          <h6 class="mb-0"><i class="bi bi-envelope-check me-2"></i>Email</h6>
+                                          <a href="mailto:" id="modalUserEmail" class="text-decoration-none text-dark"></a>
+                                        </div>
+
+                                        <div class="d-flex flex-column align-items-start mb-1">
+                                          <h6 class="mb-0"><i class="far fa-phone fs-4 me-2"></i>Phone</h6>
+                                          <span id="modalUserPhone"></span>
+                                        </div>
+
+                                        <div class="d-flex flex-column align-items-start mb-1">
+                                          <h6 class="mb-0"><i class="fas fa-map-marker-alt fs-4 me-2"></i>Address</h6>
+                                          <span id="modalUserAddress"></span>
+                                        </div>
+                                      </div>
+
+                                      <!-- Right Column (Employment & Passport) -->
+                                      <div class="col-md-6">
+                                        <div class="d-flex flex-column align-items-start mb-1" id="employmentPass">
+                                          <h6 class="mb-0"><i class="far fa-id-card fs-4 me-2"></i>Employment Pass</h6>
+                                          <span id="modalUserEmployment"></span>
+                                        </div>
+
+                                        <div class="d-flex flex-column align-items-start mb-1" id="passportNumber">
+                                          <h6 class="mb-0"><i class="far fa-passport fs-4 me-2"></i>Passport No</h6>
+                                          <span id="modalUserPassport"></span>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <hr class="my-2">
+
+                                    <!-- Full Width Row for Membership Info -->
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="d-flex flex-column align-items-start mb-1">
+                                          <h6 class="mb-0"><i class="far fa-calendar-alt fs-4 me-2"></i>Member Since</h6>
+                                          <span id="modalUserCreated"></span>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="d-flex flex-column align-items-start mb-1">
+                                          <h6 class="mb-0"><i class="far fa-clock fs-4 me-2"></i>Last Updated</h6>
+                                          <span id="modalUserUpdated"></span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </tbody>
                   </table>
                 </div>
@@ -288,3 +420,23 @@
 
 </body>
 @endsection('content')
+
+<script>
+  function showUserDetails(name, email, address, phone, employment_pass, passport_number, role_name, created_at, updated_at, profile_photo) {
+    document.getElementById("modalUserName").innerText = name;
+    document.getElementById("modalUserEmail").innerText = email;
+    document.getElementById("modalUserAddress").innerText = address;
+    document.getElementById("modalUserPhone").innerText = phone;
+    document.getElementById("modalUserEmployment").innerText = employment_pass;
+    document.getElementById("modalUserPassport").innerText = passport_number;
+    document.getElementById("modalUserRole").innerText = role_name;
+    document.getElementById("modalUserCreated").innerText = created_at;
+    document.getElementById("modalUserUpdated").innerText = updated_at;
+    document.getElementById("modalUserPicture").src = profile_photo;
+    
+    // Initialize and show the modal using Bootstrap 5
+    var myModal = new bootstrap.Modal(document.getElementById('profileModal'));
+    myModal.show();
+  }
+  
+</script>

@@ -21,6 +21,8 @@
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     /* Hover effect for the pen icon */
 .hover-edit:hover {
@@ -32,8 +34,13 @@
   color: #c82333; /* Darker red color for hover */
 }
 
+/* Hover effect for the eye icon */
+.hover-view:hover {
+  color:rgb(73, 145, 213); /* Darker red color for hover */
+}
+
 /* Optional: Make the icons slightly bigger on hover */
-.hover-edit:hover, .hover-delete:hover {
+.hover-edit:hover,.hover-view:hover, .hover-delete:hover {
   transform: scale(1.3); /* Increase size by 10% */
   transition: all 0.3s ease; /* Smooth transition for scaling */
 }
@@ -61,6 +68,11 @@
       <div class="card mb-4">
         <div class="card-header pb-0 d-flex align-items-center">
           <h6 class="mb-0">Leave Requests Table</h6>
+          @if(!empty($PermissionAdd))
+          <div class="ms-auto">
+            <a href="{{ route('leave_requests.createForUser') }}" class="btn btn-primary btn-sm">Add Leave</a>
+        </div>
+        @endif
         </div>
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-0">
@@ -125,11 +137,12 @@
 
                         @endif
 
+                        @if(!empty($PermissionDelete))
                         <!-- Edit Button -->
                         <a href="{{ route('leave_requests.edit', $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit Leave Request">
                             <i class="fas fa-pen text-success hover-edit"></i>
                         </a>
-   
+                        @endif
                         <!-- Spacing -->
                         <span class="mx-2"></span>
 
@@ -143,9 +156,33 @@
                             </button>
                         </form>
                         @endif
+                        <!-- View Button -->
+                        <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs" onclick="showLeaveDetails('{{ $value->user->name }}', '{{ $value->user->email }}', '{{ $value->reason }}')">
+                          <i class="fas fa-eye text-info hover-view"></i>
+                        </button>
                       </td>
                   </tr>
                 @endforeach
+                <!-- Leave Request Details Modal -->
+                <div class="modal fade" id="leaveRequestModal" tabindex="-1" role="dialog" aria-labelledby="leaveRequestModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="leaveRequestModalLabel">Leave Request Details</h5>
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p><strong>Name:</strong> <span id="modalUserName"></span></p>
+                        <p><strong>Email:</strong> <span id="modalUserEmail"></span></p>
+                        <p><strong>Reason:</strong> <span id="modalLeaveReason"></span></p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </tbody>
             </table>
           </div>
@@ -153,8 +190,16 @@
       </div>
     </div>
   </div>
-
 </div>
 </main>
 </body>
 @endsection
+
+<script>
+  function showLeaveDetails(name, email, reason) {
+    document.getElementById("modalUserName").innerText = name;
+    document.getElementById("modalUserEmail").innerText = email;
+    document.getElementById("modalLeaveReason").innerText = reason;
+    $('#leaveRequestModal').modal('show');
+  }
+</script>

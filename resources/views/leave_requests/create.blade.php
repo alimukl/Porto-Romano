@@ -26,8 +26,19 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <form action="{{ route('leave_requests.store') }}" method="POST">
+    <form action="{{ route('leave_requests.admin_store') }}" method="POST">
         @csrf
+
+        <div class="mb-3">
+            <label for="user_id" class="form-label">Select User</label>
+            <select name="user_id" id="user_id" class="form-control" required>
+                <option value="">-- Search and Select User --</option>
+                @foreach($users as $user)
+                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="mb-3">
             <label for="reason" class="form-label">Reason for Leave</label>
             <textarea name="reason" class="form-control" required></textarea>
@@ -38,7 +49,7 @@
             <input type="date" name="leave_date" class="form-control" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Apply</button>
+        <button type="submit" class="btn btn-primary">Apply Leave</button>
     </form>
 </div>
 @endsection

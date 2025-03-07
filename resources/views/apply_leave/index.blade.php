@@ -31,9 +31,9 @@
     <div class="col-12">
       <div class="card mb-4">
       <div class="card-header pb-0 d-flex align-items-center">
-        <h6 class="mb-0">Apply Requests Table</h6>
+        <h6 class="mb-0">Apply Requests Table</h6>      
         <div class="ms-auto">
-            <a href="{{ route('leave_requests.create') }}" class="btn btn-primary btn-sm">Apply Leave</a>
+            <a href="{{ route('apply_leave.create') }}" class="btn btn-primary btn-sm">Apply Leave</a>
         </div>
     </div>
         <div class="card-body px-0 pt-0 pb-2">

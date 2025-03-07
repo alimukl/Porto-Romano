@@ -156,4 +156,5 @@ class UserController extends Controller
 
         return redirect('panel/user')->with('success',"User successfully deleted");
     }
+
 }

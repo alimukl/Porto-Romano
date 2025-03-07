@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\LeaveRequest;
+use App\Models\RoleModel;
 use Illuminate\Http\Request;
 use App\Models\PermissionModel;
 use App\Models\PermissionRoleModel;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class LeaveRequestController extends Controller
@@ -19,9 +21,8 @@ class LeaveRequestController extends Controller
             return view('error.401');
         }
 
-        $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add List Leave',Auth::user()->role_id);
+        $data['PermissionAdd'] = PermissionRoleModel::getPermission('Add Leave',Auth::user()->role_id);
         $data['PermissionEdit'] = PermissionRoleModel::getPermission('Edit List Leave',Auth::user()->role_id);
-        $data['PermissionUpdate'] = PermissionRoleModel::getPermission('Update List Leave',Auth::user()->role_id);
         $data['PermissionDelete'] = PermissionRoleModel::getPermission('Delete List Leave',Auth::user()->role_id);
         $data['PermissionApprove'] = PermissionRoleModel::getPermission('Approve List Leave',Auth::user()->role_id);
 
@@ -42,12 +43,12 @@ class LeaveRequestController extends Controller
         return view('apply_leave.index', compact('leaveRequests'));
     }    
 
-    public function create() //display form //apply form
+    public function create() //display form for own id
     {
-        return view('leave_requests.create');
+        return view('apply_leave.create');
     }
 
-    public function store(Request $request) //store data
+    public function store(Request $request) //store own user data
     {
         $request->validate([
             'reason' => 'required|string|max:255',
@@ -61,7 +62,38 @@ class LeaveRequestController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('leave_requests.index')->with('success', 'Leave request submitted successfully.');
+          return redirect()->route('apply_leave.index')->with('success', 'Leave request submitted successfully.');
+    }
+
+    public function createForUser() //display form for all user
+    {
+        //permission to page by link
+        $PermissionRole = PermissionRoleModel::getPermission('Add Leave',Auth::user()->role_id);
+        if(empty($PermissionRole))
+        {
+            return view('error.401');
+        }
+
+        $users = User::all(); // Fetch all users from the database
+        return view('leave_requests.create', compact('users')); // Pass users to the view
+    }
+
+    public function storeForUser(Request $request) // Store leave request for a selected user
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id', // Ensure selected user exists
+            'reason' => 'required|string|max:255',
+            'leave_date' => 'required|date|after:today',
+        ]);
+
+        LeaveRequest::create([
+            'user_id' => $request->user_id, // Admin selects the user
+            'reason' => $request->reason,
+            'leave_date' => $request->leave_date,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('leave_requests.index')->with('success', 'Leave request submitted successfully for the selected user.');
     }
 
     public function approve($id) // Edit status
@@ -156,6 +188,6 @@ class LeaveRequestController extends Controller
         $leaveRequest->delete();
     
         return redirect()->route('leave_requests.index')->with('success', 'Leave request deleted successfully.');
-    }    
+    }
 
 }

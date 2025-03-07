@@ -128,7 +128,7 @@
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">List Leave</span>
+            <span class="nav-link-text ms-1">All Leave Request</span>
           </a>
         </li>
         @endif
