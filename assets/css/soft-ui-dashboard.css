@@ -82,7 +82,7 @@
   --bs-body-line-height: 1.5;
   --bs-body-color: #71717a;
   --bs-body-color-rgb: 113, 113, 122;
-  --bs-body-bg: #fff;
+  --bs-body-bg: #e3e3e3;
   --bs-body-bg-rgb: 255, 255, 255;
   --bs-emphasis-color: #000;
   --bs-emphasis-color-rgb: 0, 0, 0;
@@ -5580,7 +5580,7 @@ fieldset:disabled .btn {
 
 .accordion {
   --bs-accordion-color: #71717a;
-  --bs-accordion-bg: transparent;
+  --bs-accordion-bg: #27272a;
   --bs-accordion-transition: all 0.15s ease-in, border-radius 0.15s ease;
   --bs-accordion-border-color: rgba(0, 0, 0, 0.125);
   --bs-accordion-border-width: 0;
@@ -11335,7 +11335,7 @@ fieldset:disabled .btn {
 }
 
 .bg-gray-100 {
-  background-color: #f4f4f5 !important;
+  background-color: #ebebeb !important;
 }
 
 .bg-gray-200 {
