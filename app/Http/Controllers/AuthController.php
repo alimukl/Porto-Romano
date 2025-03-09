@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\Events\Login;
 use Illuminate\Http\Request;
+use Spatie\Activitylog\Facades\Activity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
@@ -91,15 +93,14 @@ class AuthController extends Controller
         // Combine the OTP array into a single string
         $otp = implode('', $request->otp);
 
-        // Validate OTP as a 6-digit numeric string
-        $request->merge(['otp' => $otp]); // Convert to string for validation
-
+        // Validate OTP
+        $request->merge(['otp' => $otp]); 
         $request->validate([
             'otp' => ['required', 'digits:6'],
         ]);
 
         $userId = session('mfa_user_id');
-        $remember = session('remember_me', false); // Retrieve remember me preference
+        $remember = session('remember_me', false);
 
         if (!$userId) {
             return redirect()->route('login')->with('error', 'Session expired. Please log in again.');
@@ -119,11 +120,25 @@ class AuthController extends Controller
         // Clear MFA token after successful verification
         $user->update(['mfa_token' => null, 'mfa_expires_at' => null]);
 
-        // Authenticate user without using stored password
+        // Authenticate user
         Auth::login($user, $remember);
 
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Authentication failed.');
+        }
+
+        // Fire Laravel's login event
+        event(new Login(Auth::guard(), $user, false));
+
+        // Ensure the activity log is initialized before assigning properties
+        $activity = Activity::causedBy($user)
+                            ->event('login')
+                            ->log('User successfully logged in after MFA verification');
+
+        // Ensure `$activity` is not null before setting `event`
+        if ($activity) {
+            $activity->event = 'login';  
+            $activity->save();
         }
 
         // Clear session MFA data
@@ -132,12 +147,24 @@ class AuthController extends Controller
         return redirect('panel/dashboard');
     }
 
-
     public function logout()
     {
-        session()->forget('mfa_user_id'); // Remove MFA session
+        // Get the authenticated user before logging out
+        $user = Auth::user();
+    
+        // Log user logout activity
+        if ($user) {
+            Activity::causedBy($user)
+                ->event('logout')
+                ->log('User successfully logged out');
+        }
+    
+        // Clear session data related to MFA
+        session()->forget(['mfa_user_id', 'mfa_password', 'remember_me']);
+    
+        // Perform logout
         Auth::logout();
-
+    
         return redirect(url(''));
     }
 }

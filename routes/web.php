@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\ActivityLogController;
 
 //public route
 Route::get('/', [AuthController::class, 'login'])->name('login'); 
@@ -16,6 +17,8 @@ Route::get('logout', [AuthController::class,'logout']);
 
 Route::post('/send-mfa', [AuthController::class, 'sendMfaCode'])->name('send.mfa');
 Route::post('/verify-mfa', [AuthController::class, 'verifyMfaCode'])->name('verify.mfa');
+
+Route::get('panel/activity_log', [ActivityLogController::class, 'index'])->name('activity.log');
 
 //display verify
 Route::get('/verify-mfa', function () {
