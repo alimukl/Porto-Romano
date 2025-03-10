@@ -3,15 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
-  <title>Soft UI Dashboard 3 by Creative Tim</title>
+  <title>Log Activity</title>
   <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet" />
-  <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/soft-ui-dashboard.css?v=1.1.0" />
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.1.0" rel="stylesheet" />
-  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 
   <style>
     .table-custom-shadow {
@@ -42,64 +37,65 @@
   </nav>
   <br>
 
-  <h2 class="text-center text-primary">User Login Activity Log</h2>
-
-  <div class="table-responsive">
-    <table class="table table-striped table-hover table-bordered align-middle text-center shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>#</th>
-                <th>User</th>
-                <th>Action</th>
-                <th>Before Update</th>
-                <th>After Update</th>
-                <th>Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($logs as $index => $log)
-                @php
+  <h6 class="mb-0">User Login Activity Log</h6>
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4 table-custom-shadow">
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">User</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Action</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Before Update</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">After Update</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                @forelse($logs as $index => $log)
+                  @php
                     $oldValues = $log->properties['old'] ?? [];
                     $newValues = $log->properties['attributes'] ?? [];
-                @endphp
-                <tr>
+                  @endphp
+                  <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>
-                        <span class="badge bg-primary text-white">
-                            {{ $log->causer?->name ?? 'Unknown' }}
-                        </span>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                          <img src="../public/images/admin.jpg" class="avatar avatar-sm me-3" alt="user1">
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h6 class="mb-0 text-sm">{{ $log->causer?->name ?? 'Unknown' }}</h6>
+                        </div>
+                      </div>
                     </td>
                     <td>
-                        <i class="fas fa-info-circle text-info"></i>
-                        {{ $log->description }}
-                    </td>
-                    <td class="text-start text-wrap">
-                        @if(!empty($oldValues))
-                            <pre class="bg-light p-2 rounded">{{ json_encode($oldValues, JSON_PRETTY_PRINT) }}</pre>
-                        @else
-                            <span class="text-muted">No previous data</span>
-                        @endif
-                    </td>
-                    <td class="text-start text-wrap">
-                        @if(!empty($newValues))
-                            <pre class="bg-light p-2 rounded">{{ json_encode($newValues, JSON_PRETTY_PRINT) }}</pre>
-                        @else
-                            <span class="text-muted">No new data</span>
-                        @endif
+                      <span class="badge badge-sm bg-gradient-success">{{ $log->description }}</span>
                     </td>
                     <td>
-                        <span class="text-muted">
-                            {{ $log->created_at->format('Y-m-d H:i:s') }}
-                        </span>
+                      <pre class="bg-light p-2 rounded">{{ json_encode($oldValues, JSON_PRETTY_PRINT) ?? 'No previous data' }}</pre>
                     </td>
-                </tr>
-            @empty
-                <tr>
+                    <td>
+                      <pre class="bg-light p-2 rounded">{{ json_encode($newValues, JSON_PRETTY_PRINT) ?? 'Deleted User' }}</pre>
+                    </td>
+                    <td>
+                      <span class="text-muted">{{ $log->created_at->format('Y-m-d H:i:s') }}</span>
+                    </td>
+                  </tr>
+                @empty
+                  <tr>
                     <td colspan="6" class="text-center text-muted">No login activity found</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+                  </tr>
+                @endforelse
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 </main>

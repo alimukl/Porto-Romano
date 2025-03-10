@@ -104,12 +104,6 @@ class UserController extends Controller
         $user->address = trim($request->address);
         $user->phone = trim($request->phone);
         $user->save();
-    
-        activity('user')
-        ->causedBy(Auth::user())
-        ->performedOn($user)
-        ->withProperties(['name' => $user->name, 'email' => $user->email])
-        ->log('User Created');
 
         return redirect('panel/user')->with('success', "User successfully created");
     }
@@ -123,8 +117,7 @@ class UserController extends Controller
         }
     
         // Retrieve the user before updating
-        $user = User::findOrFail($id); // Ensure user exists
-        $oldData = $user->getOriginal(); // Get original values before update
+        $user = User::findOrFail($id);
     
         // Update user details
         $user->name = trim($request->name);
@@ -135,17 +128,7 @@ class UserController extends Controller
         $user->age = trim($request->age);
         $user->address = trim($request->address);
         $user->phone = trim($request->phone);
-        $user->save();
-    
-        // Log the update action
-        activity('user')
-            ->causedBy(Auth::user())
-            ->performedOn($user)
-            ->withProperties([
-                'old' => $oldData, // Log old data
-                'new' => $user->getAttributes(), // Log new data
-            ])
-            ->log('User Updated');
+        $user->save(); // Spatie will log this automatically
     
         return redirect('panel/user')->with('success', "User successfully updated");
     }    
@@ -153,23 +136,23 @@ class UserController extends Controller
 
     public function delete($id)
     {
-        //permission to page by link
-        $PermissionRole = PermissionRoleModel::getPermission('Delete User',Auth::user()->role_id);
-
-        if(empty($PermissionRole))
-        {
+        // Permission check
+        $PermissionRole = PermissionRoleModel::getPermission('Delete User', Auth::user()->role_id);
+    
+        if (empty($PermissionRole)) {
             return view('error.401');
         }
-
+    
+        // Fetch user details before deleting
         $user = User::getSingle($id);
+    
+        if (!$user) {
+            return redirect('panel/user')->with('error', "User not found");
+        }
+
         $user->delete();
-
-        activity('user')
-        ->causedBy(Auth::user())
-        ->withProperties($deletedUser)
-        ->log('User Deleted');
-
-        return redirect('panel/user')->with('success',"User successfully deleted");
-    }
+    
+        return redirect('panel/user')->with('success', "User successfully deleted");
+    }     
 
 }
