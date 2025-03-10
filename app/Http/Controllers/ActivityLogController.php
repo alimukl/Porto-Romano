@@ -18,7 +18,7 @@ class ActivityLogController extends Controller
         }
 
         // Fetch both login and logout activity logs
-        $logs = Activity::whereIn('event', ['Login', 'Logout'])->latest()->get();
+        $logs = Activity::latest()->get(); // Fetch all logs
         return view('activity_log', compact('logs'));
     }
 

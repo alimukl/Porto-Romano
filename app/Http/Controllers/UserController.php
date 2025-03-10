@@ -7,11 +7,19 @@ use App\Models\RoleModel;
 use App\Models\PermissionModel;
 use App\Models\PermissionRoleModel;
 use App\Models\User;
+use Spatie\Activitylog\Models\Activity;
 use Hash;
 use Auth;
 
 class UserController extends Controller
 {
+
+    public function showLogs()
+    {
+        $logs = \Spatie\Activitylog\Models\Activity::where('log_name', 'user')->latest()->paginate(10);
+        return view('admin.logs', compact('logs'));
+    }
+
     public function list()
     {
         //permission to page by link
@@ -97,23 +105,28 @@ class UserController extends Controller
         $user->phone = trim($request->phone);
         $user->save();
     
+        activity('user')
+        ->causedBy(Auth::user())
+        ->performedOn($user)
+        ->withProperties(['name' => $user->name, 'email' => $user->email])
+        ->log('User Created');
+
         return redirect('panel/user')->with('success', "User successfully created");
     }
     
 
     public function update($id, Request $request)
     {
-        // Permission to page by link
         $PermissionRole = PermissionRoleModel::getPermission('Edit User', Auth::user()->role_id);
         if (empty($PermissionRole)) {
-
             return view('error.401');
         }
     
-        // Retrieve the user record
-        $user = User::getSingle($id);
+        // Retrieve the user before updating
+        $user = User::findOrFail($id); // Ensure user exists
+        $oldData = $user->getOriginal(); // Get original values before update
     
-        // Update common fields
+        // Update user details
         $user->name = trim($request->name);
         if (!empty($request->password)) {
             $user->password = Hash::make($request->password);
@@ -122,20 +135,17 @@ class UserController extends Controller
         $user->age = trim($request->age);
         $user->address = trim($request->address);
         $user->phone = trim($request->phone);
-    
-        // Check role and update employment_pass & passport_number
-        if ($user->role_id !== 1 && $user->role_id !== 2) {
-            // Update fields for roles that are NOT 1 or 2
-            $user->employment_pass = trim($request->employment_pass) ?? $user->employment_pass;
-            $user->passport_number = trim($request->passport_number) ?? $user->passport_number;
-        } else {
-            // Clear fields for roles 1 or 2
-            $user->employment_pass = null;
-            $user->passport_number = null;
-        }
-    
-        // Save updates
         $user->save();
+    
+        // Log the update action
+        activity('user')
+            ->causedBy(Auth::user())
+            ->performedOn($user)
+            ->withProperties([
+                'old' => $oldData, // Log old data
+                'new' => $user->getAttributes(), // Log new data
+            ])
+            ->log('User Updated');
     
         return redirect('panel/user')->with('success', "User successfully updated");
     }    
@@ -153,6 +163,11 @@ class UserController extends Controller
 
         $user = User::getSingle($id);
         $user->delete();
+
+        activity('user')
+        ->causedBy(Auth::user())
+        ->withProperties($deletedUser)
+        ->log('User Deleted');
 
         return redirect('panel/user')->with('success',"User successfully deleted");
     }

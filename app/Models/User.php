@@ -6,46 +6,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable  
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, LogsActivity;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'profile_photo',
-        'age',               // Add the age field here
-        'passport_number',   // Add the passport_number field here
+        'age',
+        'passport_number',
         'employment_pass',
-        'address',   // Add the employment_pass field here
-        'phone' ,
+        'address',
+        'phone',
         'mfa_token',
         'mfa_expires_at',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -61,10 +47,18 @@ class User extends Authenticatable
 
     static public function getRecord()
     {
-        return User::select('users.*', 'role.name as role_name', 'users.profile_photo', 'users.age', 'users.passport_number', 'users.employment_pass','users.address','users.phone') // Added new fields here
+        return User::select('users.*', 'role.name as role_name', 'users.profile_photo', 'users.age', 'users.passport_number', 'users.employment_pass','users.address','users.phone')
                     ->join('role', 'role.id', '=', 'users.role_id')
                     ->orderBy('users.id', 'desc')
                     ->get();
     }
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'email', 'profile_photo', 'age', 'passport_number', 'employment_pass', 'address', 'phone'])
+            ->logOnlyDirty() // Log only changes
+            ->setDescriptionForEvent(fn(string $eventName) => "User {$this->name} has been {$eventName}")
+            ->useLogName('user'); // Custom log name
+    }
 }
