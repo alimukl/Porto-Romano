@@ -72,6 +72,11 @@
     background-color:rgb(127, 17, 17);
     color: white;
 }
+
+.view-mc {
+    color:  #27a7d1;
+}
+
   </style>
 </head>
 
@@ -143,7 +148,7 @@
                     <td><span class="text-secondary text-xs font-weight-bold">{{ $value->reason }}</span></td>
                     <td>
                     @if ($value->mc_pdf)
-                    <a href="{{ asset('public/storage/' . $value->mc_pdf) }}" target="_blank" class=" text-decoration-underline text-xs font-weight-bold" style="color: #27a7d1;">View MC</a>
+                    <a href="{{ asset('public/storage/' . $value->mc_pdf) }}" target="_blank" class=" text-decoration-underline text-xs font-weight-bold view-mc">View MC</a>
                     @else
                     <a target="_blank" class=" text-xs font-weight-bold" style="color:rgb(156, 48, 48);">No Medical Certificate Uploaded</a>
                     @endif
