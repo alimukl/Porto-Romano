@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use App\Models\User;
-use Illuminate\Support\Facades\Log; // Make sure to include this at the top
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Facades\LogBatch;
 use Hash;
 
 class AuthController extends Controller
@@ -92,22 +94,22 @@ class AuthController extends Controller
     {
         // Combine the OTP array into a single string
         $otp = implode('', $request->otp);
-
+    
         // Validate OTP
         $request->merge(['otp' => $otp]); 
         $request->validate([
             'otp' => ['required', 'digits:6'],
         ]);
-
+    
         $userId = session('mfa_user_id');
         $remember = session('remember_me', false);
-
+    
         if (!$userId) {
             return redirect()->route('login')->with('error', 'Session expired. Please log in again.');
         }
-
+    
         $user = User::find($userId);
-
+    
         if (!$user || 
             is_null($user->mfa_token) || 
             is_null($user->mfa_expires_at) || 
@@ -116,47 +118,46 @@ class AuthController extends Controller
         {
             return redirect()->route('verify.mfa')->withErrors(['otp' => 'Invalid or expired verification code.']);
         }
-
-        // Clear MFA token after successful verification
-        $user->update(['mfa_token' => null, 'mfa_expires_at' => null]);
-
+    
+        // 🔹 Use a database transaction to prevent logging unwanted updates
+        DB::transaction(function () use ($user) {
+            $user->update([
+                'mfa_token' => null,
+                'mfa_expires_at' => null
+            ]);
+        });
+    
         // Authenticate user
         Auth::login($user, $remember);
-
+    
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Authentication failed.');
         }
-
-        // Fire Laravel's login event
-        event(new Login(Auth::guard(), $user, false));
-
-        // Ensure the activity log is initialized before assigning properties
-        $activity = Activity::causedBy($user)
-                            ->event('login')
-                            ->log('User successfully logged in after MFA verification');
-
-        // Ensure `$activity` is not null before setting `event`
-        if ($activity) {
-            $activity->event = 'login';  
-            $activity->save();
-        }
-
+    
+        // Log the successful MFA login
+        Activity::causedBy($user)
+                ->event('login')
+                ->log('User successfully logged in after MFA verification');
+    
         // Clear session MFA data
         session()->forget(['mfa_user_id', 'mfa_password', 'remember_me']);
-
+    
         return redirect('panel/dashboard');
     }
+    
 
     public function logout()
     {
         // Get the authenticated user before logging out
         $user = Auth::user();
     
-        // Log user logout activity
         if ($user) {
+            // Log successful logout
             Activity::causedBy($user)
                 ->event('logout')
-                ->log('User successfully logged out');
+                ->log("User {$user->name} logged out.");
+    
+            \Log::info("User {$user->name} logged out at " . now());
         }
     
         // Clear session data related to MFA
@@ -167,4 +168,5 @@ class AuthController extends Controller
     
         return redirect(url(''));
     }
+    
 }

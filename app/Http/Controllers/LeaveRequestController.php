@@ -9,6 +9,7 @@ use App\Models\PermissionModel;
 use App\Models\PermissionRoleModel;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class LeaveRequestController extends Controller
 {
@@ -48,22 +49,29 @@ class LeaveRequestController extends Controller
         return view('apply_leave.create');
     }
 
-    public function store(Request $request) //store own user data
+    public function store(Request $request)
     {
         $request->validate([
             'reason' => 'required|string|max:255',
             'leave_date' => 'required|date|after:today',
+            'mc_pdf' => 'nullable|mimes:pdf|max:2048', // Validate PDF file (max 2MB)
         ]);
-
+    
+        $mcPdfPath = null;
+        if ($request->hasFile('mc_pdf')) {
+            $mcPdfPath = $request->file('mc_pdf')->store('mc_pdfs', 'public'); // Store file in storage/app/public/mc_pdfs
+        }
+    
         LeaveRequest::create([
             'user_id' => Auth::id(),
             'reason' => $request->reason,
             'leave_date' => $request->leave_date,
             'status' => 'pending',
+            'mc_pdf' => $mcPdfPath, // Store file path in database
         ]);
-
-          return redirect()->route('apply_leave.index')->with('success', 'Leave request submitted successfully.');
-    }
+    
+        return redirect()->route('apply_leave.index')->with('success', 'Leave request submitted successfully.');
+    }    
 
     public function createForUser() //display form for all user
     {
@@ -78,23 +86,30 @@ class LeaveRequestController extends Controller
         return view('leave_requests.create', compact('users')); // Pass users to the view
     }
 
-    public function storeForUser(Request $request) // Store leave request for a selected user
+    public function storeForUser(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id', // Ensure selected user exists
+            'user_id' => 'required|exists:users,id',
             'reason' => 'required|string|max:255',
             'leave_date' => 'required|date|after:today',
+            'mc_pdf' => 'nullable|mimes:pdf|max:2048', // Validate PDF file
         ]);
-
+    
+        $mcPdfPath = null;
+        if ($request->hasFile('mc_pdf')) {
+            $mcPdfPath = $request->file('mc_pdf')->store('mc_pdfs', 'public'); // Store file
+        }
+    
         LeaveRequest::create([
-            'user_id' => $request->user_id, // Admin selects the user
+            'user_id' => $request->user_id,
             'reason' => $request->reason,
             'leave_date' => $request->leave_date,
             'status' => 'pending',
+            'mc_pdf' => $mcPdfPath, // Store file path in database
         ]);
-
+    
         return redirect()->route('leave_requests.index')->with('success', 'Leave request submitted successfully for the selected user.');
-    }
+    }    
 
     public function approve($id) // Edit status
     {
@@ -174,9 +189,7 @@ class LeaveRequestController extends Controller
     {
         // Check if the authenticated user has permission to delete leave requests
         $PermissionRole = PermissionRoleModel::getPermission('Delete List Leave', Auth::user()->role_id);
-        
-        //dd($PermissionRole);
-
+    
         if (empty($PermissionRole)) {
             return view('error.401'); // Unauthorized access
         }
@@ -184,10 +197,18 @@ class LeaveRequestController extends Controller
         // Find the leave request record
         $leaveRequest = LeaveRequest::findOrFail($id);
     
-        // Delete the leave request
+        // Check if there is an attached PDF file and delete it
+        if ($leaveRequest->mc_pdf) {
+            $filePath = storage_path('app/public/' . $leaveRequest->mc_pdf);
+            if (file_exists($filePath)) {
+                unlink($filePath); // Delete the file from storage
+            }
+        }
+    
+        // Delete the leave request record
         $leaveRequest->delete();
     
-        return redirect()->route('leave_requests.index')->with('success', 'Leave request deleted successfully.');
-    }
+        return redirect()->route('leave_requests.index')->with('success', 'Leave request and associated PDF deleted successfully.');
+    }    
 
 }

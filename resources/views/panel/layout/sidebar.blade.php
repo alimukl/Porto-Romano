@@ -20,14 +20,18 @@
   font-family: 'Great Vibes', cursive;
   font-size: 24px; /* Adjust size as needed */
   font-weight: normal;
-  color: rgb(56, 43, 18);
+  color: #202020;
   white-space: nowrap; /* Prevents text from wrapping */
   line-height: 1; /* Keeps text vertically centered */
   padding-bottom:20px;
 }
 
+#sidenav-main {
+    background-color:#fff!important;
+}
+
 </style>
-  <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
+  <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-l fixed-start " id="sidenav-main">
          @php
           $PermissionUser = App\Models\PermissionRoleModel::getPermission('User',Auth::user()->role_id);
           $PermissionRole = App\Models\PermissionRoleModel::getPermission('Role',Auth::user()->role_id);
@@ -107,7 +111,7 @@
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">Role</span>
+            <span class="nav-link-text ms-1"">Role</span>
           </a>
         </li>
         @endif

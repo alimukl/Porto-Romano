@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PermissionRoleModel;
+use Carbon\Carbon;
 
 class ActivityLogController extends Controller
 {
@@ -17,11 +18,11 @@ class ActivityLogController extends Controller
             return view('error.401');
         }
 
-        // Fetch both login and logout activity logs
-        $logs = Activity::latest()->get(); // Fetch all logs
+        // Fetch all logs
+        $logs = Activity::latest()->get();
+
+        // Pass both variables to the view
         return view('activity_log', compact('logs'));
+
     }
-
-    
 }
-

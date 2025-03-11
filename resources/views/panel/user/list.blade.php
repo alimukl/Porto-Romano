@@ -159,7 +159,7 @@
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Passport</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created</th>
-                        <th class="text-secondary opacity-7"></th>  
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th> 
                       </tr>
                     </thead>
                     <tbody>
@@ -202,7 +202,7 @@
                                 <i class="fas fa-pen text-success hover-edit"></i>
                               </a>
                             @endif
-                              <span class="mx-2"></span>
+                              <span class="mx-1"></span>
                               @if(!empty($PermissionDelete))
                                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user" 
                                   onclick="confirmDelete('{{ url('panel/user/delete/' . $value->id) }}', '{{ $value->name }}')">
@@ -245,7 +245,7 @@
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Age</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created</th>
-                        <th class="text-secondary opacity-7"></th>  
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -277,23 +277,23 @@
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->created_at }}</span>
                             </td>
                             <td class="align-middle">
-                            @if(!empty($PermissionEdit))
-                              <a href="{{ url('panel/user/edit/' . $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                <i class="fas fa-pen text-success hover-edit"></i>
-                              </a>
-                            @endif
-                              <span class="mx-2"></span>
-                              @if(!empty($PermissionDelete))
-                                <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user" 
-                                  onclick="confirmDelete('{{ url('panel/user/delete/' . $value->id) }}', '{{ $value->name }}')">
-                                  <i class="fas fa-trash text-danger hover-delete"></i>
+                              @if(!empty($PermissionEdit))
+                                <a href="{{ url('panel/user/edit/' . $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                  <i class="fas fa-pen text-success hover-edit"></i>
                                 </a>
                               @endif
-                              <!-- View Button -->
-                              <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
-                                onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
-                                <i class="fas fa-eye text-info hover-edit"></i>
-                              </button>
+                                <span class="mx-1"></span>
+                                @if(!empty($PermissionDelete))
+                                  <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user" 
+                                    onclick="confirmDelete('{{ url('panel/user/delete/' . $value->id) }}', '{{ $value->name }}')">
+                                    <i class="fas fa-trash text-danger hover-delete"></i>
+                                  </a>
+                                @endif
+                                <!-- View Button -->
+                                <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
+                                  onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
+                                  <i class="fas fa-eye text-info hover-edit"></i>
+                                </button>
                             </td>
                           </tr>
                         @endif
@@ -325,7 +325,7 @@
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Age</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created</th>
-                        <th class="text-secondary opacity-7"></th>  
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -362,7 +362,7 @@
                                 <i class="fas fa-pen text-success hover-edit"></i>
                               </a>
                             @endif
-                              <span class="mx-2"></span>
+                              <span class="mx-1"></span>
                               @if(!empty($PermissionDelete))
                                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete user" 
                                   onclick="confirmDelete('{{ url('panel/user/delete/' . $value->id) }}', '{{ $value->name }}')">

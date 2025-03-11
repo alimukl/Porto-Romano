@@ -11335,7 +11335,7 @@ fieldset:disabled .btn {
 }
 
 .bg-gray-100 {
-  background-color: #ebebeb !important;
+  background-color: #efefef!important;
 }
 
 .bg-gray-200 {
@@ -24612,8 +24612,8 @@ html {
 }
 
 .navbar-vertical .navbar-nav>.nav-item .nav-link.active {
-  color: #27272a;
-  background-color: #fff;
+  color: #fff;
+  background-color: #202020;
 }
 
 .navbar-vertical .navbar-nav>.nav-item .nav-link.active .icon {

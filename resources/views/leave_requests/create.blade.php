@@ -20,13 +20,13 @@
     @include('panel.layout.header')
     
 <div class="container">
-    <h2>Apply for Leave</h2>
+    <h2>Apply for Selected User</h2>
 
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <form action="{{ route('leave_requests.admin_store') }}" method="POST">
+    <form action="{{ route('leave_requests.storeForUser') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-3">
@@ -47,6 +47,11 @@
         <div class="mb-3">
             <label for="leave_date" class="form-label">Leave Date</label>
             <input type="date" name="leave_date" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="mc_pdf" class="form-label">Medical Certificate (PDF)</label>
+            <input type="file" name="mc_pdf" class="form-control">
         </div>
 
         <button type="submit" class="btn btn-primary">Apply Leave</button>

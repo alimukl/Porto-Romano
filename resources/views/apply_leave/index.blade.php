@@ -52,6 +52,7 @@
                 <tr>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employee Name</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reason</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">MC Pdf</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Leave Date</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
                 </tr>
@@ -73,6 +74,13 @@
                       </div>
                     </td>
                     <td><span class="text-secondary text-xs font-weight-bold">{{ $leave->reason }}</span></td>
+                    <td>
+                    @if ($leave->mc_pdf)
+                      <a href="{{ asset('public/storage/' . $leave->mc_pdf) }}" target="_blank" class=" text-decoration-underline text-xs font-weight-bold" style="color: #27a7d1;">View MC</a>
+                    @else
+                      <a target="_blank" class=" text-xs font-weight-bold" style="color:rgb(156, 48, 48);">No Medical Certificate Uploaded</a>
+                    @endif
+                    </td>
                     <td><span class="text-secondary text-xs font-weight-bold">{{ $leave->leave_date }}</span></td>
                     <td>
                       <span class="badge badge-sm 

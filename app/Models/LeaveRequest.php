@@ -9,7 +9,7 @@ class LeaveRequest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'reason', 'leave_date', 'status'];
+    protected $fillable = ['user_id', 'reason', 'leave_date', 'status', 'mc_pdf'];
 
     public function user()
     {
@@ -20,5 +20,6 @@ class LeaveRequest extends Model
     {
         return LeaveRequest::get();
     }
+
 }
 

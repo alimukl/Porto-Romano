@@ -88,30 +88,43 @@
                 <tr>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employee Name</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reason</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Medical Certificate (PDF)</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Leave Date</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
-                  @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Actions</th>
-                  @endif
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Remarks</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 @foreach($getRecord as $value)
                   <tr>
                     <td>
-                      <div class="d-flex px-2 py-1">
+                      <div class="d-flex px-2 py-1 align-items-center">
+                        <!-- View Button placed before the user name -->
+                        <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs me-2" 
+                                onclick="showLeaveDetails('{{ $value->user->name }}', '{{ $value->user->email }}', '{{ $value->reason }}')">
+                          <i class="fas fa-eye text-info hover-view"></i>
+                        </button>
                         <div>
-                        <img src="{{ $value->user->profile_photo ? asset('public/storage/' . $value->user->profile_photo) : asset('public/images/1.png') }}" 
-                        class="avatar avatar-sm me-3" 
-                        style="object-fit: cover;" 
-                        alt="User Profile Picture">
+                          <img src="{{ $value->user->profile_photo ? asset('public/storage/' . $value->user->profile_photo) : asset('public/images/1.png') }}" 
+                              class="avatar avatar-sm me-3" 
+                              style="object-fit: cover;" 
+                              alt="User Profile Picture">
                         </div>
-                        <div class="d-flex flex-column justify-content-center">
+                        <div class="d-flex align-items-center">
                           <h6 class="mb-0 text-sm">{{ $value->user->name }}</h6>
                         </div>
                       </div>
                     </td>
+
                     <td><span class="text-secondary text-xs font-weight-bold">{{ $value->reason }}</span></td>
+                    <td>
+                    @if ($value->mc_pdf)
+                    <a href="{{ asset('public/storage/' . $value->mc_pdf) }}" target="_blank" class=" text-decoration-underline text-xs font-weight-bold" style="color: #27a7d1;">View MC</a>
+                    @else
+                    <a target="_blank" class=" text-xs font-weight-bold" style="color:rgb(156, 48, 48);">No Medical Certificate Uploaded</a>
+                    @endif
+                    </td>
                     <td><span class="text-secondary text-xs font-weight-bold">{{ $value->leave_date }}</span></td>
                     <td>
                       <span class="badge badge-sm 
@@ -122,33 +135,32 @@
                         {{ ucfirst($value->status) }}
                       </span>
                     </td>
+                    <td>
+                    @if($value->status == 'pending')
+
+                      @if(!empty($PermissionApprove))
+                          <form action="{{ route('leave_requests.approve', $value->id) }}" method="POST" class="d-inline">
+                              @csrf
+                              <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                          </form>
+                      @endif
+
+                      @if(!empty($PermissionApprove))
+                          <form action="{{ route('leave_requests.reject', $value->id) }}" method="POST" class="d-inline">
+                              @csrf
+                              <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                          </form>
+                      @endif
+
+                    @endif
+                    </td>
                       <td>
-                        @if($value->status == 'pending')
-
-                          @if(!empty($PermissionApprove))
-                              <form action="{{ route('leave_requests.approve', $value->id) }}" method="POST" class="d-inline">
-                                  @csrf
-                                  <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                              </form>
-                          @endif
-
-                          @if(!empty($PermissionApprove))
-                              <form action="{{ route('leave_requests.reject', $value->id) }}" method="POST" class="d-inline">
-                                  @csrf
-                                  <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                              </form>
-                          @endif
-
-                        @endif
-
-                        @if(!empty($PermissionDelete))
+                        @if(!empty($PermissionEdit))
                         <!-- Edit Button -->
                         <a href="{{ route('leave_requests.edit', $value->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit Leave Request">
                             <i class="fas fa-pen text-success hover-edit"></i>
                         </a>
                         @endif
-                        <!-- Spacing -->
-                        <span class="mx-2"></span>
 
                         <!-- Delete Button -->
                         @if(!empty($PermissionDelete))
@@ -160,10 +172,6 @@
                             </button>
                         </form>
                         @endif
-                        <!-- View Button -->
-                        <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs" onclick="showLeaveDetails('{{ $value->user->name }}', '{{ $value->user->email }}', '{{ $value->reason }}')">
-                          <i class="fas fa-eye text-info hover-view"></i>
-                        </button>
                       </td>
                   </tr>
                 @endforeach

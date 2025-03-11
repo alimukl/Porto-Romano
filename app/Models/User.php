@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use App\Models\RoleModel;
+use Illuminate\Support\Facades\Crypt;
+
 
 class User extends Authenticatable  
 {
@@ -40,6 +43,34 @@ class User extends Authenticatable
         ];
     }
 
+    public function setAttribute($key, $value) //encrpyt data user
+    {
+        $encryptedFields = ['address', 'employment_pass', 'passport_number'];
+
+        if (in_array($key, $encryptedFields) && !is_null($value)) {
+            $value = Crypt::encryptString($value);
+        }
+
+        parent::setAttribute($key, $value);
+    }
+
+    public function getAttribute($key) //decrypt for display
+    {
+        $encryptedFields = ['address', 'employment_pass', 'passport_number'];
+
+        $value = parent::getAttribute($key);
+
+        if (in_array($key, $encryptedFields) && !is_null($value)) {
+            try {
+                return Crypt::decryptString($value);
+            } catch (\Exception $e) {
+                return $value; // Return raw data if decryption fails (for safety)
+            }
+        }
+
+        return $value;
+    }
+
     static public function getSingle($id)
     {
         return self::find($id);
@@ -52,13 +83,27 @@ class User extends Authenticatable
                     ->orderBy('users.id', 'desc')
                     ->get();
     }
-
+    
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['name', 'email', 'profile_photo', 'age', 'passport_number', 'employment_pass', 'address', 'phone'])
-            ->logOnlyDirty() // Log only changes
+            ->logOnly([
+                'name', 'email', 'profile_photo', 'age', 'passport_number', 
+                'employment_pass', 'address', 'phone'
+            ])
+            ->dontLogIfAttributesChangedOnly([
+                'updated_at', 'last_login_at', 'remember_token', 'mfa_token', 'mfa_expires_at'
+            ]) // ⬅ Ignore these changes to prevent unnecessary logs
+            ->logOnlyDirty()
             ->setDescriptionForEvent(fn(string $eventName) => "User {$this->name} has been {$eventName}")
-            ->useLogName('user'); // Custom log name
+            ->useLogName('user');
     }
+
+    public function role() //to fetch role-id name ( make a connection to read role name)
+    {
+        return $this->belongsTo(RoleModel::class, 'role_id');
+    }
+
 }
+
+

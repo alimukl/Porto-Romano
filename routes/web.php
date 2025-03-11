@@ -18,7 +18,6 @@ Route::get('logout', [AuthController::class,'logout']);
 Route::post('/send-mfa', [AuthController::class, 'sendMfaCode'])->name('send.mfa');
 Route::post('/verify-mfa', [AuthController::class, 'verifyMfaCode'])->name('verify.mfa');
 
-Route::get('panel/activity_log', [ActivityLogController::class, 'index'])->name('activity.log');
 
 //display verify
 Route::get('/verify-mfa', function () {
@@ -26,6 +25,10 @@ Route::get('/verify-mfa', function () {
 })->name('verify.mfa.form');
 
 Route::group(['middleware' => 'useradmin'], function () {
+
+    Route::get('panel/activity_log', [ActivityLogController::class, 'index'])->name('activity.log');
+
+    Route::get('panel/dashboard', [DashboardController::class, 'index']);
 
     Route::get('panel/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -47,13 +50,13 @@ Route::group(['middleware' => 'useradmin'], function () {
     Route::put('panel/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::get('panel/leave-requests', [LeaveRequestController::class, 'index'])->name('leave_requests.index');
-    Route::post('panel/leave-requests', [LeaveRequestController::class, 'storeForUser'])->name('leave_requests.admin_store');
+    Route::post('panel/leave-requests', [LeaveRequestController::class, 'storeForUser'])->name('leave_requests.storeForUser');
     Route::get('panel/leave-requests/create', [LeaveRequestController::class, 'createForUser'])->name('leave_requests.createForUser');
 
     Route::get('panel/apply_leave', [LeaveRequestController::class, 'apply'])->name('apply_leave.index'); // own user application
     Route::get('panel/apply_leave/create', [LeaveRequestController::class, 'create'])->name('apply_leave.create'); // own user application
     Route::post('panel/apply_leave', [LeaveRequestController::class, 'store'])->name('apply_leave.store'); // own user application
-
+    
     Route::post('panel/leave-requests/{id}/approve', [LeaveRequestController::class, 'approve'])->name('leave_requests.approve');
     Route::post('panel/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave_requests.reject');
 

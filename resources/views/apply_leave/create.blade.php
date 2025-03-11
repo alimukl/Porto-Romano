@@ -26,7 +26,7 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <form action="{{ route('apply_leave.store') }}" method="POST">
+    <form action="{{ route('apply_leave.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="reason" class="form-label">Reason for Leave</label>
@@ -38,7 +38,13 @@
             <input type="date" name="leave_date" class="form-control" required>
         </div>
 
+        <div class="mb-3">
+            <label for="mc_pdf" class="form-label">Medical Certificate (PDF)</label>
+            <input type="file" name="mc_pdf" class="form-control">
+        </div>
+
         <button type="submit" class="btn btn-primary">Apply</button>
     </form>
 </div>
 @endsection
+

@@ -13,6 +13,7 @@
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- CSS Files -->
   <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css?v=1.1.0') }}" rel="stylesheet" />
+  
 </head>
 <body class="g-sidenav-show bg-gray-100">
   @include('panel.layout.sidebar')

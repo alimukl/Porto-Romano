@@ -12,25 +12,50 @@
             </div>
           </div>
           <ul class="navbar-nav justify-content-end">
+
+          <li class="nav-item dropdown">
+            <a href="javascript:;" class="nav-link d-flex align-items-center text-body font-weight-bold px-2" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{{ Auth::user()->profile_photo ? asset('public/storage/' . Auth::user()->profile_photo) : asset('public/images/1.png') }}" 
+                  alt="Profile Photo" 
+                  class="rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
+              <div class="ms-2 text-start d-none d-sm-block">
+                <span class="d-block text-uppercase text-dark fw-bold">{{ Auth::user()->name }}</span>
+                <small class="text-muted">{{ Auth::user()->role->name ?? 'No Role' }}</small>
+              </div>
+              <i class="fas fa-chevron-down ms-2"></i>
+            </a>
+
             <!-- Profile Dropdown -->
-            <li class="nav-item dropdown d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body font-weight-bold px-1" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="d-sm-inline d-none">{{ Auth::user()->name }}</span>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg mt-3 border-0 rounded-3" style="min-width: 220px;">
+              <!-- Profile Info -->
+              <li class="px-3 py-2 text-center bg-light rounded-top">
                 <img src="{{ Auth::user()->profile_photo ? asset('public/storage/' . Auth::user()->profile_photo) : asset('public/images/1.png') }}" 
-                    alt="Profile Photo" 
-                    style="width: 35px; height: 35px; object-fit: cover; border-radius: 50%; margin-left: 10px;">
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                <li><a class="dropdown-item" href="{{ url('panel/profile') }}">Profile</a></li>
-                <li>
-                  <a id="logOutBtn" class="dropdown-item text-danger" href="{{ url('logout') }}">Log Out</a>
-                </li>
+                    alt="Profile" 
+                    class="rounded-circle border" style="width: 60px; height: 60px; object-fit: cover;">
+                <p class="mt-2 mb-1 fw-bold text-dark">{{ Auth::user()->name }}</p>
+                <small class="text-muted">{{ Auth::user()->role->name ?? 'No Role' }}</small>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+
+              <!-- Menu Options -->
+              <li><a class="dropdown-item d-flex align-items-center" href="{{ url('panel/profile') }}">
+                <i class="fas fa-user me-2"></i> Profile
+              </a></li>
+              <li><a class="dropdown-item d-flex align-items-center" href="#">
+                <i class="fas fa-cog me-2"></i> Settings
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a id="logOutBtn" class="dropdown-item text-danger d-flex align-items-center" href="{{ url('logout') }}">
+                  <i class="fas fa-sign-out-alt me-2"></i> Log Out
+                </a>
                 <div id="loader" class="text-center" style="display: none;">
                       <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
                 </div>
-              </ul>
-            </li>
-            
+              </li>
+            </ul>
+          </li>
+                      
             <!-- Sidenav Toggler (optional) -->
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
