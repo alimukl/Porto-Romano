@@ -49,6 +49,29 @@
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* You can adjust the values to control the shadow's size and intensity */
 }
 
+.custom-btn-approve {
+    background-color:rgb(126, 208, 44);
+    border: 2px solid black;
+    color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-btn-reject {
+    background-color: #c61919;
+    border: 2px solid black;
+    color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-btn-approve:hover {
+    background-color:rgb(69, 119, 20);
+    color: white;
+}
+
+.custom-btn-reject:hover {
+    background-color:rgb(127, 17, 17);
+    color: white;
+}
   </style>
 </head>
 
@@ -91,7 +114,7 @@
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Medical Certificate (PDF)</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Leave Date</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Remarks</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-7">Remarks</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Actions</th>
                 </tr>
               </thead>
@@ -141,14 +164,18 @@
                       @if(!empty($PermissionApprove))
                           <form action="{{ route('leave_requests.approve', $value->id) }}" method="POST" class="d-inline">
                               @csrf
-                              <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                              <button type="submit" class="btn custom-btn-approve btn-sm">
+                                  <i class="fas fa-check-circle me-1"></i> Approve
+                              </button>
                           </form>
                       @endif
 
                       @if(!empty($PermissionApprove))
                           <form action="{{ route('leave_requests.reject', $value->id) }}" method="POST" class="d-inline">
                               @csrf
-                              <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                              <button type="submit" class="btn custom-btn-reject btn-sm">
+                                  <i class="fas fa-times-circle me-1"></i> Reject
+                              </button>
                           </form>
                       @endif
 

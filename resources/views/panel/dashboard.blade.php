@@ -36,11 +36,11 @@
 
   /* Hover effect for the eye icon */
   .hover-view:hover {
-    color:rgb(73, 145, 213); /* Darker red color for hover */
+    color:rgb(99, 55, 55);
   }
 
   /* Optional: Make the icons slightly bigger on hover */
-  .hover-edit:hover,.hover-view:hover{
+  .hover-view:hover{
     transform: scale(1.3); /* Increase size by 10% */
     transition: all 0.3s ease; /* Smooth transition for scaling */
   }
@@ -217,7 +217,7 @@
                     </td>
                     <td>
                       <a href="{{ url('panel/leave-requests') }}" class="border-0 bg-transparent text-secondary font-weight-bold text-xs">
-                        <i class="fas fa-eye text-info hover-edit"></i>
+                        <i class="fas fa-eye text-info hover-view"></i>
                       </a>
                     </td>
                     <td><span class="text-secondary text-xs font-weight-bold">{{ $value->leave_date }}</span></td>
