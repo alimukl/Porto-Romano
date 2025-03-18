@@ -30,6 +30,10 @@
     background-color:#fff!important;
 }
 
+.nav-link.active .icon {
+    background-color:rgb(11, 27, 46) !important; /* Change this to your desired color */
+}
+
 </style>
   <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-l fixed-start " id="sidenav-main">
          @php
@@ -183,7 +187,7 @@
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">Apply Leave</span>
+            <span class="nav-link-text ms-1">My Leave Request</span>
           </a>
         </li>
         @endif

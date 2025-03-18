@@ -43,16 +43,20 @@ class User extends Authenticatable
         ];
     }
 
-    public function setAttribute($key, $value) //encrpyt data user
+    public function setAttribute($key, $value)
     {
         $encryptedFields = ['address', 'employment_pass', 'passport_number'];
-
+    
+        // Check if the field needs encryption and ensure it's not already encrypted
         if (in_array($key, $encryptedFields) && !is_null($value)) {
-            $value = Crypt::encryptString($value);
+            // Only encrypt if the value isn't already encrypted
+            if (!str_starts_with($value, 'eyJpdiI6')) { 
+                $value = Crypt::encryptString($value);
+            }
         }
-
+    
         parent::setAttribute($key, $value);
-    }
+    }    
 
     public function getAttribute($key) //decrypt for display
     {

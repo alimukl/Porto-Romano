@@ -13,102 +13,173 @@
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- CSS Files -->
   <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css?v=1.1.0') }}" rel="stylesheet" />
+
+  <style>
+  .container-details {
+    background-color:rgb(21, 21, 21);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding-top:20px;
+    padding-bottom:20px;
+  }
+  .img-account-profile {
+    transition: transform 0.3s ease;
+  }
+  .img-account-profile:hover {
+    transform: scale(1.05);
+  }
+
+  .table-custom-shadow {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.container-details {
+  gap: 1rem;
+}
+
+input, select {
+  border-radius: 5px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+}
+
+.bg-profile {
+  background-color:rgb(244, 244, 244);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(117, 117, 117, 0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-grow-1 {
+  display: flex;
+  flex-direction: column;
+  text-align: left !important;
+}
+
+</style>
+
 </head>
+
 <body class="g-sidenav-show bg-gray-100">
-  @include('panel.layout.sidebar')
+    @include('panel.layout.sidebar')
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+        @include('panel.layout.header')
 
-  <main class="main-content position-relative max-height-vh-100 h-120 border-radius-lg">
-    @include('panel.layout.header')
+        <div class="container-fluid py-4">
 
-    <div class="container mt-4">
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-          <div class="card">
-            <div class="card-header bg-primary text-white">
-              <h5 class="card-title mb-0">Edit User</h5>
-            </div>
-            <div class="card-body">
-              <form action="" method="post">
-                {{ csrf_field() }}
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" id="name" name="name" value="{{ $getRecord->name }}" required class="form-control">
-                  </div>
-                  <div class="col-md-6">
-                    <label for="age" class="form-label">Age</label>
-                    <input type="text" id="age" name="age" value="{{ $getRecord->age }}" required class="form-control">
-                  </div>
-                </div>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+              <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
+              <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">All User</a></li>
+              <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Edit User's Details</li>
+            </ol>
+              <h6 class="font-weight-bolder mb-0">Edit User's Details</h6>
+          </nav>
+          <br>
 
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="text" id="phone" name="phone" value="{{ $getRecord->phone }}" required class="form-control">
-                  </div>
-                  <div class="col-md-6">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="text" id="email" name="email" value="{{ $getRecord->email }}" readonly class="form-control">
-                  </div>
-                </div>
+          <!-- Error Alert -->
+          @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+          @endif
 
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label for="address" class="form-label">Address</label>
-                    <input type="text" id="address" name="address" value="{{ $getRecord->address }}" required class="form-control">
-                  </div>
-                </div>
+            <div class="row justify-content-center">
+              <div class="col-lg-12">
+                <div class="card mb-3 table-custom-shadow p-4">
+                  <h2 class="mb-4">Edit User's Details</h2>
+                  <form action="" method="post" enctype="multipart/form-data">
+                    @csrf
 
-                <!-- Employment Pass & Passport Number -->
-                <div class="form-group row">
-                    @if($getRecord->role_id !== 1 && $getRecord->role_id !== 2)
-                    <div class="col-md-6">
-                        <label for="employment_pass">Employment Pass</label>
-                        <input type="text" id="employment_pass" name="employment_pass" value="{{ $getRecord->employment_pass }}" required class="form-control">
+                    <!-- User Info Section -->
+                    <div class="d-flex flex-row flex-wrap gap-3">
+
+                      <!-- Left Column: Basic Info -->
+                      <div class="flex-grow-1 mt-2">
+                        <label for="name" class="small">Name</label>
+                        <input type="text" id="name" name="name" value="{{ $getRecord->name }}" required class="form-control mb-3">
+
+                        <label for="email" class="small">Email</label>
+                        <input type="text" id="email" name="email" value="{{ $getRecord->email }}" readonly class="form-control mb-3">
+                        @if($errors->has('email'))
+                        <div class="text-danger small">{{ $errors->first('email') }}</div>
+                        @endif
+
+                        <label for="address" class="small">Address</label>
+                        <input type="text" id="address" name="address" value="{{ $getRecord->address }}" required class="form-control mb-3">
+
+                        <label for="age" class="small">Age</label>
+                        <input type="text" id="age" name="age" value="{{ $getRecord->age }}" required class="form-control mb-3">
+                        
+                      </div>
+
+                      <!-- Middle Column: Profile Picture -->
+                      <div class="text-start mt-1">
+                        @if($getRecord->role_id !== 1 && $getRecord->role_id !== 2)
+                        <label for="employment_pass" class="small">Employment Pass</label>
+                        <input type="text" id="employment_pass" name="employment_pass" value="{{ $getRecord->employment_pass }}" required class="form-control mb-3">
+
+                        <label for="passport_number" class="small">Passport Number</label>
+                        <input type="text" id="passport_number" name="passport_number" value="{{ $getRecord->passport_number }}" required class="form-control mb-3">
+                        @else
+                        <input type="hidden" name="employment_pass" value="{{ $getRecord->employment_pass }}">
+                        <input type="hidden" name="passport_number" value="{{ $getRecord->passport_number }}">
+                        @endif
+
+                        <label for="phone" class="small">Phone Number</label>
+                        <input type="text" id="phone" name="phone" value="{{ $getRecord->phone }}" required class="form-control mb-3">
+
+                        <label for="roleSelect" class="small">Role</label>
+                        <select class="form-control form-control-sm mb-3" name="role_id" id="roleSelect" required>
+                          <option value="">Select Role</option>
+                          @foreach($getRole as $value)
+                          <option value="{{ $value->id }}" {{ (old('role_id') == $value->id) ? 'selected' : '' }}>
+                            {{ $value->name }}
+                          </option>
+                          @endforeach
+                        </select>
+                      </div>
+
+                      <!-- Right Column:-->
+                      <div class="flex-grow-1 bg-profile">
+                        <label for="profile_photo" class="small">Profile Photo</label>
+                        <div class="mb-2">
+                          <img src="{{ $getRecord->profile_photo ? asset('public/storage/' . $getRecord->profile_photo) : asset('images/1.png') }}" 
+                            alt="Profile Picture" 
+                            class="img-account-profile rounded-circle" 
+                            style="width: 220px; height: 220px; object-fit: cover; border-radius: 0;">
+                        </div>
+                        <div class="small font-italic text-muted mb-2 text-white">JPG or PNG no larger than 5 MB</div>
+                        <input type="file" name="profile_photo" id="profile_photo" class="form-control form-control-sm" accept="image/*">
+                        @if($errors->has('profile_photo'))
+                        <div class="text-danger small">{{ $errors->first('profile_photo') }}</div>
+                        @endif
+                      </div>
                     </div>
-                    <div class="col-md-6">
-                        <label for="passport_number">Passport Number</label>
-                        <input type="text" id="passport_number" name="passport_number" value="{{ $getRecord->passport_number }}" required class="form-control">
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                      <label for="password" class="small">Password</label>
+                      <input type="text" id="password" name="password" class="form-control">
+                      <small class="text-muted">(Leave blank if you don't want to change the password.)</small>
                     </div>
-                    @else
-                    <input type="hidden" name="employment_pass" value="{{ $getRecord->employment_pass }}">
-                    <input type="hidden" name="passport_number" value="{{ $getRecord->passport_number }}">
-                    @endif
-                </div>
 
-
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="text" id="password" name="password" class="form-control">
-                    <small class="text-muted">(Leave blank if you don't want to change the password.)</small>
-                  </div>
+                    <!-- Submit Section -->
+                    <div class="text-center mt-5">
+                      <button type="submit" class="btn btn-dark fw-bold px-4">Submit</button>
+                      <a href="{{ route('user.list') }}" class="btn btn-danger ms-2">Cancel</a>
+                    </div>
+                  </form>
                 </div>
-
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label for="role_id" class="form-label">Role</label>
-                    <select id="role_id" class="form-select" name="role_id" required>
-                      <option value="">Select</option>
-                      @foreach($getRole as $value)
-                        <option value="{{ $value->id }}" {{ ($getRecord->role_id == $value->id) ? 'selected' : '' }}>
-                          {{ $value->name }}
-                        </option>
-                      @endforeach
-                    </select>
-                  </div>
-                </div>
-
-                <div class="d-flex justify-content-end">
-                  <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-              </form>
+              </div>
             </div>
-          </div>
+
+
         </div>
-      </div>
-    </div>
-  </main>
+    </main>
 </body>
 
 <script>
@@ -140,6 +211,22 @@
             passportNumberField.style.display = 'block';
         }
     }
+
+    document.getElementById('age').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Allow numbers only
+        if (this.value.length > 2) this.value = this.value.slice(0, 2); // Limit to 2 digits
+    });
+
+    document.getElementById('phone').addEventListener('input', function (e) {
+        let number = this.value.replace(/\D/g, ''); // Remove non-numeric characters
+        if (number.length <= 3) {
+            this.value = number;
+        } else if (number.length <= 6) {
+            this.value = `${number.slice(0, 3)}-${number.slice(3)}`;
+        } else {
+            this.value = `${number.slice(0, 3)}-${number.slice(3, 6)}-${number.slice(6, 10)}`;
+        }
+    });
 </script>
 
 @endsection

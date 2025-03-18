@@ -28,6 +28,14 @@
     border: 2px solid #ddd; /* Add a border for separation */
   }
 
+  .custom-gradient {
+    background: linear-gradient(45deg,rgb(5, 5, 5),rgb(85, 8, 8));
+    color: #fff;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: bold;
+  }
+
   </style>
 </head>
 <body class="g-sidenav-show bg-gray-100">
@@ -83,7 +91,7 @@
                         </div>
                       </td>
                       <td>
-                        <span class="badge badge-sm bg-gradient-danger">{{ $log->description }}</span>
+                        <span class="badge badge-sm custom-gradient">{{ $log->description }}</span>
                       </td>
                       <td>
                         <pre class="bg-light p-4 rounded">

@@ -69,55 +69,86 @@ class UserController extends Controller
 
     public function insert(Request $request)
     {
-        // Permission to page by link
+        // Permission check
         $PermissionRole = PermissionRoleModel::getPermission('Add User', Auth::user()->role_id);
         if (empty($PermissionRole)) {
-
             return view('error.401');
         }
     
-        // Conditionally validate fields based on role
+        // Validation Rules
         $rules = [
+            'name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'age' => 'required|integer', // Add validation for age
+            'age' => 'required|integer',
             'address' => 'required|string',
             'phone' => 'required|string',
+            'password' => 'required|string|min:6',
+            'role_id' => 'required|integer',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     
-        // Apply validation for employment_pass and passport_number only for 'user' role
+        // Extra validation for 'user' role
         if ($request->role_id == config('roles.user')) {
-            $rules['passport_number'] = 'required|string'; // Add validation for passport_number
-            $rules['employment_pass'] = 'required|string';  // Add validation for employment_pass
+            $rules['passport_number'] = 'required|string';
+            $rules['employment_pass'] = 'required|string';
         }
     
-        request()->validate($rules);
+        $validated = $request->validate($rules);
     
-        // Create new user record
+        // Create and save new user
         $user = new User;
         $user->name = trim($request->name);
         $user->email = trim($request->email);
         $user->password = Hash::make($request->password);
         $user->role_id = trim($request->role_id);
         $user->age = trim($request->age);
-        $user->passport_number = trim($request->passport_number);  // Save passport_number
-        $user->employment_pass = trim($request->employment_pass);  // Save employment_pass
+        $user->passport_number = trim($request->passport_number);
+        $user->employment_pass = trim($request->employment_pass);
         $user->address = trim($request->address);
         $user->phone = trim($request->phone);
+    
+        // Handle Profile Photo Upload (using the ProfileController style)
+        if ($request->hasFile('profile_photo')) {
+            $profilePhoto = $request->file('profile_photo');
+    
+            // Generate unique filename
+            $fileName = uniqid() . '.' . $profilePhoto->getClientOriginalExtension();
+    
+            // Store the file in the 'public/profile_photos' directory
+            $filePath = $profilePhoto->storeAs('profile_photos', $fileName, 'public');
+    
+            // Save file path to user model
+            $user->profile_photo = 'profile_photos/' . basename($filePath);
+        }
+    
         $user->save();
-
+    
         return redirect('panel/user')->with('success', "User successfully created");
-    }
+    }    
     
 
     public function update($id, Request $request)
     {
+        // Check permissions
         $PermissionRole = PermissionRoleModel::getPermission('Edit User', Auth::user()->role_id);
         if (empty($PermissionRole)) {
             return view('error.401');
         }
     
-        // Retrieve the user before updating
+        // Fetch user record
         $user = User::findOrFail($id);
+    
+        // Validation rules
+        $rules = [
+            'name' => 'required|string',
+            'age' => 'required|integer',
+            'address' => 'required|string',
+            'phone' => 'required|string',
+            'password' => 'nullable|string|min:6',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
+    
+        $validated = $request->validate($rules);
     
         // Update user details
         $user->name = trim($request->name);
@@ -128,10 +159,26 @@ class UserController extends Controller
         $user->age = trim($request->age);
         $user->address = trim($request->address);
         $user->phone = trim($request->phone);
-        $user->save(); // Spatie will log this automatically
+    
+        // Handle Profile Photo Upload
+        if ($request->hasFile('profile_photo')) {
+            // Delete the old photo if it exists
+            if ($user->profile_photo && file_exists(public_path($user->profile_photo))) {
+                unlink(public_path($user->profile_photo));
+            }
+    
+            // Save the new profile photo
+            $fileName = time() . '.' . $request->profile_photo->extension();
+            $request->profile_photo->move(public_path('uploads/profile_photos'), $fileName);
+            $user->profile_photo = 'uploads/profile_photos/' . $fileName;
+        }
+    
+        // Save changes
+        $user->save();
     
         return redirect('panel/user')->with('success', "User successfully updated");
-    }    
+    }
+         
     
 
     public function delete($id)

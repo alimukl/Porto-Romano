@@ -11,6 +11,8 @@ class PermissionRoleModel extends Model
 
     protected $table = 'permission_role';
 
+    protected $fillable = ['permission_id', 'role_id'];  // Ensure these are fillable
+
     static public function InsertUpdateRecord($permission_ids, $role_id)
     {
         PermissionRoleModel::where('role_id', '=', $role_id)->delete();

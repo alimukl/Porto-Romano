@@ -18,6 +18,8 @@ Route::get('logout', [AuthController::class,'logout']);
 Route::post('/send-mfa', [AuthController::class, 'sendMfaCode'])->name('send.mfa');
 Route::post('/verify-mfa', [AuthController::class, 'verifyMfaCode'])->name('verify.mfa');
 
+Route::delete('/leave_requests/bulk-delete', [LeaveRequestController::class, 'bulkDelete'])->name('leave_requests.bulkDelete');
+
 
 //display verify
 Route::get('/verify-mfa', function () {
@@ -37,7 +39,7 @@ Route::group(['middleware' => 'useradmin'], function () {
     Route::post('panel/role/add', [RoleController::class, 'insert'])->name('role.insert');
     Route::get('panel/role/edit/{id}', [RoleController::class, 'edit'])->name('role.edit');
     Route::post('panel/role/edit/{id}', [RoleController::class, 'update'])->name('role.update');
-    Route::get('panel/role/delete/{id}', [RoleController::class, 'delete'])->name('role.delete');
+    Route::delete('panel/role/delete/{id}', [RoleController::class, 'delete'])->name('role.delete');
 
     Route::get('panel/user', [UserController::class, 'list'])->name('user.list');
     Route::get('panel/user/add', [UserController::class, 'add'])->name('user.add');

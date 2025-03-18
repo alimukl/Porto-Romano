@@ -209,6 +209,40 @@ class LeaveRequestController extends Controller
         $leaveRequest->delete();
     
         return redirect()->route('leave_requests.index')->with('success', 'Leave request and associated PDF deleted successfully.');
-    }    
+    }
 
+    public function bulkDelete(Request $request)
+    {
+        $ids = json_decode($request->input('ids'), true);
+
+        // Debug check
+        if (empty($ids) || !is_array($ids)) {
+            return redirect()->back()->with('error', 'No valid requests selected for deletion.');
+        }
+
+        try {
+            // Ensure IDs are integers to prevent injection
+            $ids = array_map('intval', $ids);
+
+            // Fetch all leave requests with the given IDs
+            $leaveRequests = LeaveRequest::whereIn('id', $ids)->get();
+
+            foreach ($leaveRequests as $leaveRequest) {
+                // Check and delete the associated PDF file if it exists
+                if ($leaveRequest->mc_pdf) {
+                    $filePath = storage_path('app/public/' . $leaveRequest->mc_pdf);
+                    if (file_exists($filePath)) {
+                        unlink($filePath); // Delete the file from storage
+                    }
+                }
+
+                // Delete each leave request record
+                $leaveRequest->delete();
+            }
+
+            return redirect()->back()->with('success', 'Selected leave requests and associated PDFs have been deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete leave requests. Error: ' . $e->getMessage());
+        }
+    }
 }

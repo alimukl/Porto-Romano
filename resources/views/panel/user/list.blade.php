@@ -26,6 +26,8 @@
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
@@ -44,6 +46,13 @@
 .hover-view:hover {
   color:rgb(73, 145, 213); /* Darker red color for hover */
 }
+
+.hover-view {
+      background: linear-gradient(45deg, rgb(0, 0, 0), rgb(181, 181, 181));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 12px;
+    }
 
 /* Optional: Make the icons slightly bigger on hover */
 .hover-edit:hover, .hover-delete:hover, .hover-view:hover{
@@ -121,6 +130,50 @@
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* You can adjust the values to control the shadow's size and intensity */
 }
 
+.custom-gradient {
+    background: linear-gradient(45deg,rgb(0, 0, 0),rgb(88, 88, 88));
+    color: #fff;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: bold;
+  }
+
+  .snackbar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+    min-width: 250px;
+    padding: 16px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+
+    display: flex;
+    align-items: center; /* Aligns icon and text vertically */
+    gap: 0.5rem; /* Adds spacing between icon and text */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .snackbar-icon {
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .snackbar-text {
+      font-size: 1rem;
+  }
+
+
+  .snackbar.show {
+      opacity: 1;
+  }
+
   </style>
 </head>
 
@@ -129,6 +182,12 @@
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
 @include('panel.layout.header')
 
+  @if(session('success'))
+    <div id="snackbar" class="snackbar">
+      <span class="snackbar-icon"><i class='bx bx-check-circle bx-tada text-success'></i></span>
+      <span class="snackbar-text">{{ session('success') }}</span>
+    </div>
+  @endif
   <div class="container-fluid py-4">
   <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
@@ -144,7 +203,7 @@
               <div class="card-header pb-0 d-flex align-items-center">
                 <h6 class="mb-0">Manage Employee</h6>
                 @if(!empty($PermissionAdd))
-                <a class="btn btn-primary ms-auto btn-sm" href="{{ url('panel/user/add') }}">Add</a>
+                <a class="btn bg-dark text-white ms-auto btn-sm" href="{{ url('panel/user/add') }}">Add</a>
                 @endif
               </div>
               <div class="card-body px-0 pt-0 pb-2">
@@ -191,7 +250,7 @@
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->passport_number }}</span>
                             </td>
                             <td class="align-middle text-center text-sm">
-                              <span class="badge badge-sm bg-gradient-success">{{ $value->role_name }}</span>
+                              <span class="badge badge-sm custom-gradient">{{ $value->role_name }}</span>
                             </td>
                             <td class="align-middle text-center">
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->created_at }}</span>
@@ -212,7 +271,7 @@
                               <!-- View Button -->
                               <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
                                 onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
-                                <i class="fas fa-eye text-info hover-edit"></i>
+                                <i class="fas fa-eye text-info hover-view"></i>
                               </button>
                             </td>
                           </tr>
@@ -232,7 +291,7 @@
               <div class="card-header pb-0 d-flex align-items-center">
                 <h6 class="mb-0">Manage Admin</h6>
                 @if(!empty($PermissionAdd))
-                <a class="btn btn-primary ms-auto btn-sm" href="{{ url('panel/user/add') }}">Add</a>
+                <a class="btn bg-dark text-white ms-auto btn-sm" href="{{ url('panel/user/add') }}">Add</a>
                 @endif
               </div>
               <div class="card-body px-0 pt-0 pb-2">
@@ -243,6 +302,8 @@
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Age</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employment Pass</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Passport</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
@@ -271,7 +332,13 @@
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->age }}</span>
                             </td>
                             <td class="align-middle text-center text-sm">
-                              <span class="badge badge-sm bg-gradient-success">{{ $value->role_name }}</span>
+                              <span class="text-secondary text-xs font-weight-bold">-</span>
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                              <span class="text-secondary text-xs font-weight-bold">-</span>
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                              <span class="badge badge-sm custom-gradient">{{ $value->role_name }}</span>
                             </td>
                             <td class="align-middle text-center">
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->created_at }}</span>
@@ -292,7 +359,7 @@
                                 <!-- View Button -->
                                 <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
                                   onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
-                                  <i class="fas fa-eye text-info hover-edit"></i>
+                                  <i class="fas fa-eye text-info hover-view"></i>
                                 </button>
                             </td>
                           </tr>
@@ -312,7 +379,7 @@
               <div class="card-header pb-0 d-flex align-items-center">
                 <h6 class="mb-0">Manage Super Admin</h6>
                 @if(!empty($PermissionAdd))
-                <a class="btn btn-primary ms-auto btn-sm" href="{{ url('panel/user/add') }}">Add</a>
+                <a class="btn bg-dark text-white ms-auto btn-sm" href="{{ url('panel/user/add') }}">Add</a>
                 @endif
               </div>
               <div class="card-body px-0 pt-0 pb-2">
@@ -323,6 +390,8 @@
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Age</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employment Pass</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Passport</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
@@ -351,7 +420,13 @@
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->age }}</span>
                             </td>
                             <td class="align-middle text-center text-sm">
-                              <span class="badge badge-sm bg-gradient-success">{{ $value->role_name }}</span>
+                              <span class="text-secondary text-xs font-weight-bold">-</span>
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                              <span class="text-secondary text-xs font-weight-bold">-</span>
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                              <span class="badge badge-sm custom-gradient">{{ $value->role_name }}</span>
                             </td>
                             <td class="align-middle text-center">
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->created_at }}</span>
@@ -372,7 +447,7 @@
                             <!-- View Button -->
                             <button type="button" class="border-0 bg-transparent text-secondary font-weight-bold text-xs"
                               onclick="showUserDetails('{{ $value->name }}', '{{ $value->email }}', '{{ $value->address }}', '{{ $value->phone }}', '{{ $value->employment_pass }}', '{{ $value->passport_number }}', '{{ $value->role_name }}', '{{ $value->created_at }}', '{{ $value->updated_at }}', '{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}')">
-                              <i class="fas fa-eye text-info hover-edit"></i>
+                              <i class="fas fa-eye text-info hover-view"></i>
                             </button>
                             </td>
                           </tr>
@@ -383,8 +458,8 @@
                         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                    <div class="modal-header bg-dark">
+                                        <h5 class="modal-title text-white" id="deleteModalLabel">Confirm Deletion</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -521,15 +596,23 @@
   document.addEventListener("DOMContentLoaded", function () {
   const profilePic = document.getElementById("modalUserPicture");
   const blurBackground = document.querySelector(".blur-background");
+  const snackbar = document.getElementById('snackbar');
 
     if (profilePic && blurBackground) {
       profilePic.onload = function () {
-        blurBackground.style.backgroundImage = `url(${profilePic.src})`;
-        blurBackground.style.backgroundSize = "cover";
-        blurBackground.style.backgroundPosition = "center";
-        blurBackground.style.backgroundRepeat = "no-repeat";
+      blurBackground.style.backgroundImage = `url(${profilePic.src})`;
+      blurBackground.style.backgroundSize = "cover";
+      blurBackground.style.backgroundPosition = "center";
+      blurBackground.style.backgroundRepeat = "no-repeat";
       };
     }
+
+    if (snackbar) {
+      snackbar.classList.add('show');
+      setTimeout(() => snackbar.classList.remove('show'), 5000); // Hide after 3s
+    }
+
+
   });
   
 </script>

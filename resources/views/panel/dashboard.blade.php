@@ -22,7 +22,7 @@
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 
   <!-- Bootstrap Icons CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
 
   <!-- loader css -->
@@ -39,12 +39,17 @@
     color:rgb(99, 55, 55);
   }
 
-  /* Optional: Make the icons slightly bigger on hover */
-  .hover-view:hover{
-    transform: scale(1.3); /* Increase size by 10% */
-    transition: all 0.3s ease; /* Smooth transition for scaling */
-  }
+  .hover-view {
+      background: linear-gradient(45deg, rgb(0, 0, 0), rgb(181, 181, 181));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 12px;
+    }
 
+    .hover-edit:hover,.hover-view:hover, .hover-delete:hover {
+  transform: scale(1.3); /* Increase size by 10% */
+  transition: all 0.3s ease; /* Smooth transition for scaling */
+}
   .loader-widget {
     width: 28px;
     height: 28px;
@@ -69,8 +74,39 @@
     border-radius: 50%;
     border-bottom: 4px solid #FF3D00;
     border-left: 4px solid transparent;
+    
   }
 
+  .gradient-icon {
+    background: linear-gradient(45deg,rgb(26, 86, 39),rgb(24, 194, 103));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 16px;
+  }
+
+  .custom-approve {
+    background: linear-gradient(45deg,rgb(61, 131, 40),rgb(80, 186, 31));
+    color: #fff;
+    border-radius: 5px;
+    padding: 6px 10px;
+    font-weight: bold;
+  }
+
+  .custom-reject {
+    background: linear-gradient(45deg,rgb(129, 31, 31),rgb(194, 46, 30));
+    color: #fff;
+    border-radius: 5px;
+    padding: 6px 10px;
+    font-weight: bold;
+  }
+
+  .custom-pending {
+    background: linear-gradient(45deg,rgb(2, 2, 2),rgb(77, 77, 77));
+    color: #fff;
+    border-radius: 5px;
+    padding: 6px 10px;
+    font-weight: bold;
+  }
   </style>
 </head>
 <body class="g-sidenav-show  bg-gray-100">
@@ -223,9 +259,9 @@
                     <td><span class="text-secondary text-xs font-weight-bold">{{ $value->leave_date }}</span></td>
                     <td>
                       <span class="badge badge-sm 
-                        @if($value->status == 'pending') bg-gradient-warning 
-                        @elseif($value->status == 'approved') bg-gradient-success 
-                        @else bg-gradient-danger 
+                        @if($value->status == 'pending') custom-pending
+                        @elseif($value->status == 'approved') custom-approve
+                        @else custom-reject
                         @endif">
                         {{ ucfirst($value->status) }}
                       </span>
@@ -254,7 +290,7 @@
     <div class="card-header pb-0">
       <h6>Recent Log Activity</h6>
       <p class="text-sm">
-        <i class="bi bi-shield-slash-fill text-success"></i>
+        <i class="bi bi-shield-slash-fill gradient-icon"></i>
         <span class="font-weight-bold">Latest Activity</span>
       </p>
     </div>
