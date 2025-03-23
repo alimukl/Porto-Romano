@@ -67,7 +67,7 @@ Route::group(['middleware' => 'useradmin'], function () {
     Route::put('/leave_requests/{id}', [LeaveRequestController::class, 'update'])->name('leave_requests.update');
     Route::delete('/leave_requests/{id}', [LeaveRequestController::class, 'delete'])->name('leave_requests.delete');
 
-    Route::get('panel/payslips/user', [PayslipController::class, 'userPayslips'])->name('payslips.user');
+    Route::get('panel/payslips/user', [PayslipController::class, 'userPayslip'])->name('payslip.user');
     Route::get('panel/payslips/admin', [PayslipController::class, 'adminPayslips'])->name('payslips.admin');
     Route::post('panel/payslips/upload', [PayslipController::class, 'upload'])->name('payslips.upload');    
 

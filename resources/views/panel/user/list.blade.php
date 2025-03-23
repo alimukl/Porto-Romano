@@ -232,8 +232,8 @@
                                   <img src="{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}" class="avatar avatar-sm me-3" style="object-fit: cover;" alt="user1">
                                 </div>
                                 <div class="d-flex flex-column justify-content-center">
-                                  <h6 class="mb-0 text-sm">{{ $value->name }}</h6>
-                                  <p class="text-xs text-secondary mb-0">{{ $value->email }}</p>
+                                <h6 class="mb-0 text-sm">{{ ucwords(strtolower($value->name)) }}</h6>
+                                  <p class="text-xs text-secondary mb-0" style="color:rgb(88, 120, 179)!important;">{{ $value->email }}</p>
                                 </div>
                               </div>
                             </td>
@@ -324,8 +324,8 @@
                                   <img src="{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}" class="avatar avatar-sm me-3" style="object-fit: cover;" alt="user1">
                                 </div>
                                 <div class="d-flex flex-column justify-content-center">
-                                  <h6 class="mb-0 text-sm">{{ $value->name }}</h6>
-                                  <p class="text-xs text-secondary mb-0">{{ $value->email }}</p>
+                                <h6 class="mb-0 text-sm">{{ ucwords(strtolower($value->name)) }}</h6>
+                                  <p class="text-xs text-secondary mb-0" style="color:rgb(88, 120, 179)!important;">{{ $value->email }}</p>
                                 </div>
                               </div>
                             </td>
@@ -340,10 +340,10 @@
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->annual_leave_quota }}</span>
                             </td>
                             <td class="align-middle text-center text-sm">
-                              <span class="text-secondary text-xs font-weight-bold">-</span>
+                              <span class="text-secondary text-xs font-weight-bold"></span>
                             </td>
                             <td class="align-middle text-center text-sm">
-                              <span class="text-secondary text-xs font-weight-bold">-</span>
+                              <span class="text-secondary text-xs font-weight-bold"></span>
                             </td>
                             <td class="align-middle text-center text-sm">
                               <span class="badge badge-sm custom-gradient">{{ $value->role_name }}</span>
@@ -416,8 +416,8 @@
                                 <img src="{{ $value->profile_photo ? asset('public/storage/' . $value->profile_photo) : asset('public/images/1.png') }}" class="avatar avatar-sm me-3" style="object-fit: cover;" alt="user1">
                                 </div>
                                 <div class="d-flex flex-column justify-content-center">
-                                  <h6 class="mb-0 text-sm">{{ $value->name }}</h6>
-                                  <p class="text-xs text-secondary mb-0">{{ $value->email }}</p>
+                                <h6 class="mb-0 text-sm">{{ ucwords(strtolower($value->name)) }}</h6>
+                                  <p class="text-xs text-secondary mb-0" style="color:rgb(88, 120, 179)!important;">{{ $value->email }}</p>
                                 </div>
                               </div>
                             </td>
@@ -432,10 +432,10 @@
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->annual_leave_quota }}</span>
                             </td>
                             <td class="align-middle text-center text-sm">
-                              <span class="text-secondary text-xs font-weight-bold">-</span>
+                              <span class="text-secondary text-xs font-weight-bold"></span>
                             </td>
                             <td class="align-middle text-center text-sm">
-                              <span class="text-secondary text-xs font-weight-bold">-</span>
+                              <span class="text-secondary text-xs font-weight-bold"></span>
                             </td>
                             <td class="align-middle text-center text-sm">
                               <span class="badge badge-sm custom-gradient">{{ $value->role_name }}</span>

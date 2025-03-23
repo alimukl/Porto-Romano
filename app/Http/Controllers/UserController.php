@@ -7,6 +7,7 @@ use App\Models\RoleModel;
 use App\Models\PermissionModel;
 use App\Models\PermissionRoleModel;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Models\Activity;
 use Hash;
 use Auth;
@@ -186,22 +187,20 @@ class UserController extends Controller
     
         // Recalculate annual leave using the User model method
         $user->annual_leave_quota = $user->calculateAnnualLeaveQuota();
-    
-        // Handle profile photo upload
+
+               // Handle file upload for profile photo
         if ($request->hasFile('profile_photo')) {
-            // Delete the old photo safely if it exists
-            if ($user->profile_photo && file_exists($path = public_path($user->profile_photo))) {
-                try {
-                    unlink($path);
-                } catch (\Exception $e) {
-                    Log::error("Failed to delete old profile photo: " . $e->getMessage());
-                }
+            // Delete the old profile photo if exists
+            if ($user->profile_photo && Storage::exists('public/' . $user->profile_photo)) {
+                Storage::delete('public/' . $user->profile_photo);
             }
-    
-            // Save the new profile photo
-            $fileName = time() . '.' . $request->profile_photo->extension();
-            $request->profile_photo->move(public_path('uploads/profile_photos'), $fileName);
-            $user->profile_photo = 'uploads/profile_photos/' . $fileName;
+
+            // Store the new profile photo in the 'public/profile_photos' directory
+            $profilePhoto = $request->file('profile_photo');
+            $filePath = $profilePhoto->storeAs('profile_photos', uniqid() . '.' . $profilePhoto->getClientOriginalExtension(), 'public');
+
+            // Update the profile_photo field with the file path
+            $user->profile_photo = 'profile_photos/' . basename($filePath);
         }
     
         // Save changes

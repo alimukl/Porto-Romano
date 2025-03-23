@@ -29,7 +29,7 @@
   }
 
   .custom-gradient {
-    background: linear-gradient(45deg,rgb(5, 5, 5),rgb(85, 8, 8));
+    background: linear-gradient(45deg,rgb(176, 75, 75),rgb(115, 38, 38));
     color: #fff;
     border-radius: 8px;
     padding: 5px 10px;
@@ -86,7 +86,7 @@
                           alt="user">
                           </div>
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">{{ $log->causer?->name ?? 'Unknown' }}</h6>
+                          <h6 class="mb-0 text-sm">{{ ucwords(strtolower($log->causer?->name ?? 'Unknown')) }}</h6>
                           </div>
                         </div>
                       </td>

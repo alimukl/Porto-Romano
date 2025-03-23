@@ -13,12 +13,56 @@
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- CSS Files -->
   <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css?v=1.1.0') }}" rel="stylesheet" />
+  
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
   <style>
     .table-custom-shadow {
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* You can adjust the values to control the shadow's size and intensity */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
     }
 
+    .snackbar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1050;
+      min-width: 250px;
+      padding: 16px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 5px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+
+      display: flex;
+      align-items: center; /* Aligns icon and text vertically */
+      gap: 0.5rem; /* Adds spacing between icon and text */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .snackbar-icon {
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .snackbar-text {
+        font-size: 1rem;
+    }
+
+
+    .snackbar.show {
+        opacity: 1;
+    }
+
+    .snackbar-icon {
+        font-size: 1.5rem;
+    }
   </style>
 
 </head>
@@ -41,7 +85,10 @@
 
         <!-- Error Alert -->
         @if(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
+            <div id="snackbar" class="snackbar">
+            <span class="snackbar-icon"><i class='bx bx-x-circle bx-rotate-90 bx-tada' style='color:#b50200'></i></span>
+            <span class="snackbar-text">{{ session('error') }}</span>
+            </div>
         @endif
 
         <div class="row justify-content-center">
@@ -67,21 +114,31 @@
                             <label for="category" class="form-label fw-bold">Leave Category</label>
                             <select name="category" id="category" class="form-control" required>
                                 <option value="" disabled selected>Select a category</option>
-                                <option value="annual_leave">Annual Leave</option>
-                                <option value="sick_leave">Sick Leave</option>
-                                <option value="emergency_leave">Emergency Leave</option>
-                                <option value="unpaid_leave">Unpaid Leave</option>
+                                <option value="Annual Leave">Annual Leave</option>
+                                <option value="Sick Leave">Sick Leave</option>
+                                <option value="Public Holidays">Public Holidays</option>
+                                <option value="Maternity Leave">Maternity Leave</option>
+                                <option value="Paternity Leave">Paternity Leave</option>
+                                <option value="Compassionate/Bereavement Leave">Compassionate/Bereavement Leave</option>
+                                <option value="Unpaid Leave">Unpaid Leave</option>
+                                <option value="Emergency Leave">Emergency Leave</option>
+                                <option value="Study Leave">Study Leave</option>
+                                <option value="Leave for Religious Observances">Leave for Religious Observances</option>
+                                <option value="Special Leave">Special Leave</option>
+                                <option value="Jury Duty Leave">Jury Duty Leave</option>
+                                <option value="Work-from-Home Leave">Work-from-Home Leave</option>
+                                <option value="Leave for Temporary Disability">Leave for Temporary Disability</option>
                             </select>
                         </div>
 
                         <!-- Leave Date -->
                         <div class="mb-3">
                             <label for="leave_date_start">Start Date:</label>
-                            <input type="date" name="leave_date_start" required>
+                            <input type="text" id="leave_date_start" name="leave_date_start" class="form-control" required>
 
                             <label for="leave_date_end">End Date:</label>
-                            <input type="date" name="leave_date_end" required>
-                            <small id="dateError" class="text-danger" style="display: none;">Please select a date after today.</small>
+                            <input type="text" id="leave_date_end" name="leave_date_end" class="form-control" required>
+                            <div id="dateError" style="display: none; color: red; font-weight: bold;"></div>
                         </div>
 
                         <!-- Medical Certificate Upload -->
@@ -102,18 +159,20 @@
     </div>
 
 </body>
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-    document.getElementById('leaveForm').addEventListener('submit', function(event) {
-        const leaveDate = document.getElementById('leave_date').value;
-        const today = new Date().toISOString().split('T')[0];
-        const dateError = document.getElementById('dateError');
+    flatpickr("#leave_date_start", { minDate: "today" });
+    flatpickr("#leave_date_end", { minDate: "today" });
+</script>
 
-        if (leaveDate <= today) {
-            event.preventDefault();
-            dateError.style.display = 'block';
-        } else {
-            dateError.style.display = 'none';
-        }
-    });
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const snackbar = document.getElementById('snackbar');
+    if (snackbar) {
+        snackbar.classList.add('show');
+        setTimeout(() => snackbar.classList.remove('show'), 5000); // Hide after 3s
+    }
+});
 </script>
 @endsection

@@ -1,22 +1,32 @@
 @extends('panel.layout.app')
 @section('content')
 <head>
-  <meta charset="utf-8" />
+<meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Soft UI Dashboard 3 by Creative Tim</title>
-  <!-- Fonts and icons -->
+  <link rel="apple-touch-icon" sizes="76x76" href="{{ url('') }}/assets/img/porto-romano-new.png">
+  <link rel="icon" type="image/png" href="{{ url('') }}/assets/img/porto-romano-new.png">
+  <title>
+    Porto Romano
+  </title>
+  <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet" />
+  <!-- Nucleo Icons -->
   <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- CSS Files -->
   <link id="pagestyle" href="{{ asset('assets/css/soft-ui-dashboard.css') }}" rel="stylesheet" />
-
+  <!-- Nepcha Analytics (nepcha.com) -->
+  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
+  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
     .card {
@@ -139,8 +149,8 @@
                                                             <img src="{{ $payslip->user->profile_photo ? asset('public/storage/' . $payslip->user->profile_photo) : asset('public/images/1.png') }}" class="avatar avatar-sm me-3" style="object-fit: cover;" alt="user">
                                                             </div>
                                                             <div class="d-flex flex-column justify-content-center">
-                                                                <h6 class="mb-0 text-sm">{{ $payslip->user->name }}</h6>
-                                                                <p class="text-xs text-secondary mb-0">{{ $payslip->user->email }}</p>
+                                                                <h6 class="mb-0 text-sm">{{ ucwords(strtolower($payslip->user->name)) }}</h6>
+                                                                <p class="text-xs text-secondary mb-0" style="color:rgb(88, 120, 179)!important;">{{ $payslip->user->email }}</p>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -184,45 +194,45 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-    $(document).on('click', '.view-payslip-btn', function(e) {
-        e.preventDefault();
+        $(document).on('click', '.view-payslip-btn', function(e) {
+            e.preventDefault();
 
-        const userId = $(this).data('user-id');
-        const selectedDate = $(this).closest('tr').find('.payslip-date-dropdown-btn').text().trim();
+            const userId = $(this).data('user-id');
+            const selectedDate = $(this).closest('tr').find('.payslip-date-dropdown-btn').text().trim();
 
-        if (!selectedDate || selectedDate === 'Select Date') {
-            alert('Please select a date!');
-            return;
-        }
-
-        $.ajax({
-            url: "{{ route('payslips.byDate') }}",
-            type: "GET",
-            data: {
-                user_id: userId,
-                payslip_date: selectedDate,
-            },
-            success: function (data) {
-                if (data.file_path) {
-                    const fileUrl = "{{ asset('public/storage') }}/" + data.file_path;
-                    $('#payslipIframe').attr('src', fileUrl).css('visibility', 'visible'); // Make it visible without changing layout
-                } else {
-                    alert('No payslip found for this date!');
-                }
-            },
-            error: function () {
-                alert('Payslip not found or error occurred!');
+            if (!selectedDate || selectedDate === 'Select Date') {
+                alert('Please select a date!');
+                return;
             }
-        });
-    });
 
-    // Handle dropdown item click to update the button text
-    $(document).on('click', '.dropdown-item', function() {
-        const selectedValue = $(this).data('value');
-        const dropdownText = $(this).text();
-        $(this).closest('tr').find('.payslip-date-dropdown-btn').text(dropdownText);
-        $(this).closest('tr').find('.payslip-date-dropdown-btn').data('value', selectedValue);
-    });
-</script>
+            $.ajax({
+                url: "{{ route('payslips.byDate') }}",
+                type: "GET",
+                data: {
+                    user_id: userId,
+                    payslip_date: selectedDate,
+                },
+                success: function (data) {
+                    if (data.file_path) {
+                        const fileUrl = "{{ asset('public/storage') }}/" + data.file_path;
+                        $('#payslipIframe').attr('src', fileUrl).css('visibility', 'visible'); // Make it visible without changing layout
+                    } else {
+                        alert('No payslip found for this date!');
+                    }
+                },
+                error: function () {
+                    alert('Payslip not found or error occurred!');
+                }
+            });
+        });
+
+        // Handle dropdown item click to update the button text
+        $(document).on('click', '.dropdown-item', function() {
+            const selectedValue = $(this).data('value');
+            const dropdownText = $(this).text();
+            $(this).closest('tr').find('.payslip-date-dropdown-btn').text(dropdownText);
+            $(this).closest('tr').find('.payslip-date-dropdown-btn').data('value', selectedValue);
+        });
+    </script>
 
 </body>

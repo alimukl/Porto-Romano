@@ -205,7 +205,6 @@
                   <h5 class="text-white font-weight-bolder mb-0 mt-3" id="digital-clock">
                     00:00:00
                   </h5>
-                  <p>Your remaining annual leave quota: {{ Auth::user()->annual_leave_quota }} days</p>
                   <span class="text-white text-sm">Digital Clock</span>
             </div>
           </div>
@@ -232,7 +231,8 @@
               <tr>
                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employee Name</th>
                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reason</th>
-                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Leave Date</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Start</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">End</th>
                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
               </tr>
             </thead>
@@ -248,8 +248,9 @@
                           alt="User Profile Picture">
                         </div>
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm text-uppercase">{{ $value->user->name }}</h6>
-                        </div>
+                            <h6 class="mb-0 text-sm">{{ ucwords(strtolower($value->user->name)) }}</h6>
+                            <p class="text-xs text-secondary mb-0" style="color:rgb(88, 120, 179)!important;">{{ $value->user->email }}</p>
+                          </div>
                       </div>
                     </td>
                     <td>
@@ -257,7 +258,8 @@
                         <i class="fas fa-eye text-info hover-view"></i>
                       </a>
                     </td>
-                    <td><span class="text-secondary text-xs font-weight-bold">{{ $value->leave_date }}</span></td>
+                    <td><span class="text-secondary text-xs font-weight-bold" style="color:rgb(88, 120, 179)!important;">{{ \Carbon\Carbon::parse($value->leave_date_start)->format('d M y') }}</span></td>
+                    <td><span class="text-secondary text-xs font-weight-bold" style="color:rgb(88, 120, 179)!important;">{{ \Carbon\Carbon::parse($value->leave_date_end)->format('d M y') }}</span></td>
                     <td>
                       <span class="badge badge-sm 
                         @if($value->status == 'pending') custom-pending

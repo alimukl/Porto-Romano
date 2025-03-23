@@ -3,15 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PermissionRoleModel;
 use Spatie\Activitylog\Models\Activity;
 use App\Models\User;
 use App\Models\LeaveRequest;
 use Carbon\Carbon;
+use Auth;
 
 class DashboardController extends Controller
 {
     public function dashboard()
     {
+        $PermissionRole = PermissionRoleModel::getPermission('Dashboard',Auth::user()->role_id);
+        if(empty($PermissionRole))
+        {
+            return view('error.401');
+        }
+
         $logs = Activity::latest()->take(7)->get(); // Fetch latest 5 log activities
         $totalUsers = User::count(); // Get total number of users
         $totalPendingLeave = LeaveRequest::where('status', 'pending')->count(); // Count pending leave requests

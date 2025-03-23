@@ -113,7 +113,9 @@ input, select {
 
                         <label for="age" class="small">Age</label>
                         <input type="text" id="age" name="age" value="{{ $getRecord->age }}" required class="form-control mb-3">
-                        
+
+                        <label for="start_date" class="small">Start Date</label>
+                        <input type="date" id="start_date" name="start_date" value="{{ $getRecord->start_date }}" required class="form-control mb-3">
                       </div>
 
                       <!-- Middle Column: Profile Picture -->
@@ -141,6 +143,10 @@ input, select {
                           </option>
                           @endforeach
                         </select>
+
+                        <label for="job_position">Job Position</label>
+                        <input type="text" id="job_position" name="job_position" value="{{ $getRecord->job_position }}" required class="form-control mb-3">
+                        
                       </div>
 
                       <!-- Right Column:-->

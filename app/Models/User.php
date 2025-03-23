@@ -67,7 +67,7 @@ class User extends Authenticatable
     // Encryption for sensitive fields
     public function setAttribute($key, $value)
     {
-        $encryptedFields = ['address', 'employment_pass', 'passport_number'];
+        $encryptedFields = ['address', 'employment_pass', 'passport_number','phone'];
 
         if (in_array($key, $encryptedFields) && !is_null($value)) {
             if (!str_starts_with($value, 'eyJpdiI6')) {
@@ -81,7 +81,7 @@ class User extends Authenticatable
     // Decryption for display
     public function getAttribute($key)
     {
-        $encryptedFields = ['address', 'employment_pass', 'passport_number'];
+        $encryptedFields = ['address', 'employment_pass', 'passport_number','phone'];
 
         $value = parent::getAttribute($key);
 

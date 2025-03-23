@@ -97,6 +97,13 @@
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
 @include('panel.layout.header')
 
+@if(session('success'))
+    <div id="snackbar" class="snackbar">
+      <span class="snackbar-icon"><i class='bx bx-check-circle bx-tada text-success'></i></span>
+      <span class="snackbar-text">{{ session('success') }}</span>
+    </div>
+@endif
+
 <div class="container-fluid py-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
@@ -147,7 +154,7 @@
                         alt="User Profile Picture">
                         </div>
                         <div class="d-flex flex-column justify-content-center">
-                          <h6 class="mb-0 text-sm">{{ $leave->user->name }}</h6>
+                          <h6 class="mb-0 text-sm">{{ ucwords(strtolower($leave->user->name)) }}</h6>
                         </div>
                       </div>
                     </td>
@@ -160,10 +167,10 @@
                     @endif
                     </td>
                     <td>
-                    <span class="text-secondary text-xs font-weight-bold">{{ $leave->leave_date_start }}</span>
+                    <span class="text-secondary text-xs font-weight-bold" style="color:rgb(88, 120, 179)!important;">{{ \Carbon\Carbon::parse($leave->leave_date_start)->format('d F y') }}</span>
                     </td>
                     <td>
-                    <span class="text-secondary text-xs font-weight-bold">{{ $leave->leave_date_end }}</span>
+                    <span class="text-secondary text-xs font-weight-bold" style="color:rgb(88, 120, 179)!important;">{{ \Carbon\Carbon::parse($leave->leave_date_start)->format('d F y') }}</span>
                     </td>
                     <td>
                       <span class="badge badge-sm 
