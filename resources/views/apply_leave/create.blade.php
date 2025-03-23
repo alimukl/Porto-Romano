@@ -95,6 +95,7 @@
             <div class="col-lg-9 col-md-10">
                 <div class="card mb-3 table-custom-shadow p-6">
                     <h2 class="mb-4">Apply for Leave</h2>
+                    <p>Your remaining annual leave quota: {{ Auth::user()->annual_leave_quota }} days</p>
                     <form action="{{ route('apply_leave.store') }}" method="POST" enctype="multipart/form-data" id="leaveForm">
                         @csrf
 
