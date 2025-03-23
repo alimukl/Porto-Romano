@@ -52,14 +52,23 @@
 
                         <!-- Reason for Leave -->
                         <div class="mb-3">
-                            <label for="reason" class="form-label fw-bold">Reason for Leave</label>
-                            <textarea name="reason" id="reason" class="form-control" rows="3" placeholder="Enter the reason for leave" required></textarea>
+                            <label for="category" class="form-label fw-bold">Leave Category</label>
+                            <select name="category" id="category" class="form-control" required>
+                                <option value="" disabled selected>Select a category</option>
+                                <option value="annual_leave">Annual Leave</option>
+                                <option value="sick_leave">Sick Leave</option>
+                                <option value="emergency_leave">Emergency Leave</option>
+                                <option value="unpaid_leave">Unpaid Leave</option>
+                            </select>
                         </div>
 
                         <!-- Leave Date -->
                         <div class="mb-3">
-                            <label for="leave_date" class="form-label fw-bold">Leave Date</label>
-                            <input type="date" name="leave_date" class="form-control" id="leave_date" required>
+                            <label for="leave_date_start">Start Date:</label>
+                            <input type="date" name="leave_date_start" required>
+
+                            <label for="leave_date_end">End Date:</label>
+                            <input type="date" name="leave_date_end" required>
                             <small id="dateError" class="text-danger" style="display: none;">Please select a date after today.</small>
                         </div>
 

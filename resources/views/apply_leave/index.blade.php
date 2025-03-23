@@ -19,75 +19,75 @@
 <style>
     .table-custom-shadow {
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* You can adjust the values to control the shadow's size and intensity */
-}
-
-.custom-approve {
-    background: linear-gradient(45deg,rgb(61, 131, 40),rgb(80, 186, 31));
-    color: #fff;
-    border-radius: 5px;
-    padding: 6px 10px;
-    font-weight: bold;
   }
 
-  .custom-reject {
-    background: linear-gradient(45deg,rgb(129, 31, 31),rgb(194, 46, 30));
-    color: #fff;
-    border-radius: 5px;
-    padding: 6px 10px;
-    font-weight: bold;
+  .custom-approve {
+      background: linear-gradient(45deg,rgb(61, 131, 40),rgb(80, 186, 31));
+      color: #fff;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-weight: bold;
+    }
+
+    .custom-reject {
+      background: linear-gradient(45deg,rgb(129, 31, 31),rgb(194, 46, 30));
+      color: #fff;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-weight: bold;
+    }
+
+    .custom-pending {
+      background: linear-gradient(45deg,rgb(2, 2, 2),rgb(77, 77, 77));
+      color: #fff;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-weight: bold;
+    }
+
+    .view-mc {
+      color:rgb(41, 120, 211);
   }
 
-  .custom-pending {
-    background: linear-gradient(45deg,rgb(2, 2, 2),rgb(77, 77, 77));
-    color: #fff;
-    border-radius: 5px;
-    padding: 6px 10px;
-    font-weight: bold;
+  .snackbar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1050;
+      min-width: 250px;
+      padding: 16px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 5px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+
+      display: flex;
+      align-items: center; /* Aligns icon and text vertically */
+      gap: 0.5rem; /* Adds spacing between icon and text */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   }
 
-  .view-mc {
-    color:rgb(41, 120, 211);
-}
+  .snackbar-icon {
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
 
-.snackbar {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1050;
-    min-width: 250px;
-    padding: 16px;
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-
-    display: flex;
-    align-items: center; /* Aligns icon and text vertically */
-    gap: 0.5rem; /* Adds spacing between icon and text */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.snackbar-icon {
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.snackbar-text {
-    font-size: 1rem;
-}
+  .snackbar-text {
+      font-size: 1rem;
+  }
 
 
-.snackbar.show {
-    opacity: 1;
-}
+  .snackbar.show {
+      opacity: 1;
+  }
 
-.snackbar-icon {
-    font-size: 1.5rem;
-}
+  .snackbar-icon {
+      font-size: 1.5rem;
+  }
 
 </style>
 </head>
@@ -128,9 +128,10 @@
               <thead>
                 <tr>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employee Name</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reason</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Category</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">MC Pdf</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Leave Date</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Start</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">End</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
                 </tr>
               </thead>
@@ -150,7 +151,7 @@
                         </div>
                       </div>
                     </td>
-                    <td><span class="text-secondary text-xs font-weight-bold">{{ $leave->reason }}</span></td>
+                    <td><span class="text-secondary text-xs font-weight-bold">{{ $leave->category }}</span></td>
                     <td>
                     @if ($leave->mc_pdf)
                       <a href="{{ asset('public/storage/' . $leave->mc_pdf) }}" target="_blank" class=" view-mc text-xs font-weight-bold">View MC</a>
@@ -158,7 +159,12 @@
                       <a target="_blank" class=" text-xs font-weight-bold" style="color:rgb(156, 48, 48);">No Medical Certificate Uploaded</a>
                     @endif
                     </td>
-                    <td><span class="text-secondary text-xs font-weight-bold">{{ $leave->leave_date }}</span></td>
+                    <td>
+                    <span class="text-secondary text-xs font-weight-bold">{{ $leave->leave_date_start }}</span>
+                    </td>
+                    <td>
+                    <span class="text-secondary text-xs font-weight-bold">{{ $leave->leave_date_end }}</span>
+                    </td>
                     <td>
                       <span class="badge badge-sm 
                         @if($leave->status == 'pending') custom-pending

@@ -88,6 +88,19 @@
                                 </div>
                             </div>
 
+                            
+                            <!-- Job Position & Start Date Row -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="job_position">Job Position</label>
+                                    <input type="text" name="job_position" class="form-control" value="{{ old('job_position') }}" placeholder="Enter job position">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="start_date">Start Date</label>
+                                    <input type="date" name="start_date" class="form-control" value="{{ old('start_date') }}" required>
+                                </div>
+                            </div>
+
                             <!-- Employment Pass & Passport Number Row -->
                             <div class="row mb-3">
                                 <div id="employmentPassField" class="col-md-6">

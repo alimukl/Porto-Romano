@@ -79,54 +79,72 @@ class UserController extends Controller
         $rules = [
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
+            'job_position' => 'required|string',
+            'start_date' => 'required|date',
             'age' => 'required|integer',
             'address' => 'required|string',
             'phone' => 'required|string',
             'password' => 'required|string|min:6',
             'role_id' => 'required|integer',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'passport_number' => 'nullable|string',
+            'employment_pass' => 'nullable|string',
         ];
     
-        // Extra validation for 'user' role
+        // Extra validation if 'user' role is selected
         if ($request->role_id == config('roles.user')) {
             $rules['passport_number'] = 'required|string';
             $rules['employment_pass'] = 'required|string';
         }
     
         $validated = $request->validate($rules);
+        
     
-        // Create and save new user
-        $user = new User;
-        $user->name = trim($request->name);
-        $user->email = trim($request->email);
-        $user->password = Hash::make($request->password);
-        $user->role_id = trim($request->role_id);
-        $user->age = trim($request->age);
-        $user->passport_number = trim($request->passport_number);
-        $user->employment_pass = trim($request->employment_pass);
-        $user->address = trim($request->address);
-        $user->phone = trim($request->phone);
+        try {
+            // Create and save new user
+            $user = new User();
+            $user->name = trim($request->name);
+            $user->email = trim($request->email);
+            $user->password = Hash::make($request->password);
+            $user->role_id = trim($request->role_id);
+            $user->age = trim($request->age);
+            $user->address = trim($request->address);
+            $user->phone = trim($request->phone);
+            $user->job_position = trim($request->job_position);
+            $user->start_date = $request->start_date;
     
-        // Handle Profile Photo Upload (using the ProfileController style)
-        if ($request->hasFile('profile_photo')) {
-            $profilePhoto = $request->file('profile_photo');
+            // Save Passport Number and Employment Pass (guaranteed)
+            $user->passport_number = $request->passport_number ?? null;
+            $user->employment_pass = $request->employment_pass ?? null;
     
-            // Generate unique filename
-            $fileName = uniqid() . '.' . $profilePhoto->getClientOriginalExtension();
+            // Set annual leave quota using model function
+            $user->annual_leave_quota = $user->calculateAnnualLeaveQuota();
     
-            // Store the file in the 'public/profile_photos' directory
-            $filePath = $profilePhoto->storeAs('profile_photos', $fileName, 'public');
+            // Handle Profile Photo Upload
+            if ($request->hasFile('profile_photo')) {
+                // Delete old photo if exists
+                if ($user->profile_photo && file_exists(public_path('storage/' . $user->profile_photo))) {
+                    unlink(public_path('storage/' . $user->profile_photo));
+                }
     
-            // Save file path to user model
-            $user->profile_photo = 'profile_photos/' . basename($filePath);
+                // Generate unique filename and store the file
+                $fileName = uniqid() . '.' . $request->profile_photo->getClientOriginalExtension();
+                $filePath = $request->profile_photo->storeAs('profile_photos', $fileName, 'public');
+    
+                // Save file path to user model
+                $user->profile_photo = 'profile_photos/' . basename($filePath);
+            }
+    
+            $user->save();
+    
+            return redirect('panel/user')->with('success', "User successfully created");
+        } catch (\Exception $e) {
+            \Log::error('User creation failed: ' . $e->getMessage());
+            return back()->with('error', "Something went wrong! Please try again.");
         }
-    
-        $user->save();
-    
-        return redirect('panel/user')->with('success', "User successfully created");
     }    
     
-
+    
     public function update($id, Request $request)
     {
         // Check permissions
@@ -141,6 +159,8 @@ class UserController extends Controller
         // Validation rules
         $rules = [
             'name' => 'required|string',
+            'job_position' => 'required|string',
+            'start_date' => 'required|date',
             'age' => 'required|integer',
             'address' => 'required|string',
             'phone' => 'required|string',
@@ -152,19 +172,30 @@ class UserController extends Controller
     
         // Update user details
         $user->name = trim($request->name);
-        if (!empty($request->password)) {
-            $user->password = Hash::make($request->password);
-        }
-        $user->role_id = trim($request->role_id);
+        $user->job_position = trim($request->job_position);
+        $user->start_date = $request->start_date;
         $user->age = trim($request->age);
         $user->address = trim($request->address);
         $user->phone = trim($request->phone);
+        $user->role_id = trim($request->role_id);
     
-        // Handle Profile Photo Upload
+        // Only hash password if provided
+        if (!empty($request->password)) {
+            $user->password = Hash::make($request->password);
+        }
+    
+        // Recalculate annual leave using the User model method
+        $user->annual_leave_quota = $user->calculateAnnualLeaveQuota();
+    
+        // Handle profile photo upload
         if ($request->hasFile('profile_photo')) {
-            // Delete the old photo if it exists
-            if ($user->profile_photo && file_exists(public_path($user->profile_photo))) {
-                unlink(public_path($user->profile_photo));
+            // Delete the old photo safely if it exists
+            if ($user->profile_photo && file_exists($path = public_path($user->profile_photo))) {
+                try {
+                    unlink($path);
+                } catch (\Exception $e) {
+                    Log::error("Failed to delete old profile photo: " . $e->getMessage());
+                }
             }
     
             // Save the new profile photo
@@ -178,7 +209,7 @@ class UserController extends Controller
     
         return redirect('panel/user')->with('success', "User successfully updated");
     }
-         
+    
     
 
     public function delete($id)

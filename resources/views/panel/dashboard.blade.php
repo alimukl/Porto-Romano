@@ -205,6 +205,7 @@
                   <h5 class="text-white font-weight-bolder mb-0 mt-3" id="digital-clock">
                     00:00:00
                   </h5>
+                  <p>Your remaining annual leave quota: {{ Auth::user()->annual_leave_quota }} days</p>
                   <span class="text-white text-sm">Digital Clock</span>
             </div>
           </div>

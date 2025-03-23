@@ -214,6 +214,7 @@
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Age</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Annual Leave Quota</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employment Pass</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Passport</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
@@ -242,6 +243,9 @@
                             </td>
                             <td class="align-middle text-center text-sm">
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->age }}</span>
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                              <span class="text-secondary text-xs font-weight-bold">{{ $value->annual_leave_quota }}</span>
                             </td>
                             <td class="align-middle text-center text-sm">
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->employment_pass }}</span>
@@ -302,6 +306,7 @@
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Age</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Annual Leave Quota</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employment Pass</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Passport</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
@@ -330,6 +335,9 @@
                             </td>
                             <td class="align-middle text-center text-sm">
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->age }}</span>
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                              <span class="text-secondary text-xs font-weight-bold">{{ $value->annual_leave_quota }}</span>
                             </td>
                             <td class="align-middle text-center text-sm">
                               <span class="text-secondary text-xs font-weight-bold">-</span>
@@ -390,6 +398,7 @@
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Age</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Annual Leave Quota</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employment Pass</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Passport</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
@@ -418,6 +427,9 @@
                             </td>
                             <td class="align-middle text-center text-sm">
                               <span class="text-secondary text-xs font-weight-bold">{{ $value->age }}</span>
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                              <span class="text-secondary text-xs font-weight-bold">{{ $value->annual_leave_quota }}</span>
                             </td>
                             <td class="align-middle text-center text-sm">
                               <span class="text-secondary text-xs font-weight-bold">-</span>

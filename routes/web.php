@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\PayslipController;
 
 //public route
 Route::get('/', [AuthController::class, 'login'])->name('login'); 
@@ -65,6 +66,17 @@ Route::group(['middleware' => 'useradmin'], function () {
     Route::get('/leave_requests/{id}/edit', [LeaveRequestController::class, 'edit'])->name('leave_requests.edit');
     Route::put('/leave_requests/{id}', [LeaveRequestController::class, 'update'])->name('leave_requests.update');
     Route::delete('/leave_requests/{id}', [LeaveRequestController::class, 'delete'])->name('leave_requests.delete');
+
+    Route::get('panel/payslips/user', [PayslipController::class, 'userPayslips'])->name('payslips.user');
+    Route::get('panel/payslips/admin', [PayslipController::class, 'adminPayslips'])->name('payslips.admin');
+    Route::post('panel/payslips/upload', [PayslipController::class, 'upload'])->name('payslips.upload');    
+
+    Route::get('/get-payslip', [PayslipController::class, 'getPayslipsByDate'])->name('payslips.byDate');
+
+
+    Route::get('/payslips/create', [PayslipController::class, 'create'])->name('payslips.create');
+    Route::post('/payslips/store', [PayslipController::class, 'store'])->name('payslips.store');
+
 
     Route::get('/panel/error', [UserController::class, 'index'])->name('error.401');
 
