@@ -54,7 +54,7 @@ Route::group(['middleware' => 'useradmin'], function () {
 
     Route::get('panel/leave-requests', [LeaveRequestController::class, 'index'])->name('leave_requests.index');
     Route::post('panel/leave-requests', [LeaveRequestController::class, 'storeForUser'])->name('leave_requests.storeForUser');
-    Route::get('panel/leave-requests/create', [LeaveRequestController::class, 'createForUser'])->name('leave_requests.createForUser');
+    Route::get('panel/leave-requests/create/{id?}', [LeaveRequestController::class, 'createForUser'])->name('leave_requests.createForUser');
 
     Route::get('panel/apply_leave', [LeaveRequestController::class, 'apply'])->name('apply_leave.index'); // own user application
     Route::get('panel/apply_leave/create', [LeaveRequestController::class, 'create'])->name('apply_leave.create'); // own user application

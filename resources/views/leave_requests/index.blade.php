@@ -172,6 +172,13 @@
     </div>
 @endif
 
+@if(session('error'))
+    <div id="snackbar" class="snackbar">
+      <span class="snackbar-icon"><i class='bx bx-error-alt' style='color:#c14b4b' ></i></span>
+      <span class="snackbar-text">{{ session('error') }}</span>
+    </div>
+@endif
+
 <div class="container-fluid py-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">

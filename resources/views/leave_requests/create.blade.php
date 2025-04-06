@@ -101,35 +101,31 @@
                         <!-- User Selection -->
                         <div class="mb-3">
                             <label for="user_id" class="form-label fw-bold">Select User</label>
-                            <select name="user_id" id="user_id" class="form-control" required>
-                                <option value="" disabled selected>-- Search and Select User --</option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            <select name="user_id" id="user_id" class="form-control">
+                                <option value="" disabled selected>Select a user</option>
+                                @foreach ($users as $u)
+                                    <option value="{{ $u->id }}" {{ $user && $user->id == $u->id ? 'selected' : '' }}>
+                                        {{ $u->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <!-- Reason for Leave -->
-                        <div class="mb-3">
-                            <label for="category" class="form-label fw-bold">Leave Category</label>
-                            <select name="category" id="category" class="form-control" required>
-                                <option value="" disabled selected>Select a category</option>
-                                <option value="Annual Leave">Annual Leave</option>
-                                <option value="Sick Leave">Sick Leave</option>
-                                <option value="Public Holidays">Public Holidays</option>
-                                <option value="Maternity Leave">Maternity Leave</option>
-                                <option value="Paternity Leave">Paternity Leave</option>
-                                <option value="Compassionate/Bereavement Leave">Compassionate/Bereavement Leave</option>
-                                <option value="Unpaid Leave">Unpaid Leave</option>
-                                <option value="Emergency Leave">Emergency Leave</option>
-                                <option value="Study Leave">Study Leave</option>
-                                <option value="Leave for Religious Observances">Leave for Religious Observances</option>
-                                <option value="Special Leave">Special Leave</option>
-                                <option value="Jury Duty Leave">Jury Duty Leave</option>
-                                <option value="Work-from-Home Leave">Work-from-Home Leave</option>
-                                <option value="Leave for Temporary Disability">Leave for Temporary Disability</option>
-                            </select>
-                        </div>
+                        @if($user)
+                            <!-- Reason for Leave -->
+                            <div class="mb-3">
+                                <label for="category" class="form-label fw-bold">Leave Category</label>
+                                <select name="category" id="category" class="form-control" required>
+                                    <option value="" disabled selected>Select a category</option>
+                                    <option value="Annual Leave">Annual Leave (Remaining: {{ $user->annual_leave_quota }} days)</option>
+                                    <option value="Sick Leave">Sick Leave (Remaining: {{ $user->sick_leave_quota }} days)</option>
+                                    <option value="Emergency Leave">Emergency Leave (Remaining: {{ $user->emergency_leave_quota }} days)</option>
+                                    <option value="Maternity Leave">Maternity Leave (Remaining: {{ $user->maternity_leave_quota }} days)</option>
+                                    <option value="Paternity Leave">Paternity Leave (Remaining: {{ $user->paternity_leave_quota }} days)</option>
+                                    <option value="Unpaid Leave">Unpaid Leave (No limit)</option>
+                                </select>
+                            </div>
+                        @endif
 
                         <!-- Leave Date -->
                         <div class="mb-3">
@@ -175,4 +171,14 @@
     }
 });
 </script>
+
+<script>
+    document.getElementById('user_id').addEventListener('change', function () {
+        const userId = this.value;
+        const url = `{{ route('leave_requests.createForUser', '') }}/${userId}`;
+
+        window.location.href = url; // Redirect smoothly
+    });
+</script>
+
 @endsection

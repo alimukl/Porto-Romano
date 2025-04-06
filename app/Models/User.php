@@ -20,6 +20,11 @@ class User extends Authenticatable
         'email',
         'job_position',
         'annual_leave_quota',
+        'sick_leave_quota',
+        'emergency_leave_quota',
+        'maternity_leave_quota',
+        'paternity_leave_quota',
+        'unpaid_leave_quota',
         'start_date',
         'password',
         'profile_photo',
@@ -119,6 +124,16 @@ class User extends Authenticatable
         }
     }
 
+    public function initializeLeaveQuota()
+    {
+        $this->sick_leave_quota = 14;
+        $this->emergency_leave_quota = 5;
+        $this->maternity_leave_quota = 60;
+        $this->paternity_leave_quota = 7;
+        $this->unpaid_leave_quota = 0;
+        $this->save();
+    }
+
     // Calculate how much leave user has taken this year
     public function leaveTakenThisYear()
     {
@@ -137,7 +152,8 @@ class User extends Authenticatable
     // Get user records with role data
     static public function getRecord()
     {
-        return User::select('users.*', 'role.name as role_name', 'users.job_position', 'users.annual_leave_quota', 'users.profile_photo', 'users.age', 'users.passport_number', 'users.employment_pass', 'users.address', 'users.phone')
+        return User::select('users.*', 'role.name as role_name', 'users.job_position', 'users.annual_leave_quota','users.sick_leave_quota',
+        'users.emergency_leave_quota','users.maternity_leave_quota','users.paternity_leave_quota','users.unpaid_leave_quota','users.profile_photo', 'users.age', 'users.passport_number', 'users.employment_pass', 'users.address', 'users.phone')
             ->join('role', 'role.id', '=', 'users.role_id')
             ->orderBy('users.id', 'desc')
             ->get();

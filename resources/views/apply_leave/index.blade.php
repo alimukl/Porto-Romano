@@ -89,6 +89,31 @@
       font-size: 1.5rem;
   }
 
+  .list-group-item {
+    font-size: 1.1em;
+    background-color: rgb(35, 35, 35);
+    border-left: 5px solid #4caf50;
+    margin-bottom: 5px;
+    color: #fff;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Zero quota styling */
+.zero-quota {
+    background-color: rgb(76, 0, 0);
+    border-left: 5px solid #e74c3c;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Optional: Hover effect */
+.list-group-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+}
+
+
+
 </style>
 </head>
 
@@ -113,6 +138,61 @@
     <h6 class="font-weight-bolder mb-0">My Leave Request</h6>
   </nav>
   <br>
+
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <!-- Left Side: Leave Quotas -->
+    <div class="me-3" style="width: 60%;">
+    <h4 class="fw-bold mb-3">Your Leave Quotas For This Year</h4>
+        <ul class="list-group">
+            <li class="list-group-item {{ $user->annual_leave_quota == 0 ? 'zero-quota' : '' }}">
+                Annual Leave: <strong>{{ $user->annual_leave_quota }} days</strong>
+            </li>
+            <li class="list-group-item {{ $user->sick_leave_quota == 0 ? 'zero-quota' : '' }}">
+                Sick Leave: <strong>{{ $user->sick_leave_quota }} days</strong>
+            </li>
+            <li class="list-group-item {{ $user->emergency_leave_quota == 0 ? 'zero-quota' : '' }}">
+                Emergency Leave: <strong>{{ $user->emergency_leave_quota }} days</strong>
+            </li>
+            <li class="list-group-item {{ $user->maternity_leave_quota == 0 ? 'zero-quota' : '' }}">
+                Maternity Leave: <strong>{{ $user->maternity_leave_quota }} days</strong>
+            </li>
+            <li class="list-group-item {{ $user->paternity_leave_quota == 0 ? 'zero-quota' : '' }}">
+                Paternity Leave: <strong>{{ $user->paternity_leave_quota }} days</strong>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Right Side: User Info -->
+    <div class="card shadow-sm p-3 bg-white text-black border" style="width: 38 %;">
+      <h4 class="fw-bold mb-3 text-black">Your Information</h4>
+      <div class="row mb-2 border-bottom pb-1">
+          <div class="col-5"><strong>Name:</strong></div>
+          <div class="col-7">{{ ucwords(strtolower($user->name)) }}</div>
+      </div>
+      <div class="row mb-2 border-bottom pb-1">
+          <div class="col-5"><strong>Email:</strong></div>
+          <div class="col-7">{{ $user->email }}</div>
+      </div>
+      <div class="row mb-2 border-bottom pb-1">
+          <div class="col-5"><strong>Phone:</strong></div>
+          <div class="col-7 bold">{{ $user->phone }}</div>
+      </div>
+      <div class="row mb-2 border-bottom pb-1">
+          <div class="col-5"><strong>Address:</strong></div>
+          <div class="col-7">{{ $user->address }}</div>
+      </div>
+      <div class="row mb-2 border-bottom pb-1">
+          <div class="col-5"><strong>Job Position:</strong></div>
+          <div class="col-7">{{ $user->job_position }}</div>
+      </div>
+      <div class="row mb-2 border-bottom pb-1">
+          <div class="col-5"><strong>Employee Since:</strong></div>
+          <div class="col-7">{{ \Carbon\Carbon::parse($user->start_date)->format('d/m/Y') }}</div>
+      </div>
+    </div>
+
+  </div>
+
 
   <div class="row">
     <div class="col-12">

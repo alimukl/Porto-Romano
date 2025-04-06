@@ -35,19 +35,21 @@ class LeaveRequestController extends Controller
 
     public function apply()
     {
-        $user = Auth::user(); 
+        $user = Auth::user(); // Get the logged-in user
     
-        // only take own user leave application
+        // Get the user's leave requests
         $leaveRequests = LeaveRequest::where('user_id', $user->id)
             ->with('user')
             ->get();
     
-        return view('apply_leave.index', compact('leaveRequests'));
-    }    
-
+        // Pass both user and leaveRequests to the view using compact
+        return view('apply_leave.index', compact('leaveRequests', 'user'));
+    }
+    
     public function create() //display form for own id
     {
-        return view('apply_leave.create');
+        $user = Auth::user(); // Get the logged-in user
+        return view('apply_leave.create', compact('user')); // Pass $user to the view
     }   
 
     public function store(Request $request)
@@ -58,25 +60,41 @@ class LeaveRequestController extends Controller
             'leave_date_end' => 'required|date|after_or_equal:leave_date_start',
             'mc_pdf' => 'nullable|mimes:pdf|max:2048',
         ]);
-
+    
         $user = Auth::user();
-
+    
         // Calculate the number of days
         $start = Carbon::parse($request->leave_date_start);
         $end = Carbon::parse($request->leave_date_end);
         $days = $start->diffInDays($end) + 1;
-
-        // Check if user has enough annual leave quota
-        if ($days > $user->annual_leave_quota) {
-            return redirect()->back()->with('error', 'You do not have enough annual leave quota.');
+    
+        // Define category-to-quota mappings
+        $categoryQuotas = [
+            'Annual Leave' => 'annual_leave_quota',
+            'Sick Leave' => 'sick_leave_quota',
+            'Emergency Leave' => 'emergency_leave_quota',
+            'Maternity Leave' => 'maternity_leave_quota',
+            'Paternity Leave' => 'paternity_leave_quota',
+            'Unpaid Leave' => null,  // Unpaid leave has no quota
+        ];
+    
+        $category = $request->category;
+    
+        // Check the quota for the selected category
+        if (isset($categoryQuotas[$category])) {
+            $quotaField = $categoryQuotas[$category];
+    
+            if ($quotaField && $days > $user->$quotaField) {
+                return redirect()->back()->with('error', "This user does not have enough {$category} quota.");
+            }
         }
-
+    
         // Handle PDF upload if provided
         $mcPdfPath = null;
         if ($request->hasFile('mc_pdf')) {
             $mcPdfPath = $request->file('mc_pdf')->store('mc_pdfs', 'public');
         }
-
+    
         // Create the leave request
         LeaveRequest::create([
             'user_id' => $user->id,
@@ -87,21 +105,23 @@ class LeaveRequestController extends Controller
             'status' => 'pending',
             'mc_pdf' => $mcPdfPath,
         ]);
-
+    
         return redirect()->route('apply_leave.index')->with('success', 'Leave request submitted successfully.');
     }
     
-    public function createForUser() //display form for all user
+
+    public function createForUser($id = null)
     {
-        //permission to page by link
-        $PermissionRole = PermissionRoleModel::getPermission('Add Leave',Auth::user()->role_id);
-        if(empty($PermissionRole))
-        {
+        $PermissionRole = PermissionRoleModel::getPermission('Add Leave', Auth::user()->role_id);
+        if (empty($PermissionRole)) {
             return view('error.401');
         }
-
-        $users = User::all(); // Fetch all users from the database
-        return view('leave_requests.create', compact('users')); // Pass users to the view
+    
+        $users = User::all(); // Fetch all users
+    
+        $user = $id ? User::find($id) : null; // Fetch selected user if $id exists
+    
+        return view('leave_requests.create', compact('users', 'user'));
     }
 
     // Admin assigns leave for a specific user
@@ -114,25 +134,40 @@ class LeaveRequestController extends Controller
             'leave_date_end' => 'required|date|after_or_equal:leave_date_start',
             'mc_pdf' => 'nullable|mimes:pdf|max:2048',
         ]);
-
+    
         $user = User::findOrFail($request->user_id);
-
-        // Calculate leave days
+    
+        // Calculate the total days requested
         $start = Carbon::parse($request->leave_date_start);
         $end = Carbon::parse($request->leave_date_end);
         $days = $start->diffInDays($end) + 1;
-
-        // Check if the user has enough quota
-        if ($days > $user->annual_leave_quota) {
-            return redirect()->back()->with('error', 'This user does not have enough annual leave quota.');
+    
+        // Define category-to-quota mappings
+        $categoryQuotas = [
+            'Annual Leave' => 'annual_leave_quota',
+            'Sick Leave' => 'sick_leave_quota',
+            'Emergency Leave' => 'emergency_leave_quota',
+            'Maternity Leave' => 'maternity_leave_quota',
+            'Paternity Leave' => 'paternity_leave_quota',
+            'Unpaid Leave' => null,  // Unpaid leave has no quota
+        ];
+    
+        $category = $request->category;
+    
+        // Check the quota for the selected category
+        if (isset($categoryQuotas[$category])) {
+            $quotaField = $categoryQuotas[$category];
+    
+            if ($quotaField && $days > $user->$quotaField) {
+                return redirect()->back()->with('error', "This user does not have enough {$category} quota.");
+            }
         }
-
+    
         // Handle file upload (optional)
-        $mcPdfPath = null;
-        if ($request->hasFile('mc_pdf')) {
-            $mcPdfPath = $request->file('mc_pdf')->store('mc_pdfs', 'public');
-        }
-
+        $mcPdfPath = $request->hasFile('mc_pdf') 
+            ? $request->file('mc_pdf')->store('mc_pdfs', 'public') 
+            : null;
+    
         // Create leave request for the user
         LeaveRequest::create([
             'user_id' => $request->user_id,
@@ -143,43 +178,52 @@ class LeaveRequestController extends Controller
             'status' => 'pending',
             'mc_pdf' => $mcPdfPath,
         ]);
-
+    
         return redirect()->route('leave_requests.index')->with('success', 'Leave request submitted successfully for the selected user.');
     }
+    
 
-    public function approve($id) // Edit status
+    public function approve($id)
     {
-        // Check if the user has permission
         $PermissionRole = PermissionRoleModel::getPermission('Approve List Leave', Auth::user()->role_id);
+        if (empty($PermissionRole)) return view('error.401');
     
-        if (empty($PermissionRole)) { // Explicit check for permission
-            return view('error.401'); // Redirect to 401 Unauthorized error page
-        }
-    
-        // Retrieve the leave request
         $leaveRequest = LeaveRequest::findOrFail($id);
         $user = User::findOrFail($leaveRequest->user_id);
     
-        // Check if the leave is already approved
         if ($leaveRequest->status === 'approved') {
             return redirect()->back()->with('error', 'Leave request has already been approved.');
         }
     
-        // Check if user has enough remaining quota
-        if ($leaveRequest->days > $user->annual_leave_quota) {
-            return redirect()->back()->with('error', 'User does not have enough leave quota for this request.');
+        // Match category to the correct quota field
+        $leaveTypeQuota = match ($leaveRequest->category) {
+            'Annual Leave' => 'annual_leave_quota',
+            'Sick Leave' => 'sick_leave_quota',
+            'Emergency Leave' => 'emergency_leave_quota',
+            'Maternity Leave' => 'maternity_leave_quota',
+            'Paternity Leave' => 'paternity_leave_quota',
+            'Unpaid Leave' => 'unpaid_leave_quota',
+            default => null
+        };
+    
+        // Error if the category is invalid
+        if (!$leaveTypeQuota) return redirect()->back()->with('error', 'Invalid leave type.');
+    
+        // Check if user has enough quota (except unpaid leave)
+        if ($leaveRequest->category !== 'Unpaid Leave' && $leaveRequest->days > $user->$leaveTypeQuota) {
+            return redirect()->back()->with('error', "User does not have enough {$leaveRequest->category} quota.");
         }
     
-        // Deduct the leave days from the user's quota
-        $user->forceFill([
-            'annual_leave_quota' => $user->annual_leave_quota - $leaveRequest->days,
-        ])->save();        
+        // Deduct quota (skip deduction for unpaid leave)
+        if ($leaveRequest->category !== 'Unpaid Leave') {
+            $user->decrement($leaveTypeQuota, $leaveRequest->days);
+        }
     
-        // Update status to approved
+        // Approve the leave request
         $leaveRequest->update(['status' => 'approved']);
     
-        return redirect()->back()->with('success', 'Leave request approved, and quota updated.');
-    }
+        return redirect()->back()->with('success', "{$leaveRequest->category} approved, and quota updated.");
+    }    
     
     
     public function reject($id) // Edit status

@@ -95,7 +95,6 @@
             <div class="col-lg-9 col-md-10">
                 <div class="card mb-3 table-custom-shadow p-6">
                     <h2 class="mb-4">Apply for Leave</h2>
-                    <p>Your remaining annual leave quota: {{ Auth::user()->annual_leave_quota }} days</p>
                     <form action="{{ route('apply_leave.store') }}" method="POST" enctype="multipart/form-data" id="leaveForm">
                         @csrf
 
@@ -104,20 +103,12 @@
                             <label for="category" class="form-label fw-bold">Leave Category</label>
                             <select name="category" id="category" class="form-control" required>
                                 <option value="" disabled selected>Select a category</option>
-                                <option value="Annual Leave">Annual Leave</option>
-                                <option value="Sick Leave">Sick Leave</option>
-                                <option value="Public Holidays">Public Holidays</option>
-                                <option value="Maternity Leave">Maternity Leave</option>
-                                <option value="Paternity Leave">Paternity Leave</option>
-                                <option value="Compassionate/Bereavement Leave">Compassionate/Bereavement Leave</option>
-                                <option value="Unpaid Leave">Unpaid Leave</option>
-                                <option value="Emergency Leave">Emergency Leave</option>
-                                <option value="Study Leave">Study Leave</option>
-                                <option value="Leave for Religious Observances">Leave for Religious Observances</option>
-                                <option value="Special Leave">Special Leave</option>
-                                <option value="Jury Duty Leave">Jury Duty Leave</option>
-                                <option value="Work-from-Home Leave">Work-from-Home Leave</option>
-                                <option value="Leave for Temporary Disability">Leave for Temporary Disability</option>
+                                <option value="Annual Leave">Annual Leave (Remaining: {{ $user->annual_leave_quota }} days)</option>
+                                <option value="Sick Leave">Sick Leave (Remaining: {{ $user->sick_leave_quota }} days)</option>
+                                <option value="Emergency Leave">Emergency Leave (Remaining: {{ $user->emergency_leave_quota }} days)</option>
+                                <option value="Maternity Leave">Maternity Leave (Remaining: {{ $user->maternity_leave_quota }} days)</option>
+                                <option value="Paternity Leave">Paternity Leave (Remaining: {{ $user->paternity_leave_quota }} days)</option>
+                                <option value="Unpaid Leave">Unpaid Leave (No limit)</option>
                             </select>
                         </div>
 
@@ -180,4 +171,5 @@
     }
 });
 </script>
+
 @endsection
