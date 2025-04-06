@@ -60,7 +60,7 @@
     }
 
     .custom-divider {
-        border-top: 2px solid white !important; /* White color for the divider */
+        border-top: 2px solid black !important; /* White color for the divider */
         margin: 10px 0!important; /* Optional: space around the divider */
         
     }
@@ -99,9 +99,9 @@
             <div class="row">
                 <!-- Top -->
                 <div class="col-md-6">
-                    <div>
-                        <div class="p-4 border rounded shadow bg-dark text-white">
-                            <h2 class="font-weight-bold text-white mb-3">User Details</h2>
+                    <div class="card">
+                        <div class="p-4 border rounded shadow text-dark">
+                            <h2 class="font-weight-bold text-dark mb-3">User Details</h2>
                             <hr class="custom-divider mb-4">
 
                             <div class="row align-items-center mb-3">
@@ -112,25 +112,25 @@
                                 style="width: 100%; max-width: 220px; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 2px;">
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Name:</strong> {{ $user->name }}</div>
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Email:</strong> {{ $user->email }}</div>
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Age:</strong> {{ $user->age }}</div>
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Phone:</strong> {{ $user->phone }}</div>
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Address:</strong> {{ $user->address }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Name:</strong> {{ $user->name }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Email:</strong> {{ $user->email }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Age:</strong> {{ $user->age }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Phone:</strong> {{ $user->phone }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Address:</strong> {{ $user->address }}</div>
                                 </div>
                             </div>
 
-                            <h3 class="font-weight-bold text-white mb-3">Employment Details</h3>
+                            <h3 class="font-weight-bold text-dark mb-3">Employment Details</h3>
                             <hr class="custom-divider mb-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Job Position:</strong> {{ $user->job_position }}</div>
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Employment Pass:</strong> {{ $user->employment_pass }}</div>
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Passport Number:</strong> {{ $user->passport_number }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Job Position:</strong> {{ $user->job_position }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Employment Pass:</strong> {{ $user->employment_pass }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Passport Number:</strong> {{ $user->passport_number }}</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Annual Leave Quota:</strong> {{ $user->annual_leave_quota }}</div>
-                                    <div class="p-2 mb-2 bg-white text-dark rounded"><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($user->start_date)->format('d M Y') }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Annual Leave Quota:</strong> {{ $user->annual_leave_quota }}</div>
+                                    <div class="p-2 mb-2 bg-white text-dark rounded" style="border: 1px solid #dfdfdf;"><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($user->start_date)->format('d M Y') }}</div>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +168,7 @@
                 <!-- Right Column: Payslip Viewer (Aside) -->
                 <div class="col-md-6">
                     <div class="p-4 border rounded shadow-sm bg-dark " style="width:100%; height:680px; border:1px solid #ddd;">
-                        <h2 class="font-weight-bold text-white pb-3">Payslip Viewer</h2>
+                        <h2 class="font-weight-bold text-white pb-3">Payslip Preview</h2>
                         <hr class="custom-divider">
 
                         @if($payslipFile)

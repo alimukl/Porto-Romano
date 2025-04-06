@@ -126,7 +126,7 @@
 
   .list-group-item-clock {
     font-size: 1.1em;
-    background-color: rgb(220, 220, 220);
+    background-color: rgb(178, 178, 178);
     margin-bottom: 5px;
     color: #000000;
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -240,14 +240,24 @@
 
         <div class="col-lg-3 col-md-6 col-12">
           <div class="card">
-            <span class="mask opacity-10 border-radius-lg" style="background-color:rgb(22, 22, 22);"></span>
+            <span class="mask opacity-10 border-radius-lg" style="background-color: rgb(178, 178, 178);"></span>
             <div class="card-body p-3 position-relative">
-                  <h5 class="text-white font-weight-bolder mb-0 mt-3" id="digital-clock">
+              <div class="row">
+                <div class="col-8 text-start">
+                  <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                    <i class="fa-solid fa-clock-rotate-left fs-3 opacity-10" style="color:rgb(0, 0, 0);"></i>
+                  </div>
+
+                  <!-- Total logs for today (Initially Hidden) -->
+                  <h5 class="text-dark font-weight-bolder mb-0 mt-3" id="digital-clock">
                     00:00:00
                   </h5>
-                  <span class="text-white text-sm">Digital Clock</span>
+                  <span class="text-dark text-sm font-weight-bolder">Digital Clock</span>
+                </div>
+              </div>
             </div>
           </div>
+          </a>
         </div>
 
       <div class="row my-4">
@@ -529,7 +539,7 @@
                   <h5 class="text-dark font-weight-bolder mb-0 mt-3" id="digital-clock">
                     00:00:00
                   </h5>
-                  <span class="text-dark text-sm">Digital Clock</span>
+                  <span class="text-dark text-sm font-weight-bolder">Digital Clock</span>
                 </div>
               </div>
             </div>
