@@ -51,6 +51,12 @@ class User extends Authenticatable
         ];
     }
 
+    public function role()
+    {
+        return $this->belongsTo(RoleModel::class, 'role_id');
+    }
+    
+
     // Model lifecycle hooks to auto-calculate leave quota
     protected static function boot()
     {
@@ -175,9 +181,4 @@ class User extends Authenticatable
             ->useLogName('user');
     }
 
-    // Role relationship
-    public function role()
-    {
-        return $this->belongsTo(RoleModel::class, 'role_id');
-    }
 }

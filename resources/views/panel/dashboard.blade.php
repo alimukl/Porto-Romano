@@ -14,7 +14,7 @@
   <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- Font Awesome Icons -->
-  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/5da10a0f2b.js" crossorigin="anonymous"></script>
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css" rel="stylesheet" />
   <!-- Nepcha Analytics (nepcha.com) -->
@@ -23,6 +23,7 @@
 
   <!-- Bootstrap Icons CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
 
 
   <!-- loader css -->
@@ -84,6 +85,12 @@
     font-size: 16px;
   }
 
+  .gradient-icon-user {
+    background: linear-gradient(45deg,rgb(240, 204, 57),rgb(167, 139, 27));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 25px;
+  }
   .custom-approve {
     background: linear-gradient(45deg,rgb(61, 131, 40),rgb(80, 186, 31));
     color: #fff;
@@ -107,6 +114,36 @@
     padding: 6px 10px;
     font-weight: bold;
   }
+
+  .list-group-item {
+    font-size: 1.1em;
+    background-color: rgb(35, 35, 35);
+    border-left: 5px solid #4caf50;
+    margin-bottom: 5px;
+    color: #fff;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  .list-group-item-clock {
+    font-size: 1.1em;
+    background-color: rgb(220, 220, 220);
+    margin-bottom: 5px;
+    color: #000000;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  /* Zero quota styling */
+  .zero-quota {
+      background-color: rgb(76, 0, 0);
+      border-left: 5px solid #e74c3c;
+      color: #fff;
+      font-weight: bold;
+  }
+
+  .apply-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+  }
+
   </style>
 </head>
 <body class="g-sidenav-show  bg-gray-100">
@@ -120,11 +157,14 @@
 
 
 <div class="container-fluid py-4">
+
+@if(auth()->user()->role && auth()->user()->role->id != 10)
+
       <div class="row">
         <div class="col-lg-3 col-md-6 col-12">
           <a href="{{ url('panel/user') }}" class="text-decoration-none">
             <div class="card">
-              <span class="mask opacity-10 border-radius-lg" style="background-color:rgb(101, 165, 77);"></span>
+              <span class="mask opacity-10 border-radius-lg" style="background-color:rgb(66, 158, 55);"></span>
               <div class="card-body p-3 position-relative">
                 <div class="row">
                   <div class="col-8 text-start">
@@ -174,7 +214,7 @@
 
         <div class="col-lg-3 col-md-6 col-12">
           <div class="card">
-          <a href="{{ url('panel/activity_log') }}" class="text-decoration-none">
+            <a href="{{ url('panel/activity_log') }}" class="text-decoration-none">
             <span class="mask opacity-10 border-radius-lg" style="background-color:rgb(231, 197, 74);"></span>
             <div class="card-body p-3 position-relative">
               <div class="row">
@@ -198,14 +238,13 @@
           </a>
         </div>
 
-        <div class="col-lg-2 col-md-2 col-2">
+        <div class="col-lg-3 col-md-6 col-12">
           <div class="card">
             <span class="mask opacity-10 border-radius-lg" style="background-color:rgb(22, 22, 22);"></span>
             <div class="card-body p-3 position-relative">
                   <h5 class="text-white font-weight-bolder mb-0 mt-3" id="digital-clock">
                     00:00:00
                   </h5>
-                  <p>Your remaining annual leave quota: {{ Auth::user()->annual_leave_quota }} days</p>
                   <span class="text-white text-sm">Digital Clock</span>
             </div>
           </div>
@@ -238,7 +277,7 @@
               </tr>
             </thead>
             <tbody>
-            @foreach($getSixRecord as $key => $value)
+              @foreach($getSixRecord as $key => $value)
                   <tr class="data-row d-none"> <!-- Initially Hidden -->
                     <td>
                       <div class="d-flex px-2 py-1">
@@ -291,103 +330,337 @@
         </div>
         <div class="col-lg-4 col-md-6">
         <div class="card h-100">
-    <div class="card-header pb-0">
-      <h6>Recent Log Activity</h6>
-      <p class="text-sm">
-        <i class="bi bi-shield-slash-fill gradient-icon"></i>
-        <span class="font-weight-bold">Latest Activity</span>
-      </p>
-    </div>
-    <div class="card-body p-3">
-      <div class="timeline timeline-one-side">
-        @forelse($logs as $key => $log)
-          <!-- Loader Row (Initially Visible) -->
-          <div class="timeline-block mb-3 log-loader" data-index="{{ $key }}">
-            <div class="timeline-step">
-            <i class="bi bi-alexa text-danger"></i>
+        <div class="card-header pb-0">
+          <h6>Recent Log Activity</h6>
+          <p class="text-sm">
+            <i class="bi bi-shield-slash-fill gradient-icon"></i>
+            <span class="font-weight-bold">Latest Activity</span>
+          </p>
+        </div>
+      <div class="card-body p-3">
+        <div class="timeline timeline-one-side">
+          @forelse($logs as $key => $log)
+            <!-- Loader Row (Initially Visible) -->
+            <div class="timeline-block mb-3 log-loader" data-index="{{ $key }}">
+              <div class="timeline-step">
+              <i class="bi bi-alexa text-danger"></i>
+              </div>
+              <div class="timeline-content">
+                <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
+                  <div class="loader-widget" role="status">
+                  </div>
+                </p>
+              </div>
             </div>
-            <div class="timeline-content">
-              <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
-                <div class="loader-widget" role="status">
-                </div>
-              </p>
-            </div>
-          </div>
 
-          <!-- Log Entry (Initially Hidden) -->
-          <div class="timeline-block mb-3 log-entry d-none" data-index="{{ $key }}">
-            <span class="timeline-step">
-              @if(str_contains(strtolower($log->description), 'login'))
-                <i class="ni ni-key-25 text-success text-gradient"></i>
-              @else
-                <i class="bi bi-alexa text-danger"></i>
-              @endif
-            </span>
-            <div class="timeline-content">
-              <h6 class="text-dark text-sm font-weight-bold mb-0">
-                {{ $log->causer?->name ?? 'Unknown User' }}
-              </h6>
-              <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
-                {{ ucfirst($log->description) }} at {{ $log->created_at->format('Y-m-d H:i:s') }}
-              </p>
+            <!-- Log Entry (Initially Hidden) -->
+            <div class="timeline-block mb-3 log-entry d-none" data-index="{{ $key }}">
+              <span class="timeline-step">
+                @if(str_contains(strtolower($log->description), 'login'))
+                  <i class="ni ni-key-25 text-success text-gradient"></i>
+                @else
+                  <i class="bi bi-alexa text-danger"></i>
+                @endif
+              </span>
+              <div class="timeline-content">
+                <h6 class="text-dark text-sm font-weight-bold mb-0">
+                  {{ $log->causer?->name ?? 'Unknown User' }}
+                </h6>
+                <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
+                  {{ ucfirst($log->description) }} at {{ $log->created_at->format('Y-m-d H:i:s') }}
+                </p>
+              </div>
             </div>
-          </div>
-        @empty
-          <p class="text-center text-muted">No recent logins</p>
-        @endforelse
+          @empty
+            <p class="text-center text-muted">No recent logins</p>
+          @endforelse
+        </div>
       </div>
-    </div>
     
   </div>
-</div>
-      </div>
-      <div class="row mt-4">
-        <div class="col-lg-7 mb-lg-0 mb-4">
+@endif
+
+<!-- user dashboard -->
+
+@if(auth()->user()->role && auth()->user()->role->id == 10)
+
+    <h4 class="fw-bold mb-3">Your Leave Quotas For This Year</h4>
+      <div class="row">
+
+        <div class="col-lg-2 col-md-6 col-12">
+          <a href="{{ url('panel/apply_leave') }}" class="text-decoration-none">
           <div class="card">
-            <div class="card-body p-3">
+            <span class="mask opacity-10 border-radius-lg list-group-item {{ $user->annual_leave_quota == 0 ? 'zero-quota' : '' }}"></span>
+            <div class="card-body p-3 position-relative">
               <div class="row">
-                <div class="col-lg-6">
-                  <div class="d-flex flex-column h-100">
-                    <p class="mb-1 pt-2 text-bold">Built by developers</p>
-                    <h5 class="font-weight-bolder">Soft UI Dashboard</h5>
-                    <p class="mb-5">From colors, cards, typography to complex elements, you will find the full documentation.</p>
-                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
-                      Read More
-                      <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                    </a>
+                <div class="col-8 text-start">
+                  <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                    <i class="fa-solid fa-calendar-week fs-3 opacity-10" style="color:rgb(102, 174, 68);"></i>
                   </div>
+
+                  <!-- Spinner (Initially Visible) -->
+                  <div class="loader-widget total-spinner" role="status"></div>
+
+                  <!-- Total logs for today (Initially Hidden) -->
+                  <h5 class="text-white font-weight-bolder mb-0 mt-3 total-number d-none">
+                  {{ $user->annual_leave_quota }} days
+                  </h5>
+                  <span class="text-white text-sm">Annual Leave</span>
                 </div>
-                <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                  <div class="bg-primary border-radius-lg h-100">
-                    <img src="../assets/img/shapes/waves-white.svg" class="position-absolute h-100 w-50 top-0 d-lg-block d-none" alt="waves">
-                    <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                      <img class="w-100 position-relative z-index-2 pt-4" src="../assets/img/illustrations/rocket-white.png" alt="rocket">
+              </div>
+            </div>
+          </div>
+          </a>
+        </div> 
+      
+        <div class="col-lg-2 col-md-6 col-12">
+            <a href="{{ url('panel/apply_leave') }}" class="text-decoration-none">
+            <div class="card">
+              <span class="mask opacity-10 border-radius-lg list-group-item {{ $user->paternity_leave_quota == 0 ? 'zero-quota' : '' }}"></span>
+              <div class="card-body p-3 position-relative">
+                <div class="row">
+                  <div class="col-8 text-start">
+                    <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                      <i class="fa-solid fa-person-breastfeeding fs-3 opacity-10" style="color:rgb(42, 101, 230);"></i>
                     </div>
+                    <!-- Spinner (Initially Visible) -->
+                    <div class="loader-widget total-spinner" role="status"></div>
+                    
+                    <!-- Number (Initially Hidden) -->
+                    <h5 class="text-white font-weight-bolder mb-0 mt-3 total-number d-none">
+                    {{ $user->paternity_leave_quota }} days
+                    </h5>
+
+                    <span class="text-white text-sm">Paternity Leave</span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
-        <div class="col-lg-5">
-          <div class="card h-100 p-3">
-            <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('../assets/img/ivancik.jpg');">
-              <span class="mask bg-gradient-dark"></span>
-              <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
-                <h5 class="text-white font-weight-bolder mb-4 pt-2">Work with the rockets</h5>
-                <p class="text-white">Wealth creation is an evolutionarily recent positive-sum game. It is all about who take the opportunity first.</p>
-                <a class="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
-                  Read More
-                  <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                </a>
+
+        <div class="col-lg-2 col-md-6 col-12">
+          <a href="{{ url('panel/apply_leave') }}" class="text-decoration-none">
+          <div class="card">
+            <span class="mask opacity-10 border-radius-lg list-group-item {{ $user->sick_leave_quota == 0 ? 'zero-quota' : '' }}"></span>
+            <div class="card-body p-3 position-relative">
+              <div class="row">
+                <div class="col-8 text-start">
+                  <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                    <i class="fa-solid fa-temperature-full fs-3  opacity-10 " style="color:rgb(199, 108, 23);"></i>
+                  </div>
+
+                  <!-- Spinner (Initially Visible) -->
+                  <div class="loader-widget total-spinner" role="status"></div>
+
+                  <h5 class="text-white font-weight-bolder mb-0 mt-3 total-number d-none">
+                  {{ $user->sick_leave_quota }} days
+                  </h5>
+                  <span class="text-white text-sm">Sick Leave</span>
+                </div>
               </div>
             </div>
           </div>
+          </a>
         </div>
+
+        <div class="col-lg-2 col-md-6 col-12">
+        <a href="{{ url('panel/apply_leave') }}" class="text-decoration-none">
+          <div class="card">
+            <span class="mask opacity-10 border-radius-lg list-group-item {{ $user->emergency_leave_quota == 0 ? 'zero-quota' : '' }}"></span>
+            <div class="card-body p-3 position-relative">
+              <div class="row">
+                <div class="col-8 text-start">
+                  <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                    <i class="fa-solid fa-circle-exclamation fs-3 opacity-10 " style="color:rgb(150, 33, 33);"></i>
+                  </div>
+
+                  <!-- Spinner (Initially Visible) -->
+                  <div class="loader-widget total-spinner" role="status"></div>
+
+                  <!-- Total logs for today (Initially Hidden) -->
+                  <h5 class="text-white font-weight-bolder mb-0 mt-3 total-number d-none">
+                  {{ $user->emergency_leave_quota }} days
+                  </h5>
+                  <span class="text-white text-sm">Emergency Leave</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          </a>
+        </div>
+
+        <div class="col-lg-2 col-md-6 col-12">
+        <a href="{{ url('panel/apply_leave') }}" class="text-decoration-none">
+          <div class="card">
+            <span class="mask opacity-10 border-radius-lg list-group-item {{ $user->maternity_leave_quota == 0 ? 'zero-quota' : '' }}"></span>
+            <div class="card-body p-3 position-relative">
+              <div class="row">
+                <div class="col-8 text-start">
+                  <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                    <i class="fa-solid fa-person-pregnant fs-3 opacity-10" style="color:rgb(42, 101, 230);"></i>
+                  </div>
+
+                  <!-- Spinner (Initially Visible) -->
+                  <div class="loader-widget total-spinner" role="status"></div>
+
+                  <!-- Total logs for today (Initially Hidden) -->
+                  <h5 class="text-white font-weight-bolder mb-0 mt-3 total-number d-none">
+                  {{ $user->maternity_leave_quota }} days
+                  </h5>
+                  <span class="text-white text-sm">Maternity Leave</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          </a>
+        </div>        
+
+        <div class="col-lg-2 col-md-6 col-12">
+          <div class="card">
+            <span class="mask opacity-10 border-radius-lg list-group-item-clock"></span>
+            <div class="card-body p-3 position-relative">
+              <div class="row">
+                <div class="col-8 text-start">
+                  <div class="icon icon-shape bg-white shadow text-center border-radius-2xl">
+                    <i class="fa-solid fa-clock-rotate-left fs-3 opacity-10" style="color:rgb(0, 0, 0);"></i>
+                  </div>
+
+                  <h5 class="text-dark font-weight-bolder mb-0 mt-3" id="digital-clock">
+                    00:00:00
+                  </h5>
+                  <span class="text-dark text-sm">Digital Clock</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          </a>
+        </div> 
+
       </div>
 
-      @include('panel.layout.footer')
+      <div class="row my-4">
+        <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="row">
+                <div class="col-lg-6 col-7">
+                  <h6>Leave Application</h6>
+                  <p class="text-sm mb-0">
+                    <i class="fa fa-check text-info" aria-hidden="true"></i>
+                    <span class="font-weight-bold ms-1">Latest</span> application
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive">
+              <table class="table align-items-center mb-0">
+            <thead>
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employee Name</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Category Leave</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Start</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">End</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+                @foreach($leaveRequests as $key => $leave)
+                  <tr class="data-row d-none"> <!-- Initially Hidden -->
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                          <img src="{{ $leave->user->profile_photo ? asset('public/storage/' . $leave->user->profile_photo) : asset('public/images/1.png') }}" 
+                          class="avatar avatar-sm me-3" 
+                          style="object-fit: cover;" 
+                          alt="User Profile Picture">
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">{{ ucwords(strtolower($leave->user->name)) }}</h6>
+                            <p class="text-xs text-secondary mb-0" style="color:rgb(88, 120, 179)!important;">{{ $leave->user->email }}</p>
+                          </div>
+                      </div>
+                    </td>
+                    <td><span class="text-secondary text-xs font-weight-bold">{{ $leave->category }}</span></td>
+                    <td><span class="text-secondary text-xs font-weight-bold" style="color:rgb(88, 120, 179)!important;">{{ \Carbon\Carbon::parse($leave->leave_date_start)->format('d M y') }}</span></td>
+                    <td><span class="text-secondary text-xs font-weight-bold" style="color:rgb(88, 120, 179)!important;">{{ \Carbon\Carbon::parse($leave->leave_date_end)->format('d M y') }}</span></td>
+                    <td>
+                      <span class="badge badge-sm 
+                        @if($leave->status == 'pending') custom-pending
+                        @elseif($leave->status == 'approved') custom-approve
+                        @else custom-reject
+                        @endif">
+                        {{ ucfirst($leave->status) }}
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Loader Row (Initially Visible) -->
+                  <tr class="loader-row" data-index="{{ $key }}">
+                    <td colspan="4" class="text-center">
+                      <div class="loader-widget" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    </td>
+                  </tr>
+                @endforeach
+            </tbody>
+            </table>
+
+              </div>
+            </div>
+
+            <div class="card-footer text-center mt-1">
+              <a href="{{ url('panel/apply_leave') }}" class="btn btn-info text-white apply-btn">
+                <i class="fas fa-paper-plane me-1"></i> Apply New Leave
+              </a>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+        <div class="card h-100">
+        <div class="card-header pb-0 d-flex align-items-center gap-2">
+          <i class='bx bxs-user-pin gradient-icon-user'></i>
+          <h6 class="mb-0">Your Information</h6>
+        </div>
+        <div class="card-body p-3">
+        <div class="card shadow-sm p-3 bg-white text-black border" style="width: 100%;">
+          <div class="row mb-2 border-bottom pb-1">
+              <div class="col-5"><strong>Name:</strong></div>
+              <div class="col-7">{{ ucwords(strtolower($user->name)) }}</div>
+          </div>
+          <div class="row mb-2 border-bottom pb-1">
+              <div class="col-5"><strong>Email:</strong></div>
+              <div class="col-7">{{ $user->email }}</div>
+          </div>
+          <div class="row mb-2 border-bottom pb-1">
+              <div class="col-5"><strong>Phone:</strong></div>
+              <div class="col-7">{{ $user->phone }}</div>
+          </div>
+          <div class="row mb-2 border-bottom pb-1">
+              <div class="col-5"><strong>Address:</strong></div>
+              <div class="col-7">{{ $user->address }}</div>
+          </div>
+          <div class="row mb-2 border-bottom pb-1">
+              <div class="col-5"><strong>Job Position:</strong></div>
+              <div class="col-7">{{ $user->job_position }}</div>
+          </div>
+          <div class="row mb-2 border-bottom pb-1">
+              <div class="col-5"><strong>Employee Since:</strong></div>
+              <div class="col-7">{{ \Carbon\Carbon::parse($user->start_date)->format('d/m/Y') }}</div>
+          </div>
+        </div>
     </div>
+
+    
+  </div>
+@endif
+
+</div>
+
+  @include('panel.layout.footer')
 
 </main>
 

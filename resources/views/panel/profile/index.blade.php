@@ -100,7 +100,7 @@
                                 </div>
                             </div>
                             <!-- Save Changes Button -->
-                            <button class="btn btn-primary" type="submit">Save changes</button>
+                            <button class="btn btn-dark text-white" type="submit">Save changes</button>
 
                         </div>
                     </div>

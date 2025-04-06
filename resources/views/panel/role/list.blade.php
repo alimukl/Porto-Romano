@@ -157,9 +157,9 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Permission</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Last Update</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Actions</th>
                     </tr>
                   </thead>
@@ -167,6 +167,11 @@
                   <tbody>
                     @foreach($getRecord as $value)
                     <tr>
+
+                      <td>
+                        <span class="text-secondary text-xs font-weight-bold ps-3">{{ $value->id }}</span>
+                      </td>
+
                       <td>
                         <div class="d-flex px-2 py-1 gap-3 fs-4">
                           <div>
@@ -179,14 +184,9 @@
                       </td>
 
                       <td>
-                        <span class="text-secondary text-xs font-weight-bold">{{ $value->created_at }}</span>
-                      </td>
-
-                      <td>
-                        <!-- View All Permission Button -->
-                        <a href="#" class="view-permission text-xs font-weight-bold" data-bs-toggle="modal" data-bs-target="#permissionsModal-{{ $value->id }}">
-                          View All Permission
-                        </a>
+                        <span class="text-secondary text-xs font-weight-bold">
+                          {{ \Carbon\Carbon::parse($value->updated_at)->format('F d, Y - H:i:s') }}
+                        </span>
                       </td>
 
                       <td class="align-middle">
