@@ -39,3 +39,5 @@ It integrates multiple security components such as **Laravel Crypt** for encrypt
 For example, if you're using XAMPP or Laragon, access it via:
     ```arduino
    http://localhost/portoromano
+
+4. Database file (SQL) inside database folder
