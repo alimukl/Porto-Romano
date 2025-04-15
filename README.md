@@ -27,13 +27,20 @@ It integrates multiple security components such as **Laravel Crypt** for encrypt
 
 ## 🚀 Installation
 
-### 1. Install Laravel
+### 1. Prerequisites
 
-First, ensure you have Composer installed. If not, you can download and install it from [here](https://getcomposer.org/).
+Make sure you have the following installed:
 
-To install Laravel, you can either use the Laravel installer or Composer directly.
+- PHP >= 8.0
+- Composer
+- MySQL or any compatible database
+- Git
 
-#### a. Install Laravel globally (if you haven't done so already):
+---
+
+### 2. Install Laravel (If not installed globally)
+
+#### a. Install Laravel globally via Composer:
 
 ```bash
 composer global require laravel/installer
