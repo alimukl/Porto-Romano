@@ -28,5 +28,14 @@ It integrates multiple security components such as **Laravel Crypt** for encrypt
 ## 🚀 Installation
 
 1. Clone the repository:
-```bash
-git clone https://github.com/your-username/your-repo-name.git
+   ```bash
+   git clone https://github.com/your-username/your-repo-name.git
+
+2. Install Laravel dependencies using Composer:
+   ```bash
+   composer install
+
+3. Serve the project via a local Apache or Nginx server, not with php artisan serve.
+For example, if you're using XAMPP or Laragon, access it via:
+    ```arduino
+   http://localhost/portoromano
