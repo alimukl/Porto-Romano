@@ -1,8 +1,8 @@
 # Secure Employee Data System
 
-![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
-![Spatie](https://img.shields.io/badge/Spatie-Activity%20Log-blue?style=for-the-badge&logo=laravel&logoColor=white)
-![Encryption](https://img.shields.io/badge/Laravel-Crypt-green?style=for-the-badge&logo=laravel&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)  
+![Spatie](https://img.shields.io/badge/Spatie-Activity%20Log-blue?style=for-the-badge&logo=laravel&logoColor=white)  
+![Encryption](https://img.shields.io/badge/Laravel-Crypt-green?style=for-the-badge&logo=laravel&logoColor=white)  
 ![OTP](https://img.shields.io/badge/Google%20OTP-2FA-yellow?style=for-the-badge&logo=google&logoColor=white)
 
 This project is built using the **Laravel** PHP framework and focuses on securely managing employee information.  
@@ -27,6 +27,13 @@ It integrates multiple security components such as **Laravel Crypt** for encrypt
 
 ## 🚀 Installation
 
-1. Clone the repository:
+### 1. Install Laravel
+
+First, ensure you have Composer installed. If not, you can download and install it from [here](https://getcomposer.org/).
+
+To install Laravel, you can either use the Laravel installer or Composer directly.
+
+#### a. Install Laravel globally (if you haven't done so already):
+
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
+composer global require laravel/installer
